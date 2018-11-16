@@ -13,9 +13,9 @@ namespace SmartDormitary.Services.API
         private const string getSensorIdUrl = "api/sensor/SensorId";
         private readonly IRestClient restClient;
 
-        public SensorsAPI()
+        public SensorsAPI(IRestClient restClient)
         {
-            restClient = new RestClient();
+            this.restClient = restClient;
         }
 
         /// <summary>

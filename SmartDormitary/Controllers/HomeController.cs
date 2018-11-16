@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using RestSharp;
 using SmartDormitary.Models;
 using SmartDormitary.Services.API;
 
@@ -11,6 +12,13 @@ namespace SmartDormitary.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IRestClient restClient;
+
+        public HomeController(IRestClient restClient)
+        {
+            this.restClient = restClient;
+        }
+
         public IActionResult Index()
         {
             return View();
@@ -19,7 +27,7 @@ namespace SmartDormitary.Controllers
         public async Task<IActionResult> About()
         {
             // Testing the sensor API.
-            var test = new SensorsAPI();
+            var test = new SensorsAPI(restClient);
             var response = await test.GetAllSensorsAsync();
             var newResponse = await test.GetSensorAsync(response.First().SensorId);
 

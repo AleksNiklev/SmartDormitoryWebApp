@@ -13,6 +13,7 @@ using SmartDormitary.Models;
 using SmartDormitary.Services;
 using SmartDormitary.Data.Models;
 using Microsoft.AspNetCore.Mvc;
+using RestSharp;
 using SmartDormitary.Data.Context;
 
 namespace SmartDormitary
@@ -38,6 +39,7 @@ namespace SmartDormitary
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddScoped<IRestClient, RestClient>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
