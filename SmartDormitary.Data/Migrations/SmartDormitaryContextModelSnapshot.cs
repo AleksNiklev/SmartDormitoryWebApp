@@ -158,9 +158,7 @@ namespace SmartDormitary.Data.Migrations
 
                     b.Property<int>("TypeId");
 
-                    b.Property<int>("UserId");
-
-                    b.Property<string>("UserId1");
+                    b.Property<string>("UserId");
 
                     b.Property<string>("Value")
                         .IsRequired();
@@ -169,7 +167,7 @@ namespace SmartDormitary.Data.Migrations
 
                     b.HasIndex("TypeId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Sensors");
                 });
@@ -298,9 +296,9 @@ namespace SmartDormitary.Data.Migrations
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("SmartDormitary.Data.Models.User", "User")
+                    b.HasOne("SmartDormitary.Data.Models.User")
                         .WithMany("Sensors")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }
