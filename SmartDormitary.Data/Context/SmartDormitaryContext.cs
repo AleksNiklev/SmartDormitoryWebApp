@@ -9,6 +9,11 @@ namespace SmartDormitary.Data.Context
         public DbSet<Sensor> Sensors { get; set; }
         public DbSet<SensorType> SensorTypes { get; set; }
 
+        public SmartDormitaryContext()
+        {
+
+        }
+
         public SmartDormitaryContext(DbContextOptions<SmartDormitaryContext> options)
             : base(options)
         {

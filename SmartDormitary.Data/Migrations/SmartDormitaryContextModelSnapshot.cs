@@ -129,6 +129,72 @@ namespace SmartDormitary.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("SmartDormitary.Data.Models.Sensor", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(300);
+
+                    b.Property<bool>("IsPublic");
+
+                    b.Property<string>("Latitude")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Longitude")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<int>("RefreshTime");
+
+                    b.Property<DateTime?>("Timestamp");
+
+                    b.Property<int>("TypeId");
+
+                    b.Property<int>("UserId");
+
+                    b.Property<string>("UserId1");
+
+                    b.Property<string>("Value")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TypeId");
+
+                    b.HasIndex("UserId1");
+
+                    b.ToTable("Sensors");
+                });
+
+            modelBuilder.Entity("SmartDormitary.Data.Models.SensorType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("MaxAcceptableValue");
+
+                    b.Property<string>("MeasurementType");
+
+                    b.Property<int>("MinAcceptableValue");
+
+                    b.Property<int>("MinRefreshTime");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SensorTypes");
+                });
+
             modelBuilder.Entity("SmartDormitary.Data.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -223,6 +289,18 @@ namespace SmartDormitary.Data.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SmartDormitary.Data.Models.Sensor", b =>
+                {
+                    b.HasOne("SmartDormitary.Data.Models.SensorType", "Type")
+                        .WithMany()
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("SmartDormitary.Data.Models.User", "User")
+                        .WithMany("Sensors")
+                        .HasForeignKey("UserId1");
                 });
 #pragma warning restore 612, 618
         }
