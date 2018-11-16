@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SmartDormitary.Models;
+using SmartDormitary.Services.API;
 
 namespace SmartDormitary.Controllers
 {
@@ -15,9 +16,12 @@ namespace SmartDormitary.Controllers
             return View();
         }
 
-        public IActionResult About()
+        public async Task<IActionResult> About()
         {
-            ViewData["Message"] = "Your application description page.";
+            // Testing the sensor API.
+            var test = new SensorsAPI();
+            var response = await test.GetAllSensorsAsync();
+            var newResponse = await test.GetSensorAsync(response.First().SensorId);
 
             return View();
         }

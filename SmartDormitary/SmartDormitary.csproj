@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SmartDormitary.Data\SmartDormitary.Data.csproj" />
+    <ProjectReference Include="..\SmartDormitary.Services\SmartDormitary.Services.csproj" />
   </ItemGroup>
 
 </Project>
