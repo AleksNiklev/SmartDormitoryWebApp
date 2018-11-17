@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using RestSharp;
-using SmartDormitary.DormitaryAPI.Models;
-using SmartDormitary.DormitaryAPI.Utils;
+using SmartDormitory.API.DormitaryAPI.Models;
+using SmartDormitory.API.DormitaryAPI.Utils;
 
-namespace SmartDormitary.DormitaryAPI
+namespace SmartDormitory.API.DormitaryAPI
 {
     public class SensorsAPI
     {

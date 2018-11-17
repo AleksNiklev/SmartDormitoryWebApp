@@ -1,4 +1,4 @@
-﻿namespace SmartDormitary.DormitaryAPI.Utils
+﻿namespace SmartDormitory.API.DormitaryAPI.Utils
 {
     internal static class Constants
     {
