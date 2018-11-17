@@ -35,8 +35,8 @@ namespace SmartDormitary.Data.Models
         [Required]
         public string Value { get; set; }
 
-        public int TypeId { get; set; }
-        public SensorType Type { get; set; }
+        public Guid SensorTypeId { get; set; }
+        public SensorType SensorType { get; set; }
 
         public User User { get; set; }
     }

@@ -6,6 +6,9 @@
 
   <ItemGroup>
     <Compile Remove="Migrations\20181116114856_Initial3.cs" />
+    <Compile Remove="Migrations\20181117164341_SensorTypeKey.cs" />
+    <Compile Remove="Migrations\20181117200501_SensorTypeKey.cs" />
+    <Compile Remove="Migrations\20181117203404_DropSensorTables.cs" />
   </ItemGroup>
 
   <ItemGroup>
