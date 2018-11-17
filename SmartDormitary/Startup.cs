@@ -44,7 +44,7 @@ namespace SmartDormitary
 
             // Services & API
             services.AddScoped<IRestClient, RestClient>();
-            services.AddScoped<SensorsAPI>();
+            services.AddScoped<ISensorsAPI, SensorsAPI>();
             services.AddScoped<ISensorsService, SensorsService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
