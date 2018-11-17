@@ -1,7 +1,7 @@
 ﻿using System;
 using RestSharp.Deserializers;
 
-namespace SmartDormitary.Services.API.Models
+namespace SmartDormitary.DormitaryAPI.Models
 {
     public class SensorDTO
     {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp;
 using SmartDormitary.Models;
-using SmartDormitary.Services.API;
+using SmartDormitary.DormitaryAPI;
 
 namespace SmartDormitary.Controllers
 {

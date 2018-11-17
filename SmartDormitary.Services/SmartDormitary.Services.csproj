@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SmartDormitary.Data\SmartDormitary.Data.csproj" />
+    <ProjectReference Include="..\SmartDormitory.API\SmartDormitory.API.csproj" />
   </ItemGroup>
 
 </Project>
