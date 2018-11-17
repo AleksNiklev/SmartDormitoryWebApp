@@ -7,7 +7,7 @@ using SmartDormitory.API.DormitaryAPI.Utils;
 
 namespace SmartDormitory.API.DormitaryAPI
 {
-    public class SensorsAPI
+    public class SensorsAPI : ISensorsAPI
     {
         private const string getAllSensorsUrl = "api/sensor/all";
         private const string getSensorIdUrl = "api/sensor/SensorId";

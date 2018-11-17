@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 using RestSharp;
 using SmartDormitary.Data.Context;
 using SmartDormitary.Services.Contracts;
+using SmartDormitory.API.DormitaryAPI;
 
 namespace SmartDormitary
 {
@@ -43,6 +44,7 @@ namespace SmartDormitary
 
             // Services & API
             services.AddScoped<IRestClient, RestClient>();
+            services.AddScoped<SensorsAPI>();
             services.AddScoped<ISensorsService, SensorsService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

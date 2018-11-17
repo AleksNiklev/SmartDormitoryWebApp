@@ -12,11 +12,15 @@ namespace SmartDormitary.Data.Models
 
         [Required]
         [MaxLength(50)]
-        public string Name { get; set; }
+        public string Tag { get; set; }
 
         [Required]
         [MaxLength(50)]
         public string MeasurementType { get; set; }
+
+        [Required]
+        [MaxLength(300)]
+        public string Description { get; set; }
 
         public int MinRefreshTime { get; set; }
         public int MinAcceptableValue { get; set; }
