@@ -177,6 +177,10 @@ namespace SmartDormitary.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(300);
+
                     b.Property<int>("MaxAcceptableValue");
 
                     b.Property<string>("MeasurementType")
@@ -187,13 +191,29 @@ namespace SmartDormitary.Data.Migrations
 
                     b.Property<int>("MinRefreshTime");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Tag")
                         .IsRequired()
                         .HasMaxLength(50);
 
                     b.HasKey("Id");
 
                     b.ToTable("SensorTypes");
+
+                    b.HasData(
+                        new { Id = new Guid("f1796a28-642e-401f-8129-fd7465417061"), Description = "This sensor will return values between 15 and 28", MaxAcceptableValue = 28, MeasurementType = "°C", MinAcceptableValue = 15, MinRefreshTime = 40, Tag = "TemperatureSensor1" },
+                        new { Id = new Guid("81a2e1b1-ea5d-4356-8266-b6b42471653e"), Description = "This sensor will return values between 6 and 18", MaxAcceptableValue = 18, MeasurementType = "°C", MinAcceptableValue = 6, MinRefreshTime = 30, Tag = "TemperatureSensor2" },
+                        new { Id = new Guid("92f7dc9a-f2fe-4b60-82f5-400e42f099b4"), Description = "This sensor will return values between 19 and 23", MaxAcceptableValue = 23, MeasurementType = "°C", MinAcceptableValue = 19, MinRefreshTime = 70, Tag = "TemperatureSensor3" },
+                        new { Id = new Guid("216fc1e7-1496-4532-b9ee-29565b865ad6"), Description = "This sensor will return values between 0 and 60", MaxAcceptableValue = 60, MeasurementType = "%", MinAcceptableValue = 0, MinRefreshTime = 40, Tag = "HumiditySensor1" },
+                        new { Id = new Guid("61ff0614-64fd-4842-9a05-0b1541d2cc61"), Description = "This sensor will return values between 10 and 90", MaxAcceptableValue = 90, MeasurementType = "%", MinAcceptableValue = 10, MinRefreshTime = 50, Tag = "HumiditySensor2" },
+                        new { Id = new Guid("08503c1c-963f-4106-9088-82fa67d34f9d"), Description = "This sensor will return values between 1000 and 5000", MaxAcceptableValue = 5000, MeasurementType = "W", MinAcceptableValue = 1000, MinRefreshTime = 70, Tag = "ElectricPowerConsumtionSensor1" },
+                        new { Id = new Guid("1f0ef0ff-396b-40cb-ac3d-749196dee187"), Description = "This sensor will return values between 500 and 3500", MaxAcceptableValue = 3500, MeasurementType = "W", MinAcceptableValue = 500, MinRefreshTime = 105, Tag = "ElectricPowerConsumtionSensor2" },
+                        new { Id = new Guid("4008e030-fd3a-4f8c-a8ca-4f7609ecdb1e"), Description = "This sensor will return true or false value", MaxAcceptableValue = 1, MeasurementType = "(true/false)", MinAcceptableValue = 0, MinRefreshTime = 50, Tag = "OccupancySensor1" },
+                        new { Id = new Guid("7a3b1db5-959d-46ce-82b6-517773327427"), Description = "This sensor will return true or false value", MaxAcceptableValue = 1, MeasurementType = "(true/false)", MinAcceptableValue = 0, MinRefreshTime = 80, Tag = "OccupancySensor2" },
+                        new { Id = new Guid("a3b8a078-0409-4365-ace6-6f8b5b93d592"), Description = "This sensor will return true or false value", MaxAcceptableValue = 1, MeasurementType = "(true/false)", MinAcceptableValue = 0, MinRefreshTime = 90, Tag = "DoorSensor1" },
+                        new { Id = new Guid("ec3c4770-5d57-4d81-9c83-a02140b883a1"), Description = "This sensor will return true or false value", MaxAcceptableValue = 1, MeasurementType = "(true/false)", MinAcceptableValue = 0, MinRefreshTime = 50, Tag = "DoorSensor2" },
+                        new { Id = new Guid("d5d37a46-8ab5-41ec-b7d5-d28c2fd68d3d"), Description = "This sensor will return values between 20 and 70", MaxAcceptableValue = 70, MeasurementType = "dB", MinAcceptableValue = 20, MinRefreshTime = 40, Tag = "NoiseSensor1" },
+                        new { Id = new Guid("65d98ff7-b524-49de-8d13-f85753d98858"), Description = "This sensor will return values between 40 and 90", MaxAcceptableValue = 90, MeasurementType = "dB", MinAcceptableValue = 40, MinRefreshTime = 85, Tag = "NoiseSensor2" }
+                    );
                 });
 
             modelBuilder.Entity("SmartDormitary.Data.Models.User", b =>

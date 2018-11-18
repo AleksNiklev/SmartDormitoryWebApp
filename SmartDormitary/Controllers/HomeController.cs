@@ -28,7 +28,9 @@ namespace SmartDormitary.Controllers
         {
             // Testing the sensor API.
             var test = new SensorsAPI(restClient);
-            var response = await test.GetAllSensorsAsync();
+
+            var response = test.GetAllSensors();
+            var responseAsync = await test.GetAllSensorsAsync();
             var newResponse = await test.GetSensorAsync(response.First().SensorId);
 
             return View();

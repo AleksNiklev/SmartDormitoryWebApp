@@ -16,28 +16,26 @@ namespace SmartDormitary.Data.Context
 
         public DbSet<Sensor> Sensors { get; set; }
         public DbSet<SensorType> SensorTypes { get; set; }
-
-        public SmartDormitaryContext(ISensorsAPI sensorApi)
+        
+        public SmartDormitaryContext(DbContextOptions<SmartDormitaryContext> options, ISensorsAPI sensorApi)
+            : base(options)
         {
             this.sensorApi = sensorApi;
         }
 
-        public SmartDormitaryContext(DbContextOptions<SmartDormitaryContext> options)
-            : base(options)
-        {
-        }
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<SensorType>().HasData(SeedSensorTypes());
+
             base.OnModelCreating(builder);
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
 
-        private async Task<IEnumerable<SensorType>> SeedSensorTypes()
+        private SensorType[] SeedSensorTypes()
         {
-            var sensorsFromApi = await this.sensorApi.GetAllSensorsAsync();
+            var sensorsFromApi = this.sensorApi.GetAllSensors();
             var sensorTypes = sensorsFromApi.Select(x => 
             {
                 var numbers = GetNumbersFromString(x.Description);
@@ -51,7 +49,7 @@ namespace SmartDormitary.Data.Context
                     MinAcceptableValue = numbers.Length == 0 ? 0 : numbers.Min(),
                     MaxAcceptableValue = numbers.Length == 0 ? 1 : numbers.Max()
                 };
-            });
+            }).ToArray();
 
             return sensorTypes;
         }
