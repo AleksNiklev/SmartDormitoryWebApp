@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp;
 using SmartDormitary.Models;
+using SmartDormitary.Services.Contracts;
 using SmartDormitory.API.DormitaryAPI;
 
 namespace SmartDormitary.Controllers
@@ -13,14 +15,20 @@ namespace SmartDormitary.Controllers
     public class HomeController : Controller
     {
         private readonly IRestClient restClient;
+        private readonly ISensorTypesService sensorTypesService;
 
-        public HomeController(IRestClient restClient)
+        public HomeController(IRestClient restClient, ISensorTypesService sensorTypesService)
         {
             this.restClient = restClient;
+            this.sensorTypesService = sensorTypesService;
         }
 
         public IActionResult Index()
         {
+            RecurringJob.AddOrUpdate(
+                () => sensorTypesService.SeedSensorTypesAsync(),
+                Cron.MinuteInterval(1));
+
             return View();
         }
 

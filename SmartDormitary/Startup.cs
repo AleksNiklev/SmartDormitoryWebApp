@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Hangfire;
+using Hangfire.Dashboard;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +17,7 @@ using SmartDormitary.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp;
 using SmartDormitary.Data.Context;
+using SmartDormitary.Extensions;
 using SmartDormitary.Services.Contracts;
 using SmartDormitory.API.DormitaryAPI;
 
@@ -32,6 +35,8 @@ namespace SmartDormitary
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddDbContext<SmartDormitaryContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -46,6 +51,7 @@ namespace SmartDormitary
             services.AddScoped<IRestClient, RestClient>();
             services.AddScoped<ISensorsAPI, SensorsAPI>();
             services.AddScoped<ISensorsService, SensorsService>();
+            services.AddScoped<ISensorTypesService, SensorTypesService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -67,6 +73,14 @@ namespace SmartDormitary
             app.UseStaticFiles();
 
             app.UseAuthentication();
+
+            // Hangfire Middleware
+            var dashboardOptions = new DashboardOptions
+            {
+                Authorization = new [] { new OWINAuthorizationFilter() }
+            };
+            app.UseHangfireDashboard("/hangfire", dashboardOptions);
+            app.UseHangfireServer();
 
             app.UseMvc(routes =>
             {

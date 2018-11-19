@@ -9,9 +9,10 @@ namespace SmartDormitary.Models.AccountViewModels
     public class LoginViewModel
     {
         [Required]
-        [EmailAddress]
-        public string Email { get; set; }
-
+        [DataType(DataType.Text)]
+        [Display(Name = "Username")]
+        public string Username { get; set; }
+        
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
