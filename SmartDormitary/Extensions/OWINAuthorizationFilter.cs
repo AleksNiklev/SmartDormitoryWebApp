@@ -7,7 +7,7 @@ namespace SmartDormitary.Extensions
         public bool Authorize(DashboardContext context)
         {
             var httpContext = context.GetHttpContext();
-            return httpContext.User.IsInRole("Administrator");
+            return httpContext.User.Identity.IsAuthenticated && httpContext.User.IsInRole("Administrator");
         }
     }
 }

@@ -75,12 +75,12 @@ namespace SmartDormitary
             app.UseAuthentication();
 
             // Hangfire Middleware
+            app.UseHangfireServer();
             var dashboardOptions = new DashboardOptions
             {
                 Authorization = new [] { new OWINAuthorizationFilter() }
             };
             app.UseHangfireDashboard("/hangfire", dashboardOptions);
-            app.UseHangfireServer();
 
             app.UseMvc(routes =>
             {
