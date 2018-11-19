@@ -12,11 +12,16 @@ namespace SmartDormitary.Data.Context
 {
     public class SmartDormitaryContext : IdentityDbContext<User>
     {
-        private readonly ISensorsAPI sensorApi; 
+        private readonly ISensorsAPI sensorApi;
 
         public DbSet<Sensor> Sensors { get; set; }
         public DbSet<SensorType> SensorTypes { get; set; }
-        
+
+        public SmartDormitaryContext()
+        {
+
+        }
+
         public SmartDormitaryContext(DbContextOptions<SmartDormitaryContext> options, ISensorsAPI sensorApi)
             : base(options)
         {
@@ -36,7 +41,7 @@ namespace SmartDormitary.Data.Context
         private SensorType[] SeedSensorTypes()
         {
             var sensorsFromApi = this.sensorApi.GetAllSensors();
-            var sensorTypes = sensorsFromApi.Select(x => 
+            var sensorTypes = sensorsFromApi.Select(x =>
             {
                 var numbers = GetNumbersFromString(x.Description);
                 return new SensorType()
