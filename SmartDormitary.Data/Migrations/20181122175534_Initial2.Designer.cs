@@ -10,8 +10,8 @@ using SmartDormitary.Data.Context;
 namespace SmartDormitary.Data.Migrations
 {
     [DbContext(typeof(SmartDormitaryContext))]
-    [Migration("20181119150920_AdminRoleSeed")]
-    partial class AdminRoleSeed
+    [Migration("20181122175534_Initial2")]
+    partial class Initial2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -45,7 +45,7 @@ namespace SmartDormitary.Data.Migrations
                     b.ToTable("AspNetRoles");
 
                     b.HasData(
-                        new { Id = "8b3aa7ee-6fa0-40ce-89fd-27c80847dcf8", ConcurrencyStamp = "2bd3d99a-fc30-49e8-a400-d852e38a6440", Name = "Administrator", NormalizedName = "ADMINISTRATOR" }
+                        new { Id = "f31f22a9-35c4-4d42-b56e-bc7ba4eec5bb", ConcurrencyStamp = "536d14d4-dc13-43e9-be73-d7df46ade901", Name = "Administrator", NormalizedName = "ADMINISTRATOR" }
                     );
                 });
 
@@ -146,13 +146,13 @@ namespace SmartDormitary.Data.Migrations
 
                     b.Property<bool>("IsPublic");
 
-                    b.Property<string>("Latitude")
-                        .IsRequired()
-                        .HasMaxLength(100);
+                    b.Property<double>("Latitude");
 
-                    b.Property<string>("Longitude")
-                        .IsRequired()
-                        .HasMaxLength(100);
+                    b.Property<double>("Longitude");
+
+                    b.Property<double>("MaxAcceptableValue");
+
+                    b.Property<double>("MinAcceptableValue");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -161,6 +161,8 @@ namespace SmartDormitary.Data.Migrations
                     b.Property<int>("RefreshTime");
 
                     b.Property<Guid>("SensorTypeId");
+
+                    b.Property<bool>("TickOff");
 
                     b.Property<DateTime?>("Timestamp");
 

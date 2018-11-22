@@ -25,15 +25,18 @@ namespace SmartDormitary.Data.Models
 
         public DateTime? Timestamp { get; set; }
 
-        [Required]
-        [MaxLength(100)]
-        public string Latitude { get; set; }
-        [Required]
-        [MaxLength(100)]
-        public string Longitude { get; set; }
+        public double Latitude { get; set; }
 
+        public double Longitude { get; set; }
+        
         [Required]
         public string Value { get; set; }
+
+        public double MinAcceptableValue { get; set; }
+
+        public double MaxAcceptableValue { get; set; }
+
+        public bool TickOff { get; set; }
 
         public Guid SensorTypeId { get; set; }
         public SensorType SensorType { get; set; }

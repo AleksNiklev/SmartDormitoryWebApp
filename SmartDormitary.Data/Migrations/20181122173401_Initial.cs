@@ -51,10 +51,10 @@ namespace SmartDormitary.Data.Migrations
                 name: "SensorTypes",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true),
-                    MeasurementType = table.Column<string>(nullable: true),
+                    Id = table.Column<Guid>(nullable: false),
+                    Tag = table.Column<string>(maxLength: 50, nullable: false),
+                    MeasurementType = table.Column<string>(maxLength: 50, nullable: false),
+                    Description = table.Column<string>(maxLength: 300, nullable: false),
                     MinRefreshTime = table.Column<int>(nullable: false),
                     MinAcceptableValue = table.Column<int>(nullable: false),
                     MaxAcceptableValue = table.Column<int>(nullable: false)
@@ -180,29 +180,36 @@ namespace SmartDormitary.Data.Migrations
                     RefreshTime = table.Column<int>(nullable: false),
                     IsPublic = table.Column<bool>(nullable: false),
                     Timestamp = table.Column<DateTime>(nullable: true),
-                    Latitude = table.Column<string>(maxLength: 100, nullable: false),
-                    Longitude = table.Column<string>(maxLength: 100, nullable: false),
-                    Value = table.Column<string>(nullable: false),
-                    TypeId = table.Column<int>(nullable: false),
-                    UserId = table.Column<int>(nullable: false),
-                    UserId1 = table.Column<string>(nullable: true)
+                    Latitude = table.Column<double>(nullable: false),
+                    Longitude = table.Column<double>(nullable: false),
+                    Value = table.Column<double>(nullable: false),
+                    MinAcceptableValue = table.Column<double>(nullable: false),
+                    MaxAcceptableValue = table.Column<double>(nullable: false),
+                    TickOff = table.Column<bool>(nullable: false),
+                    SensorTypeId = table.Column<Guid>(nullable: false),
+                    UserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Sensors", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Sensors_SensorTypes_TypeId",
-                        column: x => x.TypeId,
+                        name: "FK_Sensors_SensorTypes_SensorTypeId",
+                        column: x => x.SensorTypeId,
                         principalTable: "SensorTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Sensors_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_Sensors_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "9f2f7134-e1f3-40ac-9d7f-2e451d9f8969", "987e7813-9286-487a-8b33-89fcedd9b1c6", "Administrator", "ADMINISTRATOR" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -244,14 +251,14 @@ namespace SmartDormitary.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Sensors_TypeId",
+                name: "IX_Sensors_SensorTypeId",
                 table: "Sensors",
-                column: "TypeId");
+                column: "SensorTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Sensors_UserId1",
+                name: "IX_Sensors_UserId",
                 table: "Sensors",
-                column: "UserId1");
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

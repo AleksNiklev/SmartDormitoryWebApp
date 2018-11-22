@@ -7,6 +7,7 @@ using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp;
 using SmartDormitary.Models;
+using SmartDormitary.Models.SensorViewModels;
 using SmartDormitary.Services.Contracts;
 using SmartDormitory.API.DormitaryAPI;
 
@@ -16,20 +17,39 @@ namespace SmartDormitary.Controllers
     {
         private readonly IRestClient restClient;
         private readonly ISensorTypesService sensorTypesService;
+        private readonly ISensorsService sensorsService;
 
-        public HomeController(IRestClient restClient, ISensorTypesService sensorTypesService)
+        public HomeController(IRestClient restClient, ISensorTypesService sensorTypesService, ISensorsService sensorsService)
         {
             this.restClient = restClient;
             this.sensorTypesService = sensorTypesService;
+            this.sensorsService = sensorsService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            RecurringJob.AddOrUpdate(
-                () => sensorTypesService.SeedSensorTypesAsync(),
-                Cron.MinuteInterval(1));
+            //RecurringJob.AddOrUpdate(
+            //    () => sensorTypesService.SeedSensorTypesAsync(),
+            //    Cron.MinuteInterval(1));
+            var sensors = await this.sensorsService.GetAllPublicSensorsAsync();
 
-            return View();
+            var result = sensors.Select(s => new SensorViewModel()
+            {
+                Name = s.Name,
+                Description = s.Description,
+                PullingInterval = s.RefreshTime,
+                Url = s.SensorTypeId.ToString(),
+                Latitude = s.Latitude,
+                Longitude = s.Longitude,
+                Value = s.Value,
+                IsPublic = s.IsPublic,
+                MaxAcceptableValue = s.MaxAcceptableValue,
+                MinAcceptableValue = s.MinAcceptableValue,
+                TickOff = s.TickOff
+
+            });
+
+            return View("Index", result);
         }
 
         public async Task<IActionResult> About()

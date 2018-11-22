@@ -10,7 +10,7 @@ using SmartDormitary.Data.Context;
 namespace SmartDormitary.Data.Migrations
 {
     [DbContext(typeof(SmartDormitaryContext))]
-    [Migration("20181116114404_Initial")]
+    [Migration("20181122173401_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,6 +43,10 @@ namespace SmartDormitary.Data.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new { Id = "9f2f7134-e1f3-40ac-9d7f-2e451d9f8969", ConcurrencyStamp = "987e7813-9286-487a-8b33-89fcedd9b1c6", Name = "Administrator", NormalizedName = "ADMINISTRATOR" }
+                    );
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -142,13 +146,13 @@ namespace SmartDormitary.Data.Migrations
 
                     b.Property<bool>("IsPublic");
 
-                    b.Property<string>("Latitude")
-                        .IsRequired()
-                        .HasMaxLength(100);
+                    b.Property<double>("Latitude");
 
-                    b.Property<string>("Longitude")
-                        .IsRequired()
-                        .HasMaxLength(100);
+                    b.Property<double>("Longitude");
+
+                    b.Property<double>("MaxAcceptableValue");
+
+                    b.Property<double>("MinAcceptableValue");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -156,41 +160,47 @@ namespace SmartDormitary.Data.Migrations
 
                     b.Property<int>("RefreshTime");
 
+                    b.Property<Guid>("SensorTypeId");
+
+                    b.Property<bool>("TickOff");
+
                     b.Property<DateTime?>("Timestamp");
 
-                    b.Property<int>("TypeId");
+                    b.Property<string>("UserId");
 
-                    b.Property<int>("UserId");
-
-                    b.Property<string>("UserId1");
-
-                    b.Property<string>("Value")
-                        .IsRequired();
+                    b.Property<double>("Value");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TypeId");
+                    b.HasIndex("SensorTypeId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Sensors");
                 });
 
             modelBuilder.Entity("SmartDormitary.Data.Models.SensorType", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(300);
 
                     b.Property<int>("MaxAcceptableValue");
 
-                    b.Property<string>("MeasurementType");
+                    b.Property<string>("MeasurementType")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<int>("MinAcceptableValue");
 
                     b.Property<int>("MinRefreshTime");
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Tag")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.HasKey("Id");
 
@@ -295,14 +305,14 @@ namespace SmartDormitary.Data.Migrations
 
             modelBuilder.Entity("SmartDormitary.Data.Models.Sensor", b =>
                 {
-                    b.HasOne("SmartDormitary.Data.Models.SensorType", "Type")
+                    b.HasOne("SmartDormitary.Data.Models.SensorType", "SensorType")
                         .WithMany()
-                        .HasForeignKey("TypeId")
+                        .HasForeignKey("SensorTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("SmartDormitary.Data.Models.User", "User")
                         .WithMany("Sensors")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

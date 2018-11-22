@@ -1,25 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Hangfire;
-using Hangfire.Dashboard;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SmartDormitary.Data;
-using SmartDormitary.Models;
 using SmartDormitary.Services;
 using SmartDormitary.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp;
 using SmartDormitary.Data.Context;
-using SmartDormitary.Extensions;
 using SmartDormitary.Services.Contracts;
 using SmartDormitory.API.DormitaryAPI;
+using SmartDormitary.Services.Cron;
+using SmartDormitary.Services.Cron.Contracts;
+using System;
 
 namespace SmartDormitary
 {
@@ -35,10 +29,8 @@ namespace SmartDormitary
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddHangfire(x => x.UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection")));
-
             services.AddDbContext<SmartDormitaryContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("LocalDBConnection")));
 
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<SmartDormitaryContext>()
@@ -52,8 +44,14 @@ namespace SmartDormitary
             services.AddScoped<ISensorsAPI, SensorsAPI>();
             services.AddScoped<ISensorsService, SensorsService>();
             services.AddScoped<ISensorTypesService, SensorTypesService>();
+            services.AddScoped<IJobScheduleService, JobScheduleService>();
+            services.AddScoped<IServiceProvider, ServiceProvider>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            var sp = services.BuildServiceProvider();
+            var jobService = sp.GetService<IJobScheduleService>();
+            jobService.RunJobs();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -73,15 +71,7 @@ namespace SmartDormitary
             app.UseStaticFiles();
 
             app.UseAuthentication();
-
-            // Hangfire Middleware
-            app.UseHangfireServer();
-            var dashboardOptions = new DashboardOptions
-            {
-                Authorization = new [] { new OWINAuthorizationFilter() }
-            };
-            app.UseHangfireDashboard("/hangfire", dashboardOptions);
-
+            
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
