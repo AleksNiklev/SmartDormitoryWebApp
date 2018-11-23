@@ -5,15 +5,17 @@ namespace SmartDormitary.Services.Extensions
 {
     internal static class Helpers
     {
-        internal static int[] GetNumbersFromString(string input)
+        internal static double[] GetNumbersFromString(string input)
         {
-            var result = new List<int>();
-            var numbers = Regex.Split(input, @"\D+");
-            foreach (var value in numbers)
+            var result = new List<double>();
+            var numbers = input.Split(' ');
+
+            foreach (string num in numbers)
             {
-                if (!string.IsNullOrEmpty(value))
+                double numValue;
+                if (double.TryParse(num, out numValue))
                 {
-                    result.Add(int.Parse(value));
+                    result.Add(numValue);
                 }
             }
 

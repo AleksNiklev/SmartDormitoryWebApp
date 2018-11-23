@@ -43,7 +43,7 @@ namespace SmartDormitary.Data.Migrations
                     b.ToTable("AspNetRoles");
 
                     b.HasData(
-                        new { Id = "f31f22a9-35c4-4d42-b56e-bc7ba4eec5bb", ConcurrencyStamp = "536d14d4-dc13-43e9-be73-d7df46ade901", Name = "Administrator", NormalizedName = "ADMINISTRATOR" }
+                        new { Id = "9e5898df-ded2-45cf-ad01-5b1738dd071b", ConcurrencyStamp = "9597ab59-fa73-4665-957a-220f0c7ab6af", Name = "Administrator", NormalizedName = "ADMINISTRATOR" }
                     );
                 });
 
@@ -187,13 +187,13 @@ namespace SmartDormitary.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(300);
 
-                    b.Property<int>("MaxAcceptableValue");
+                    b.Property<double>("MaxAcceptableValue");
 
                     b.Property<string>("MeasurementType")
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<int>("MinAcceptableValue");
+                    b.Property<double>("MinAcceptableValue");
 
                     b.Property<int>("MinRefreshTime");
 

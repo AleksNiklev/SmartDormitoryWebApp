@@ -6,15 +6,11 @@
     <h1 class="h1-seo"><span class="fas fa-bed"></span></h1>
     <h1 class="h1-seo">SmartDorm</h1>
     <h3>An innovative smart technology system for dormitary sensors.</h3>
-</div>
-<body>
-    <div>
-        @foreach (var sensor in Model)
-        {
-            <span class="col-md-3">@sensor.Name</span>
-            <span class="col-md-3">@sensor.Value</span>
-            <span class="col-md-3">@sensor.Description</span>
-            <hr />
-        }
-    </div>
-</body>
+    @foreach (var sensor in Model)
+    {
+        <span class="col-md-3">@sensor.Name</span>
+        <span class="col-md-3">@sensor.Value</span>
+        <span class="col-md-3">@sensor.Description</span>
+        <hr />
+    }
+        </div>

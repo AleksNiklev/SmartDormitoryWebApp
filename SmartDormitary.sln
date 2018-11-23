@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartDormitary.Services", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartDormitary", "SmartDormitary\SmartDormitary.csproj", "{D4399FEB-DCE3-4A9B-97C4-E4F26514ABEE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartDormitory.API", "SmartDormitory.API\SmartDormitory.API.csproj", "{5DB24CB2-1456-49C9-814C-0BFF44E16CB3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmartDormitory.API", "SmartDormitory.API\SmartDormitory.API.csproj", "{5DB24CB2-1456-49C9-814C-0BFF44E16CB3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartDormitory.Tests", "SmartDormitory.Tests\SmartDormitory.Tests.csproj", "{39827179-6CF0-4122-8AA9-D12F0DD5C29A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{5DB24CB2-1456-49C9-814C-0BFF44E16CB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5DB24CB2-1456-49C9-814C-0BFF44E16CB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5DB24CB2-1456-49C9-814C-0BFF44E16CB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39827179-6CF0-4122-8AA9-D12F0DD5C29A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39827179-6CF0-4122-8AA9-D12F0DD5C29A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39827179-6CF0-4122-8AA9-D12F0DD5C29A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39827179-6CF0-4122-8AA9-D12F0DD5C29A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

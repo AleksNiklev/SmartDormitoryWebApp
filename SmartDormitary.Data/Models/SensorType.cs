@@ -23,7 +23,7 @@ namespace SmartDormitary.Data.Models
         public string Description { get; set; }
 
         public int MinRefreshTime { get; set; }
-        public int MinAcceptableValue { get; set; }
-        public int MaxAcceptableValue { get; set; }
+        public double MinAcceptableValue { get; set; }
+        public double MaxAcceptableValue { get; set; }
     }
 }
