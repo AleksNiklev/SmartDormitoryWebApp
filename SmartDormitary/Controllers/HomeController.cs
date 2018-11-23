@@ -28,9 +28,6 @@ namespace SmartDormitary.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //RecurringJob.AddOrUpdate(
-            //    () => sensorTypesService.SeedSensorTypesAsync(),
-            //    Cron.MinuteInterval(1));
             var sensors = await this.sensorsService.GetAllPublicSensorsAsync();
 
             var result = sensors.Select(s => new SensorViewModel()

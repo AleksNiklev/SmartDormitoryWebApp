@@ -1,0 +1,26 @@
+﻿@model IEnumerable<SensorTypeViewModel>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Sensor Menager Pannel</h2>
+
+<table class="table table-bordered">
+    <tr>
+        <td class="col-lg-5">Description</td>
+        <td class="col-lg-2">Name</td>
+        <td class="col-lg-2">MeasurementType</td>
+        <td class="col-lg-2">MinRefreshTime</td>
+    </tr>
+    @foreach (var sensorType in Model)
+    {
+    <tr>
+        <td>@sensorType.Description</td>
+        <td>@sensorType.Tag</td>
+        <td>@sensorType.MeasurementType</td>
+        <td>@sensorType.MinRefreshTime</td>
+    </tr>
+
+    }
+</table>
+

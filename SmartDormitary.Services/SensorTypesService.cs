@@ -25,6 +25,16 @@ namespace SmartDormitary.Services
             this.sensorsApi = sensorsApi;
         }
 
+        public async Task<SensorType> GetSensorTypesByIdAsync(Guid id)
+        {
+            return await dormitaryContext.SensorTypes.Where(s => s.Id == id).FirstOrDefaultAsync();
+        }
+
+        public async Task<List<SensorType>> GetAllSensorTypesAsync()
+        {
+            return await dormitaryContext.SensorTypes.ToListAsync();
+        }
+
         public async Task<List<SensorType>> SeedSensorTypesAsync()
         {
             var sensorsFromApi = await this.sensorsApi.GetAllSensorsAsync();
