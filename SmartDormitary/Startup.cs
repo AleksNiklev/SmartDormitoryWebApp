@@ -49,9 +49,9 @@ namespace SmartDormitary
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            //var sp = services.BuildServiceProvider();
-            //var jobService = sp.GetService<IJobScheduleService>();
-            //jobService.RunJobs();
+            var sp = services.BuildServiceProvider();
+            var jobService = sp.GetService<IJobScheduleService>();
+            jobService.RunJobs();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
