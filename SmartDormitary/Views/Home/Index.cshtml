@@ -2,10 +2,9 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-<div class="content-center brand">
-    <h1 class="h1-seo"><span class="fas fa-bed"></span></h1>
-    <h1 class="h1-seo">SmartDorm</h1>
-    <h3>An innovative smart technology system for dormitary sensors.</h3>
+<div class="container">
+    <h4>For research purposes only</h4>
+    <hr />
     @foreach (var sensor in Model)
     {
         <span class="col-md-3">@sensor.Name</span>
@@ -13,4 +12,4 @@
         <span class="col-md-3">@sensor.Description</span>
         <hr />
     }
-        </div>
+</div>

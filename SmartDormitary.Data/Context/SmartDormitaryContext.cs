@@ -15,7 +15,12 @@ namespace SmartDormitary.Data.Context
     {
         public DbSet<Sensor> Sensors { get; set; }
         public DbSet<SensorType> SensorTypes { get; set; }
-        
+
+        public SmartDormitaryContext()
+        {
+
+        }
+
         public SmartDormitaryContext(DbContextOptions<SmartDormitaryContext> options)
             : base(options)
         {
@@ -24,7 +29,7 @@ namespace SmartDormitary.Data.Context
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<IdentityRole>()
-                .HasData(new IdentityRole {Name = "Administrator", NormalizedName = "ADMINISTRATOR"});
+                .HasData(new IdentityRole { Name = "Administrator", NormalizedName = "ADMINISTRATOR" });
 
             base.OnModelCreating(builder);
         }
