@@ -26,17 +26,27 @@ namespace SmartDormitary.Services.Cron.Jobs
 
         public async void Execute()
         {
-            using (var dbContext = this.serviceProvider.CreateScope()
-                .ServiceProvider
-                .GetService<SmartDormitaryContext>())
+            try
             {
-                var sensorService = new SensorsService(dbContext);
-                var sensor = await sensorService.GetSensorByGuidAsync(sensorId);
+                using (var dbContext = this.serviceProvider.CreateScope()
+                    .ServiceProvider
+                    .GetService<SmartDormitaryContext>())
+                {
+                    var sensorService = new SensorsService(dbContext);
+                    var sensor = await sensorService.GetSensorByGuidAsync(sensorId);
 
-                var sensorApi = await this.api.GetSensorAsync(sensor.SensorTypeId);
-                sensor.Value = sensorApi.Value;
-                await sensorService.UpdateSensorAsync(sensor);
-                Debug.WriteLine(sensor.Id + " was updated: value: " + sensor.Value);
+                    var sensorApi = await this.api.GetSensorAsync(sensor.SensorTypeId);
+                    sensor.Value = sensorApi.Value;
+                    sensor.Timestamp = sensorApi.Timestamp;
+                    await sensorService.UpdateSensorAsync(sensor);
+                    Debug.WriteLine(sensor.Id + " was updated: value: " + sensor.Value);
+                    Debug.WriteLine(sensor.Id + " was updated: TimeStamp: " + sensor.Timestamp);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Got Execption in job: " + ex.Message);
             }
         }
     }

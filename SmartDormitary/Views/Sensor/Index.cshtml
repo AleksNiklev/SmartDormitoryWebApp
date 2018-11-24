@@ -7,10 +7,11 @@
 
 <table class="table table-bordered">
     <tr>
-        <td class="col-lg-5">Description</td>
+        <td class="col-lg-3">Description</td>
         <td class="col-lg-2">Name</td>
         <td class="col-lg-2">MeasurementType</td>
         <td class="col-lg-2">MinRefreshTime</td>
+        <td class="col-lg-1"></td>
     </tr>
     @foreach (var sensorType in Model)
     {
@@ -19,6 +20,7 @@
         <td>@sensorType.Tag</td>
         <td>@sensorType.MeasurementType</td>
         <td>@sensorType.MinRefreshTime</td>
+        <td><a asp-action="Register" asp-controller="Sensor" asp-route-id="@sensorType.Id" class="btn btn-success">Register Sensor</a></td>
     </tr>
 
     }

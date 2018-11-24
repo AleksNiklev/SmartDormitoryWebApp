@@ -25,5 +25,10 @@ namespace SmartDormitary.Services.Cron
         {
             JobManager.Initialize(new JobRegistry(this.api, this.serviceProvider));
         }
+
+        public void RunOneJob(Guid sensorId, int refreshTime)
+        {
+            JobManager.Initialize(new JobRegistry(this.api, this.serviceProvider, sensorId, refreshTime));
+        }
     }
 }

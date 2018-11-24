@@ -2,14 +2,22 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-<div class="container">
-    <h4>For research purposes only</h4>
-    <hr />
+<table class="table table-bordered">
+    <tr>
+        <td class="col-md-2">Sensor Name</td>
+        <td class="col-md-2">Description</td>
+        <td class="col-md-2">Value</td>
+        <td class="col-md-2">TimeStamp</td>
+        <td class="col-md-2">Link</td>
+    </tr>
     @foreach (var sensor in Model)
     {
-        <span class="col-md-3">@sensor.Name</span>
-        <span class="col-md-3">@sensor.Value</span>
-        <span class="col-md-3">@sensor.Description</span>
-        <hr />
+    <tr>
+        <td>@sensor.Name</td>
+        <td>@sensor.Description</td>
+        <td>@sensor.Value</td>
+        <td>@sensor.Timestamp</td>
+        <td><a asp-action="Details" asp-controller="Sensor" asp-route-id="@sensor.Id">Details</a></td>
+    </tr>
     }
-</div>
+</table>

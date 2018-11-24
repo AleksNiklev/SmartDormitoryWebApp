@@ -16,6 +16,6 @@ namespace SmartDormitary.Services.Contracts
         Task<EntityEntry<Sensor>> UpdateSensorAsync(Sensor sensor);
         Task<List<Sensor>> GetAllSensorsAsync();
         List<Sensor> GetAllSensors();
-
+        Sensor GetSensorByGuid(Guid sensorId);
     }
 }

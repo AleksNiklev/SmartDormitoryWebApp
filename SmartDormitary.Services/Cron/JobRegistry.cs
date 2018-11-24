@@ -17,6 +17,17 @@ namespace SmartDormitary.Services.Cron
         private readonly IServiceProvider serviceProvider;
         private readonly ISensorsService sensorsService;
 
+        public JobRegistry(ISensorsAPI api, IServiceProvider serviceProvider, Guid sensorId, int refreshTime)
+        {
+            this.api = api;
+            this.serviceProvider = serviceProvider; 
+
+            Schedule(() => new SensorJob(api, this.serviceProvider, sensorId))
+                .ToRunNow()
+                .AndEvery(refreshTime)
+                .Seconds();
+        }
+
         public JobRegistry(ISensorsAPI api, IServiceProvider serviceProvider)
         {
             this.api = api;

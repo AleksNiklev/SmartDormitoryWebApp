@@ -1,6 +1,7 @@
 ﻿@model SensorViewModel
 @{
     ViewData["Title"] = "Register";
+    Html.HiddenFor(m => m.Type, Model.Type);
 }
 
 <h2>Register</h2>
@@ -21,23 +22,35 @@
             </div>
             <div class="form-group">
                 <label asp-for="Longitude">Longitude</label>
-                <textarea asp-for="Longitude" class="form-control"></textarea>
+                <input asp-for="Longitude" class="form-control" />
                 <span asp-validation-for="Longitude" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Latitude">Latitude</label>
-                <textarea asp-for="Latitude" class="form-control"></textarea>
+                <input asp-for="Latitude" class="form-control" />
                 <span asp-validation-for="Latitude" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="PullingInterval">Pulling Data Interval</label>
-                <textarea asp-for="PullingInterval" class="form-control"></textarea>
+                <input asp-for="PullingInterval" class="form-control" />
                 <span asp-validation-for="PullingInterval" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="TickOff">Is Public</label>
+                <label asp-for="TickOff">Tick-Off</label>
                 <input type="checkbox" asp-for="TickOff" class="form-control" />
             </div>
+
+            <div class="form-group">
+                <label asp-for="MinAcceptableValue">Min Acceptable Value</label>
+                <input asp-for="MinAcceptableValue" class="form-control" />
+                <span asp-validation-for="MinAcceptableValue" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaxAcceptableValue">Max Acceptable Value</label>
+                <input asp-for="MaxAcceptableValue" class="form-control" />
+                <span asp-validation-for="MaxAcceptableValue" class="text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <label asp-for="IsPublic">Is Public</label>
                 <input type="checkbox" asp-for="IsPublic" class="form-control" />

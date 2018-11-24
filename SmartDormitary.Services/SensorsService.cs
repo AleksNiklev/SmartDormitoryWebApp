@@ -98,5 +98,11 @@ namespace SmartDormitary.Services
                 .Include(s => s.SensorType)
                 .ToList();
         }
+
+        public Sensor GetSensorByGuid(Guid sensorId)
+        {
+            return dormitaryContext.Sensors.Where(s => s.Id == sensorId).Include(s => s.User)
+                .Include(s => s.SensorType).FirstOrDefault();
+        }
     }
 }

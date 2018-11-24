@@ -1,5 +1,4 @@
-﻿using SmartDormitary.Data.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -7,32 +6,10 @@ using System.Threading.Tasks;
 
 namespace SmartDormitary.Models.SensorViewModels
 {
-    public class SensorViewModel
+    public class SensorFromViewModel
     {
-        public SensorViewModel()
+        public SensorFromViewModel()
         {
-        }
-
-        public SensorViewModel(Sensor sensor)
-        {
-            this.Id = sensor.Id;
-            this.Name = sensor.Name;
-            this.Description = sensor.Description;
-            this.Latitude = sensor.Latitude;
-            this.Longitude = sensor.Longitude;
-            this.IsPublic = sensor.IsPublic;
-            this.MinAcceptableValue = sensor.MinAcceptableValue;
-            this.MaxAcceptableValue = sensor.MaxAcceptableValue;
-            this.Value = sensor.Value;
-            this.PullingInterval = sensor.RefreshTime;
-            this.TickOff = sensor.TickOff;
-            this.Timestamp = sensor.Timestamp;
-            this.Type = new SensorTypeViewModel(sensor.SensorType);
-        }
-
-        public SensorViewModel(SensorTypeViewModel sensorType)
-        {
-            this.Type = sensorType;
         }
 
         public Guid Id { get; set; }
@@ -42,7 +19,7 @@ namespace SmartDormitary.Models.SensorViewModels
 
         [Required, MinLength(2), MaxLength(300)]
         public string Description { get; set; }
-        
+
         [Range(0, 2880)]
         public int PullingInterval { get; set; }
 

@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Hangfire;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp;
+using SmartDormitary.Data.Models;
 using SmartDormitary.Models;
 using SmartDormitary.Models.SensorViewModels;
 using SmartDormitary.Services.Contracts;
@@ -18,35 +20,33 @@ namespace SmartDormitary.Controllers
         private readonly IRestClient restClient;
         private readonly ISensorTypesService sensorTypesService;
         private readonly ISensorsService sensorsService;
+        private readonly UserManager<User> userManeger;
 
-        public HomeController(IRestClient restClient, ISensorTypesService sensorTypesService, ISensorsService sensorsService)
+        public HomeController(IRestClient restClient, ISensorTypesService sensorTypesService, ISensorsService sensorsService, UserManager<User> userManeger)
         {
             this.restClient = restClient;
             this.sensorTypesService = sensorTypesService;
             this.sensorsService = sensorsService;
+            this.userManeger = userManeger;
         }
 
         public async Task<IActionResult> Index()
         {
             var sensors = await this.sensorsService.GetAllPublicSensorsAsync();
 
-            var result = sensors.Select(s => new SensorViewModel()
-            {
-                Name = s.Name,
-                Description = s.Description,
-                PullingInterval = s.RefreshTime,
-                Url = s.SensorTypeId.ToString(),
-                Latitude = s.Latitude,
-                Longitude = s.Longitude,
-                Value = s.Value,
-                IsPublic = s.IsPublic,
-                MaxAcceptableValue = s.MaxAcceptableValue,
-                MinAcceptableValue = s.MinAcceptableValue,
-                TickOff = s.TickOff
-
-            });
+            var result = sensors.Select(s => new SensorViewModel(s));
 
             return View("Index", result);
+        }
+
+        [Authorize(Roles = "Administrator, User")]
+        public async Task<IActionResult> Sensors()
+        {
+            var user = this.userManeger.Users.Where(u => u.UserName == User.Identity.Name).First();
+            var sensors = await this.sensorsService.GetUserSensorsAsync(user.Id);
+            var result = sensors.Select(s => new SensorViewModel(s));
+
+            return View("Sensors", result);
         }
 
         public async Task<IActionResult> About()

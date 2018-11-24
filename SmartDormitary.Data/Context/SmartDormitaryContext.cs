@@ -30,6 +30,8 @@ namespace SmartDormitary.Data.Context
         {
             builder.Entity<IdentityRole>()
                 .HasData(new IdentityRole { Name = "Administrator", NormalizedName = "ADMINISTRATOR" });
+            builder.Entity<IdentityRole>()
+                .HasData(new IdentityRole { Name = "User", NormalizedName = "USER" });
 
             base.OnModelCreating(builder);
         }
