@@ -2,22 +2,25 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-<table class="table table-bordered">
-    <tr>
-        <td class="col-md-2">Sensor Name</td>
-        <td class="col-md-2">Description</td>
-        <td class="col-md-2">Value</td>
-        <td class="col-md-2">TimeStamp</td>
-        <td class="col-md-2">Link</td>
-    </tr>
-    @foreach (var sensor in Model)
-    {
-    <tr>
-        <td>@sensor.Name</td>
-        <td>@sensor.Description</td>
-        <td>@sensor.Value</td>
-        <td>@sensor.Timestamp</td>
-        <td><a asp-action="Details" asp-controller="Sensor" asp-route-id="@sensor.Id">Details</a></td>
-    </tr>
-    }
-</table>
+<div class="container">
+    <img class="mb-3" src="@TempData["StaticMapUri"]" alt="Sensors Map" />
+    <table class="table table-bordered">
+        <tr>
+            <td class="col-md-2">Sensor Name</td>
+            <td class="col-md-2">Description</td>
+            <td class="col-md-2">Value</td>
+            <td class="col-md-2">TimeStamp</td>
+            <td class="col-md-2">Link</td>
+        </tr>
+        @foreach (var sensor in Model)
+        {
+            <tr>
+                <td>@sensor.Name</td>
+                <td>@sensor.Description</td>
+                <td>@sensor.Value</td>
+                <td>@sensor.Timestamp</td>
+                <td><a asp-action="Details" asp-controller="Sensor" asp-route-id="@sensor.Id">Details</a></td>
+            </tr>
+        }
+    </table>
+</div>

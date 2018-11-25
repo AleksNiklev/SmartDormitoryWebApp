@@ -49,6 +49,7 @@ namespace SmartDormitary
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            // Cron Jobs
             var sp = services.BuildServiceProvider();
             var jobService = sp.GetService<IJobScheduleService>();
             jobService.RunJobs();
