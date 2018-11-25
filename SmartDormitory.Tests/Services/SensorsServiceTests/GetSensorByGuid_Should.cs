@@ -3,35 +3,36 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SmartDormitary.Data.Context;
 using SmartDormitary.Services;
 using SmartDormitory.Tests.Helpers;
-using System.Linq;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace SmartDormitory.Tests.Services.SensorsServiceTests
 {
     [TestClass]
-    public class GetAllSensors_Should
+    public class GetSensorByGuid_Should
     {
         [TestMethod]
-        public void Return_EmptySensorList()
+        public void Return_Null_IfNoSensorsMatch()
         {
             var contextOptions = new DbContextOptionsBuilder<SmartDormitaryContext>()
-                .UseInMemoryDatabase(databaseName: "Return_EmptySensorList")
+                .UseInMemoryDatabase(databaseName: "Return_Null_IfNoSensorsMatch")
                 .Options;
-            
+
             // Assert
             using (var assertContext = new SmartDormitaryContext(contextOptions))
             {
                 var service = new SensorsService(assertContext);
 
-                Assert.AreEqual(0, service.GetAllSensors().Count);
+                Assert.IsNull(service.GetSensorByGuid(TestHelpers.TestGuid()));
             }
         }
 
-
         [TestMethod]
-        public void Return_AllSensors()
+        public void Return_RightSensor()
         {
             var contextOptions = new DbContextOptionsBuilder<SmartDormitaryContext>()
-                .UseInMemoryDatabase(databaseName: "Return_AllSensors")
+                .UseInMemoryDatabase(databaseName: "Return_RightSensor")
                 .Options;
 
             var sensor = TestHelpers.TestPublicSensor();
@@ -47,10 +48,9 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
             using (var assertContext = new SmartDormitaryContext(contextOptions))
             {
                 var service = new SensorsService(assertContext);
-                var result = service.GetAllSensors();
+                var result = service.GetSensorByGuid(sensor.Id);
 
-                Assert.AreEqual(1, result.Count);
-                Assert.AreEqual("test", result.First().Name);
+                Assert.AreEqual(sensor.Id, result.Id);
             }
         }
     }

@@ -4,34 +4,36 @@ using SmartDormitary.Data.Context;
 using SmartDormitary.Services;
 using SmartDormitory.Tests.Helpers;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SmartDormitory.Tests.Services.SensorsServiceTests
 {
     [TestClass]
-    public class GetAllSensors_Should
+    public class GetAllSensorsAsync_Should
     {
         [TestMethod]
-        public void Return_EmptySensorList()
+        public async Task Return_EmptySensorList()
         {
             var contextOptions = new DbContextOptionsBuilder<SmartDormitaryContext>()
-                .UseInMemoryDatabase(databaseName: "Return_EmptySensorList")
+                .UseInMemoryDatabase(databaseName: "Return_EmptySensorList_Async")
                 .Options;
-            
+
             // Assert
             using (var assertContext = new SmartDormitaryContext(contextOptions))
             {
                 var service = new SensorsService(assertContext);
+                var result = await service.GetAllSensorsAsync();
 
-                Assert.AreEqual(0, service.GetAllSensors().Count);
+                Assert.AreEqual(0, result.Count);
             }
         }
 
 
         [TestMethod]
-        public void Return_AllSensors()
+        public async Task Return_AllSensors()
         {
             var contextOptions = new DbContextOptionsBuilder<SmartDormitaryContext>()
-                .UseInMemoryDatabase(databaseName: "Return_AllSensors")
+                .UseInMemoryDatabase(databaseName: "Return_AllSensors_Async")
                 .Options;
 
             var sensor = TestHelpers.TestPublicSensor();
@@ -47,7 +49,7 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
             using (var assertContext = new SmartDormitaryContext(contextOptions))
             {
                 var service = new SensorsService(assertContext);
-                var result = service.GetAllSensors();
+                var result = await service.GetAllSensorsAsync();
 
                 Assert.AreEqual(1, result.Count);
                 Assert.AreEqual("test", result.First().Name);

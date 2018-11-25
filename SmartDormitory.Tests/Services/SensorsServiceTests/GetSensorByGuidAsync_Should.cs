@@ -3,35 +3,38 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SmartDormitary.Data.Context;
 using SmartDormitary.Services;
 using SmartDormitory.Tests.Helpers;
-using System.Linq;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace SmartDormitory.Tests.Services.SensorsServiceTests
 {
     [TestClass]
-    public class GetAllSensors_Should
+    public class GetSensorByGuidAsync_Should
     {
         [TestMethod]
-        public void Return_EmptySensorList()
+        public async Task Return_Null_IfNoSensorsMatch()
         {
             var contextOptions = new DbContextOptionsBuilder<SmartDormitaryContext>()
-                .UseInMemoryDatabase(databaseName: "Return_EmptySensorList")
+                .UseInMemoryDatabase(databaseName: "Return_Null_IfNoSensorsMatch_Async")
                 .Options;
-            
+
             // Assert
             using (var assertContext = new SmartDormitaryContext(contextOptions))
             {
                 var service = new SensorsService(assertContext);
+                var result = await service.GetSensorByGuidAsync(TestHelpers.TestGuid());
 
-                Assert.AreEqual(0, service.GetAllSensors().Count);
+                Assert.IsNull(result);
             }
         }
 
-
         [TestMethod]
-        public void Return_AllSensors()
+        public async Task Return_RightSensor()
         {
             var contextOptions = new DbContextOptionsBuilder<SmartDormitaryContext>()
-                .UseInMemoryDatabase(databaseName: "Return_AllSensors")
+                .UseInMemoryDatabase(databaseName: "Return_RightSensor_Async")
                 .Options;
 
             var sensor = TestHelpers.TestPublicSensor();
@@ -47,10 +50,9 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
             using (var assertContext = new SmartDormitaryContext(contextOptions))
             {
                 var service = new SensorsService(assertContext);
-                var result = service.GetAllSensors();
+                var result = await service.GetSensorByGuidAsync(sensor.Id);
 
-                Assert.AreEqual(1, result.Count);
-                Assert.AreEqual("test", result.First().Name);
+                Assert.AreEqual(sensor.Id, result.Id);
             }
         }
     }

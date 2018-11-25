@@ -45,7 +45,7 @@ namespace SmartDormitary.Services
         }
 
         /// <summary>
-        /// Returns a collection of all sensors, matching the (Guid) sensorId.
+        /// Returns a sensors, matching the (Guid) sensorId.
         /// </summary>
         /// <param name="sensorId">(Guid) sensorId</param>
         /// <returns></returns>
@@ -98,7 +98,11 @@ namespace SmartDormitary.Services
                 .Include(s => s.SensorType)
                 .ToList();
         }
-
+        /// <summary>
+        /// Returns a sensors, matching the (Guid) sensorId.
+        /// </summary>
+        /// <param name="sensorId"></param>
+        /// <returns></returns>
         public Sensor GetSensorByGuid(Guid sensorId)
         {
             return dormitaryContext.Sensors.Where(s => s.Id == sensorId).Include(s => s.User)
