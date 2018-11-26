@@ -3,9 +3,9 @@ using System.Text.RegularExpressions;
 
 namespace SmartDormitary.Services.Extensions
 {
-    internal static class Helpers
+    public static class Helpers
     {
-        internal static double[] GetNumbersFromString(string input)
+        public static double[] GetNumbersFromString(string input)
         {
             var result = new List<double>();
             var numbers = input.Split(' ');

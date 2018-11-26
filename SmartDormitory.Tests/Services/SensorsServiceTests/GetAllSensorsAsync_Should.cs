@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SmartDormitary.Data.Context;
 using SmartDormitary.Services;
-using SmartDormitory.Tests.Helpers;
+using SmartDormitory.Tests.HelpersMethods;
 using System.Linq;
 using System.Threading.Tasks;
 
