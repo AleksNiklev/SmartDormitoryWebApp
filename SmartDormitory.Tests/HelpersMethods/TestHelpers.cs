@@ -7,15 +7,34 @@ namespace SmartDormitory.Tests.HelpersMethods
 {
     public static class TestHelpers
     {
-        public static User TestUser()
+        public static User TestUser1()
         {
-            return new User() { Id = "00000000-0000-0000-0000-000000000000" };
+            return new User() { Id = "00000000-0000-0000-0000-000000000001" };
+        }
+
+        public static User TestUser2()
+        {
+            return new User() { Id = "00000000-0000-0000-0000-000000000002" };
         }
 
         public static Guid TestGuid()
         {
-
             return Guid.Parse("00000000-0000-0000-0000-000000000000");
+        }
+
+        public static Guid TestGuid1()
+        {
+            return Guid.Parse("00000000-0000-0000-0000-000000000001");
+        }
+
+        public static Guid TestGuid2()
+        {
+            return Guid.Parse("00000000-0000-0000-0000-000000000002");
+        }
+
+        public static Guid TestGuid3()
+        {
+            return Guid.Parse("00000000-0000-0000-0000-000000000003");
         }
 
         public static SensorType TestSensorType()
@@ -41,7 +60,7 @@ namespace SmartDormitory.Tests.HelpersMethods
                 RefreshTime = 40,
                 Value = "123",
                 Timestamp = new DateTime(),
-                User = TestUser()
+                User = TestUser1()
             };
         }
 
@@ -63,7 +82,7 @@ namespace SmartDormitory.Tests.HelpersMethods
                 RefreshTime = 40,
                 Value = "123",
                 Timestamp = new DateTime(),
-                User = TestUser()
+                User = TestUser1()
             };
         }
     }
