@@ -11,38 +11,37 @@ using System.Threading.Tasks;
 
 namespace SmartDormitory.Tests.Services.SensorsServiceTests
 {
-//    [TestClass]
-//    public class UpdateSensorAsync_Should
-//    {
-//        [TestMethod]
-//        [DataRow("Update1")]
-//        [DataRow("Update2")]
-//        [DataRow("Update3")]
-//        public async Task Update_Sensor(string name)
-//        {
-//            var contextOptions = new DbContextOptionsBuilder<SmartDormitaryContext>()
-//                .UseInMemoryDatabase(databaseName: "Update_Sensor_Async")
-//                .Options;
-            
-//            // Act
-//            using (var actContext = new SmartDormitaryContext(contextOptions))
-//            {
-//                var service = new SensorsService(actContext);
+    [TestClass]
+    public class UpdateSensorAsync_Should
+    {
+        [TestMethod]
+        public async Task Update_Sensor()
+        {
+            var contextOptions = new DbContextOptionsBuilder<SmartDormitaryContext>()
+                .UseInMemoryDatabase(databaseName: "Update_Sensor_Async")
+                .Options;
 
-//                var sensor = actContext.Sensors.Add(TestHelpers.TestPublicSensor());
-//                var entity = sensor.Entity;
-//                entity.Name = name;
+            var sensor = TestHelpers.TestPublicSensor();
+            var name = "Update";
 
-//                var result = await service.UpdateSensorAsync(entity);
-//            }
+            // Act
+            using (var actContext = new SmartDormitaryContext(contextOptions))
+            {
+                await actContext.Sensors.AddAsync(sensor);
+                await actContext.SaveChangesAsync();
+            }
 
-//            // Assert
-//            using (var assertContext = new SmartDormitaryContext(contextOptions))
-//            {
-//                var result = await assertContext.Sensors.FirstOrDefaultAsync();
+            // Assert
+            using (var assertContext = new SmartDormitaryContext(contextOptions))
+            {
+                var service = new SensorsService(assertContext);
+                var toUbdate = await assertContext.Sensors.SingleAsync();
 
-//                Assert.AreEqual(name, result.Name);
-//            }
-//        }
-//    }
+                toUbdate.Name = name;
+                var result = await service.UpdateSensorAsync(toUbdate);
+
+                Assert.AreEqual(name, result.Entity.Name);
+            }
+        }
+    }
 }

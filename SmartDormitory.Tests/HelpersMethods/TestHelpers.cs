@@ -9,12 +9,12 @@ namespace SmartDormitory.Tests.HelpersMethods
     {
         public static User TestUser1()
         {
-            return new User() { Id = "00000000-0000-0000-0000-000000000001" };
+            return new User() { Id = "00000000-0000-0000-0000-000000000001", Sensors = new List<Sensor>() };
         }
 
         public static User TestUser2()
         {
-            return new User() { Id = "00000000-0000-0000-0000-000000000002" };
+            return new User() { Id = "00000000-0000-0000-0000-000000000002", Sensors = new List<Sensor>() };
         }
 
         public static Guid TestGuid()
