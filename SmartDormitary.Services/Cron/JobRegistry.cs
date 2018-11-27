@@ -35,7 +35,7 @@ namespace SmartDormitary.Services.Cron
             this.sensorsService = serviceProvider.CreateScope().ServiceProvider.GetService<ISensorsService>();
             var sensors = this.sensorsService.GetAllSensors();
 
-            Schedule(() => new SensorTypesJob(api, this.serviceProvider)).ToRunNow().AndEvery(60).Seconds();
+            Schedule(() => new SensorTypesJob(api, this.serviceProvider)).ToRunEvery(24).Hours();
             foreach (var sensor in sensors)
             {
                 Schedule(() => new SensorJob(api, this.serviceProvider, sensor.Id))

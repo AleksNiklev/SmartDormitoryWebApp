@@ -64,6 +64,7 @@
                 <span asp-validation-for="Latitude" class="text-danger"></span>
                 <input asp-for="Longitude" class="form-control" type="hidden" id="lngField" />
                 <span asp-validation-for="Longitude" class="text-danger"></span>
+                <input type="checkbox" name="MapMarker" style="visibility:hidden" id="mapMarker"/>
             </div>
         </div>
         <div class="form-group">
@@ -86,7 +87,8 @@
             rules: {
                 PullingInterval: {
                     required: true,
-                    min: @Model.DefaultPullingInterval
+                    min: @Model.DefaultPullingInterval,
+                    max: 2880
                 },
                 MinAcceptableValue: {
                     required: true,
@@ -107,7 +109,13 @@
                     required: true,
                     minlength: 2,
                     maxlength: 300
+                },
+                MapMarker: {
+                    required: true
                 }
+            },
+            messages: {
+                MapMarker: "Enter sensor Location!"
             }
         });
     });
@@ -134,6 +142,7 @@
             }
             map.panTo(position);
 
+            $('#mapMarker').prop('checked', true);
             $('#latField').val(position.lat)
             $('#lngField').val(position.lng)
         }

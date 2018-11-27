@@ -11,6 +11,7 @@ using SmartDormitary.Services.Contracts;
 using SmartDormitary.Services.Cron;
 using SmartDormitary.Services.Cron.Contracts;
 using Newtonsoft.Json;
+using SmartDormitory.API.DormitaryAPI;
 
 namespace SmartDormitary.Controllers
 {
@@ -19,14 +20,14 @@ namespace SmartDormitary.Controllers
         private readonly ISensorTypesService sensorTypesService;
         private readonly ISensorsService sensorsService;
         private readonly UserManager<User> userManeger;
-        private readonly IJobScheduleService scheduleService;
+        private readonly ISensorsAPI sensorApi;
 
-        public SensorController(ISensorTypesService sensorTypesService, ISensorsService sensorsService, UserManager<User> userManeger, IJobScheduleService scheduleService)
+        public SensorController(ISensorTypesService sensorTypesService, ISensorsService sensorsService, UserManager<User> userManeger, ISensorsAPI sensorApi)
         {
             this.sensorTypesService = sensorTypesService;
             this.sensorsService = sensorsService;
             this.userManeger = userManeger;
-            this.scheduleService = scheduleService;
+            this.sensorApi = sensorApi;
         }
 
         [Authorize(Roles = "Administrator, User")]
@@ -53,17 +54,18 @@ namespace SmartDormitary.Controllers
         {
             if (!this.ModelState.IsValid)
             {
-                return this.View();
+                return this.View("Index");
             }
 
             var typeId = model.Id;
+            var sensorApi = await this.sensorApi.GetSensorAsync(typeId);
             model.Id = Guid.Empty;
             var sensor = new Sensor()
             {
                 Name = model.Name,
                 Description = model.Description,
                 RefreshTime = model.PullingInterval,
-                Timestamp = new DateTime(),
+                Timestamp = sensorApi.Timestamp,
                 Longitude = model.Longitude,
                 Latitude = model.Latitude,
                 IsPublic = model.IsPublic,
@@ -71,12 +73,11 @@ namespace SmartDormitary.Controllers
                 MinAcceptableValue = model.MinAcceptableValue,
                 MaxAcceptableValue = model.MaxAcceptableValue,
                 SensorTypeId = typeId,
-                Value = "0",
+                Value = sensorApi.Value,
                 UserId = this.userManeger.Users.Where(u => u.UserName == User.Identity.Name).First().Id
             };
 
             var result = await this.sensorsService.RegisterSensorAsync(sensor);
-            //this.scheduleService.RunOneJob(result.Entity.Id, result.Entity.RefreshTime);
             return RedirectToAction("Details", new { id = result.Entity.Id });
         }
 
