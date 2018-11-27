@@ -10,6 +10,7 @@ using SmartDormitary.Models.SensorViewModels;
 using SmartDormitary.Services.Contracts;
 using SmartDormitary.Services.Cron;
 using SmartDormitary.Services.Cron.Contracts;
+using Newtonsoft.Json;
 
 namespace SmartDormitary.Controllers
 {
@@ -85,6 +86,14 @@ namespace SmartDormitary.Controllers
 
             var model = new SensorViewModel(sensor);
             return View(model);
+        }
+
+        public async Task<JsonResult> GetPublicSensors()
+        {
+            var sensors = await this.sensorsService.GetAllPublicSensorsAsync();
+            var result = JsonConvert.SerializeObject(sensors.Select(s => new { x = s.Latitude, y = s.Longitude }));
+
+            return Json(result);
         }
     }
 }

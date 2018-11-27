@@ -3,7 +3,7 @@
     ViewData["Title"] = "Home Page";
 }
 <div class="container">
-    <img class="mb-3" src="@TempData["StaticMapUri"]" alt="Sensors Map" />
+    <div id="map" style="height: 400px;"></div>
     <table class="table table-bordered">
         <tr>
             <td class="col-md-2">Sensor Name</td>
@@ -23,4 +23,41 @@
             </tr>
         }
     </table>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+        function initMap() {
+
+            $.ajax({
+                url: "../../Sensor/GetPublicSensors",
+                type: "GET",
+                success: function (response) {
+
+                    var map = new google.maps.Map(document.getElementById('map'), {
+                        zoom: 12,
+                        center: { lat: 42.6875236, lng: 23.3139769 }
+                    });
+
+                    JSON.parse(response).forEach(function(marker) {
+
+                        var myLatLng = { lat: marker.x, lng: marker.y };
+
+                        let markerTEmp = new google.maps.Marker({
+                            position: myLatLng,
+                            map: map,
+                            title: 'Hello World!'
+                        });
+                    });
+                    
+                },
+                error: function (response) {
+                    alert(response);
+                }
+            });
+
+        }
+
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOc4hXPYpMR4Gos817M6Iz_5hUKrPE0k4&callback=initMap"></script>
 </div>
