@@ -42,15 +42,20 @@ namespace SmartDormitary.Controllers
         public async Task<IActionResult> Register(Guid Id)
         {
             var model = await this.sensorTypesService.GetSensorTypesByIdAsync(Id);
-            var sensor = new SensorViewModel(new SensorTypeViewModel(model));
+            var sensor = new RegisterSensorViewModel(new SensorTypeViewModel(model));
             return View(sensor);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator, User")]
-        public async Task<IActionResult> Register(SensorViewModel model)
+        public async Task<IActionResult> Register(RegisterSensorViewModel model)
         {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View();
+            }
+
             var typeId = model.Id;
             model.Id = Guid.Empty;
             var sensor = new Sensor()
@@ -71,7 +76,7 @@ namespace SmartDormitary.Controllers
             };
 
             var result = await this.sensorsService.RegisterSensorAsync(sensor);
-            this.scheduleService.RunOneJob(result.Entity.Id, result.Entity.RefreshTime);
+            //this.scheduleService.RunOneJob(result.Entity.Id, result.Entity.RefreshTime);
             return RedirectToAction("Details", new { id = result.Entity.Id });
         }
 
@@ -91,7 +96,7 @@ namespace SmartDormitary.Controllers
         public async Task<JsonResult> GetPublicSensors()
         {
             var sensors = await this.sensorsService.GetAllPublicSensorsAsync();
-            var result = JsonConvert.SerializeObject(sensors.Select(s => new { x = s.Latitude, y = s.Longitude }));
+            var result = JsonConvert.SerializeObject(sensors.Select(s => new { x = s.Latitude, y = s.Longitude, name = s.Name }));
 
             return Json(result);
         }

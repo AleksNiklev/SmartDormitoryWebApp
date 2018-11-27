@@ -43,10 +43,10 @@
 
                         var myLatLng = { lat: marker.x, lng: marker.y };
 
-                        let markerTEmp = new google.maps.Marker({
+                        new google.maps.Marker({
                             position: myLatLng,
                             map: map,
-                            title: 'Hello World!'
+                            title: marker.name
                         });
                     });
                     
@@ -55,7 +55,6 @@
                     alert(response);
                 }
             });
-
         }
 
     </script>

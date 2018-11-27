@@ -49,10 +49,10 @@ namespace SmartDormitary
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            // Cron Jobs
-            var sp = services.BuildServiceProvider();
-            var jobService = sp.GetService<IJobScheduleService>();
-            jobService.RunJobs();
+            //// Cron Jobs
+            //var sp = services.BuildServiceProvider();
+            //var jobService = sp.GetService<IJobScheduleService>();
+            //jobService.RunJobs();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

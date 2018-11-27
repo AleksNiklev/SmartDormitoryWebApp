@@ -1,68 +1,144 @@
-﻿@model SensorViewModel
+﻿@model RegisterSensorViewModel
 @{
     ViewData["Title"] = "Register";
-    Html.HiddenFor(m => m.Type, Model.Type);
 }
 
 <h2>Register</h2>
+<p>@Model.DefaultPullingInterval</p>
+<div class="table">
+    <form asp-controller="Sensor" asp-action="Register" method="post" id="registerForm">
+        <div asp-validation-summary="All" class="text-danger"></div>
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-controller="Sensor" asp-action="Register" method="post">
-            <div asp-validation-summary="All" class="text-danger"></div>
-            <div class="form-group">
+        <div class="form-row">
+            <div class="form-group col-md-6">
                 <label asp-for="Name">Name</label>
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name" class="form-control" name="Name"/>
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Description">Description</label>
-                <textarea asp-for="Description" class="form-control"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Latitude">Latitude</label>
-                <input asp-for="Latitude" class="form-control" />
-                <span asp-validation-for="Latitude" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Longitude">Longitude</label>
-                <input asp-for="Longitude" class="form-control" />
-                <span asp-validation-for="Longitude" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+            <div class="form-group col-md-6">
                 <label asp-for="PullingInterval">Pulling Data Interval</label>
-                <input asp-for="PullingInterval" class="form-control" />
+                <input asp-for="PullingInterval" class="form-control" name="PullingInterval"/>
                 <span asp-validation-for="PullingInterval" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="TickOff">Tick-Off</label>
-                <input type="checkbox" asp-for="TickOff" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Description">Description</label>
+            <textarea asp-for="Description" class="form-control" name="Description"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label asp-for="MinAcceptableValue">Min Acceptable Value</label>
+                        <input asp-for="MinAcceptableValue" class="form-control" name="MinAcceptableValue" />
+                        <span asp-validation-for="MinAcceptableValue" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label asp-for="MaxAcceptableValue">Max Acceptable Value</label>
+                        <input asp-for="MaxAcceptableValue" class="form-control" name="MaxAcceptableValue" />
+                        <span asp-validation-for="MaxAcceptableValue" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="TickOff">Tick-Off
+                            <input type="checkbox" asp-for="TickOff" class="form-control" />
+                        </label>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="IsPublic">Is Public
+                            <input type="checkbox" asp-for="IsPublic" class="form-control" />
+                        </label>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="MinAcceptableValue">Min Acceptable Value</label>
-                <input asp-for="MinAcceptableValue" class="form-control" />
-                <span asp-validation-for="MinAcceptableValue" class="text-danger"></span>
+            <div class="form-group col-md-6">
+                <div id="map" style="height: 300px;"></div>
+                <input asp-for="Latitude" class="form-control" type="hidden" id="latField" />
+                <span asp-validation-for="Latitude" class="text-danger"></span>
+                <input asp-for="Longitude" class="form-control" type="hidden" id="lngField" />
+                <span asp-validation-for="Longitude" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="MaxAcceptableValue">Max Acceptable Value</label>
-                <input asp-for="MaxAcceptableValue" class="form-control" />
-                <span asp-validation-for="MaxAcceptableValue" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="IsPublic">Is Public</label>
-                <input type="checkbox" asp-for="IsPublic" class="form-control" />
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-success" />
-            </div>
-        </form>
-    </div>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-success" />
+        </div>
+    </form>
 </div>
+
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
 }
+
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+    
+        $("#registerForm").validate({
+            rules: {
+                PullingInterval: {
+                    required: true,
+                    min: @Model.DefaultPullingInterval
+                },
+                MinAcceptableValue: {
+                    required: true,
+                    min: @Model.DefaultMinAcceptableValue,
+                    max: @Model.DefaultMaxAcceptableValue
+                },
+                MaxAcceptableValue: {
+                    required: true,
+                    min: @Model.DefaultMinAcceptableValue,
+                    max: @Model.DefaultMaxAcceptableValue
+                },
+                Name: {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 30
+                },
+                Description: {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 300
+                }
+            }
+        });
+    });
+
+    function initMap() {
+        var marker;
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 12,
+            center: { lat: 42.6875236, lng: 23.3139769 }
+        });
+
+        map.addListener('click', function (e) {
+            placeMarker(e.latLng, map);
+        });
+
+        function placeMarker(position, map) {
+            if (marker) {
+                marker.setPosition(position)
+            } else {
+                marker = new google.maps.Marker({
+                    position: position,
+                    map: map
+                });
+            }
+            map.panTo(position);
+
+            $('#latField').val(position.lat)
+            $('#lngField').val(position.lng)
+        }
+    }
+</script>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOc4hXPYpMR4Gos817M6Iz_5hUKrPE0k4&callback=initMap"></script>
 
