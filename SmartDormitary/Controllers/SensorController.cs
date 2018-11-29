@@ -98,5 +98,18 @@ namespace SmartDormitary.Controllers
 
             return Json(result);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateSensor(SensorViewModel sensorModel)
+        {
+            var sensor = await this.sensorsService.GetSensorByGuidAsync(sensorModel.Id);
+            sensor.Name = sensorModel.Name;
+            sensor.Description = sensorModel.Description;
+            sensor.Longitude = sensorModel.Longitude;
+            sensor.Latitude = sensorModel.Latitude;
+            var result = await this.sensorsService.UpdateSensorAsync(sensor);
+
+            return Json(result);
+        }
     }
 }

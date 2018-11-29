@@ -39,7 +39,7 @@ namespace SmartDormitary.Controllers
             return View("Index", result);
         }
 
-        [Authorize(Roles = "Administrator, User")]
+        [Authorize]
         public async Task<IActionResult> Sensors()
         {
             var user = userManager.Users.First(u => u.UserName == User.Identity.Name);
