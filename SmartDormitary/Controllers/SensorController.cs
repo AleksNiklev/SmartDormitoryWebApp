@@ -15,22 +15,22 @@ using SmartDormitory.API.DormitaryAPI;
 
 namespace SmartDormitary.Controllers
 {
+    [Authorize]
     public class SensorController : Controller
     {
         private readonly ISensorTypesService sensorTypesService;
         private readonly ISensorsService sensorsService;
-        private readonly UserManager<User> userManeger;
+        private readonly UserManager<User> userManager;
         private readonly ISensorsAPI sensorApi;
 
-        public SensorController(ISensorTypesService sensorTypesService, ISensorsService sensorsService, UserManager<User> userManeger, ISensorsAPI sensorApi)
+        public SensorController(ISensorTypesService sensorTypesService, ISensorsService sensorsService, UserManager<User> userManager, ISensorsAPI sensorApi)
         {
             this.sensorTypesService = sensorTypesService;
             this.sensorsService = sensorsService;
-            this.userManeger = userManeger;
+            this.userManager = userManager;
             this.sensorApi = sensorApi;
         }
 
-        [Authorize(Roles = "Administrator, User")]
         public async Task<IActionResult> Index()
         {
             var sensorTypes = await this.sensorTypesService.GetAllSensorTypesAsync();
@@ -39,7 +39,6 @@ namespace SmartDormitary.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Administrator, User")]
         public async Task<IActionResult> Register(Guid Id)
         {
             var model = await this.sensorTypesService.GetSensorTypesByIdAsync(Id);
@@ -49,7 +48,6 @@ namespace SmartDormitary.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator, User")]
         public async Task<IActionResult> Register(RegisterSensorViewModel model)
         {
             if (!this.ModelState.IsValid)
@@ -74,14 +72,13 @@ namespace SmartDormitary.Controllers
                 MaxAcceptableValue = model.MaxAcceptableValue,
                 SensorTypeId = typeId,
                 Value = sensorApi.Value,
-                UserId = this.userManeger.Users.Where(u => u.UserName == User.Identity.Name).First().Id
+                UserId = this.userManager.Users.First(u => u.UserName == User.Identity.Name).Id
             };
 
             var result = await this.sensorsService.RegisterSensorAsync(sensor);
             return RedirectToAction("Details", new { id = result.Entity.Id });
         }
 
-        [Authorize(Roles = "Administrator, User")]
         public async Task<IActionResult> Details(Guid id)
         {
             var sensor = await this.sensorsService.GetSensorByGuidAsync(id);

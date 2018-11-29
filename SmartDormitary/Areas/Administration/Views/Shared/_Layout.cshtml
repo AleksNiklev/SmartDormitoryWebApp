@@ -38,6 +38,12 @@
                             <p>Sensors</p>
                         </a>
                     </li>
+                    <li class="nav-item @(ViewBag.Current == "UsersIndex" ? "active" : "")">
+                        <a class="nav-link" asp-action="Index" asp-controller="Users" asp-area="Administration">
+                            <i class="material-icons">people</i>
+                            <p>Users</p>
+                        </a>
+                    </li>
                     <!-- your sidebar here -->
                 </ul>
             </div>

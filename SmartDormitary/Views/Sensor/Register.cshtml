@@ -12,12 +12,12 @@
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label asp-for="Name">Name</label>
-                <input asp-for="Name" class="form-control" name="Name"/>
+                <input asp-for="Name" class="form-control" name="Name" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group col-md-6">
                 <label asp-for="PullingInterval">Pulling Data Interval</label>
-                <input asp-for="PullingInterval" class="form-control" name="PullingInterval"/>
+                <input asp-for="PullingInterval" class="form-control" name="PullingInterval" />
                 <span asp-validation-for="PullingInterval" class="text-danger"></span>
             </div>
         </div>
@@ -47,12 +47,14 @@
 
                 <div class="form-row">
                     <div class="form-group col-md-6">
-                        <label asp-for="TickOff">Tick-Off
+                        <label asp-for="TickOff">
+                            Tick-Off
                             <input type="checkbox" asp-for="TickOff" class="form-control" />
                         </label>
                     </div>
                     <div class="form-group col-md-6">
-                        <label asp-for="IsPublic">Is Public
+                        <label asp-for="IsPublic">
+                            Is Public
                             <input type="checkbox" asp-for="IsPublic" class="form-control" />
                         </label>
                     </div>
@@ -64,7 +66,7 @@
                 <span asp-validation-for="Latitude" class="text-danger"></span>
                 <input asp-for="Longitude" class="form-control" type="hidden" id="lngField" />
                 <span asp-validation-for="Longitude" class="text-danger"></span>
-                <input type="checkbox" name="MapMarker" style="visibility:hidden" id="mapMarker"/>
+                <input type="checkbox" name="MapMarker" style="visibility:hidden" id="mapMarker" />
             </div>
         </div>
         <div class="form-group">
@@ -75,14 +77,9 @@
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
-}
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-<script type="text/javascript">
+    <script type="text/javascript">
     $(document).ready(function () {
-    
+
         $("#registerForm").validate({
             rules: {
                 PullingInterval: {
@@ -147,7 +144,11 @@
             $('#lngField').val(position.lng)
         }
     }
-</script>
+    </script>
 
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOc4hXPYpMR4Gos817M6Iz_5hUKrPE0k4&callback=initMap"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOc4hXPYpMR4Gos817M6Iz_5hUKrPE0k4&callback=initMap"></script>
+}
 
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>

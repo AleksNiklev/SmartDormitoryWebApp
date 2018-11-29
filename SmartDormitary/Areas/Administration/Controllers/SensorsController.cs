@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using SmartDormitary.Data.Models;
 
 namespace SmartDormitary.Areas.Administration.Controllers
 {
+    [Authorize(Roles = "Administrator")]
     [Area("Administration")]
     public class SensorsController : Controller
     {
