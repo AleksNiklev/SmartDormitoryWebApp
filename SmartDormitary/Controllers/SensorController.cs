@@ -30,7 +30,7 @@ namespace SmartDormitary.Controllers
             this.sensorApi = sensorApi;
         }
 
-        [Authorize(Roles = "Administrator, User")]
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             var sensorTypes = await this.sensorTypesService.GetAllSensorTypesAsync();
@@ -39,7 +39,7 @@ namespace SmartDormitary.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Administrator, User")]
+        [Authorize]
         public async Task<IActionResult> Register(Guid Id)
         {
             var model = await this.sensorTypesService.GetSensorTypesByIdAsync(Id);
@@ -49,7 +49,7 @@ namespace SmartDormitary.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Administrator, User")]
+        [Authorize]
         public async Task<IActionResult> Register(RegisterSensorViewModel model)
         {
             if (!this.ModelState.IsValid)
@@ -81,7 +81,7 @@ namespace SmartDormitary.Controllers
             return RedirectToAction("Details", new { id = result.Entity.Id });
         }
 
-        [Authorize(Roles = "Administrator, User")]
+        [Authorize]
         public async Task<IActionResult> Details(Guid id)
         {
             var sensor = await this.sensorsService.GetSensorByGuidAsync(id);
@@ -98,6 +98,19 @@ namespace SmartDormitary.Controllers
         {
             var sensors = await this.sensorsService.GetAllPublicSensorsAsync();
             var result = JsonConvert.SerializeObject(sensors.Select(s => new { x = s.Latitude, y = s.Longitude, name = s.Name }));
+
+            return Json(result);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateSensor(SensorViewModel sensorModel)
+        {
+            var sensor = await this.sensorsService.GetSensorByGuidAsync(sensorModel.Id);
+            sensor.Name = sensorModel.Name;
+            sensor.Description = sensorModel.Description;
+            sensor.Longitude = sensorModel.Longitude;
+            sensor.Latitude = sensorModel.Latitude;
+            var result = await this.sensorsService.UpdateSensorAsync(sensor);
 
             return Json(result);
         }

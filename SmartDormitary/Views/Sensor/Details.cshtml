@@ -1,15 +1,122 @@
-﻿@model SensorViewModel
+﻿<style type="text/css">
+    .editable {
+        border-radius: 10px;
+        background-color: antiquewhite;
+    }
+
+    .saveButton {
+        visibility: hidden;
+    }
+</style>
+
+@model SensorViewModel
 @{
     ViewData["Title"] = "Details";
 }
 
 <h2>Details</h2>
-<h3>@Model.Name</h3>
-<p>Description</p>
-<p>@Model.Description</p>
-<br/>
-<p>Pulling Interval: @Model.PullingInterval</p>
-<p>Sensor Value: @Model.Value</p>
-<p>@Model.Timestamp</p>
+
+<div class="updateForm">
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <table class="table table-condensed">
+                <tr>
+                    <td>Sensor Name:</td>
+                    <td class="editableField">@Model.Name</td>
+                </tr>
+                <tr>
+                    <td>Description:</td>
+                    <td class="editableField">@Model.Description</td>
+                </tr>
+                <tr>
+                    <td>Pulling Interval:</td>
+                    <td>@Model.PullingInterval</td>
+                </tr>
+                <tr>
+                    <td>Sensor Value:</td>
+                    <td>@Model.Value</td>
+                </tr>
+                <tr>
+                    <td>Time stamp:</td>
+                    <td>@Model.Timestamp</td>
+                </tr>
+            </table>
+        </div>
+        <div class="form-group col-md-2"></div>
+        <div class="form-group col-md-4">
+            <button type="reset" class="btn btn-primary editButton"><i class="fas fa-edit"></i> Edit Content</button>
+            <button type="reset" class="btn btn-primary saveButton"><i class="fas fa-save"></i> Save</button>
+
+        </div>
+    </div>
+</div>
+
+
+    <script type="text/javascript">
+        $(function () {
+            const oldValues = [];
+            let restore = false;
+
+            $('.editButton').click(function () {
+                let $fields = $('.editableField');
+
+                if (!restore) {
+                    $fields.each((i, e) => {
+                        oldValues.push(e.innerHTML)
+                    })
+                    $('.saveButton').css("visibility", "initial");
+                } else {
+                    $fields.each((i, e) => {
+                        e.innerHTML = oldValues[i];
+                    });
+
+                    oldValues.length = 0;
+                    $('.saveButton').css("visibility", "hidden");
+                }
+
+                restore = !restore;
+                var isEditable = $fields.is('.editable');
+                $fields.prop('contenteditable', !isEditable).toggleClass('editable');
+            })
+
+            $('.saveButton').click(function () {
+                let $fields = $('.editableField');
+                var isEditable = $fields.is('.editable');
+
+                oldValues.length = 0;
+                restore = !restore;
+
+                let id = '@Model.Id';
+                let name = $fields[0].innerHTML;
+                let description = $fields[1].innerHTML;
+
+                $.post("/Sensor/UpdateSensor", {
+                    Id: id,
+                    Name: name,
+                    Description: description,
+                    Latitude: '@Model.Latitude',
+                    Longitude: '@Model.Longitude',
+                    IsPublic: '@Model.IsPublic',
+                    MinAcceptableValue: '@Model.MinAcceptableValue',
+                    MaxAcceptableValue: '@Model.MaxAcceptableValue',
+                    Value: '@Model.Value',
+                    PullingInterval: '@Model.PullingInterval',
+                    TickOff: '@Model.TickOff',
+                    Timestamp: '@Model.Timestamp'
+                },
+                    function (data, status) {
+                        alert("Data: " + data + "\nStatus: " + status);
+                    });
+                  
+
+                $('.saveButton').css("visibility", "hidden");
+                $fields.prop('contenteditable', !isEditable).toggleClass('editable');
+            })
+
+
+        });
+
+    </script>
+
 
 
