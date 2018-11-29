@@ -43,8 +43,8 @@ namespace SmartDormitary.Data.Migrations
                     b.ToTable("AspNetRoles");
 
                     b.HasData(
-                        new { Id = "55704faa-d654-4f78-bc00-7a50145bd4fe", ConcurrencyStamp = "2b6a1c99-b484-4353-9290-fa36e051802b", Name = "Administrator", NormalizedName = "ADMINISTRATOR" },
-                        new { Id = "3b157522-e71a-492b-b903-c45292464046", ConcurrencyStamp = "5106cc77-ed7f-4918-a0a8-467c9ae8c962", Name = "User", NormalizedName = "USER" }
+                        new { Id = "759094a7-e427-4794-ba83-33bdcf3fe64a", ConcurrencyStamp = "a9b16ad2-01e4-41d5-8e42-430249b32960", Name = "Administrator", NormalizedName = "ADMINISTRATOR" },
+                        new { Id = "72c3f103-7479-464b-9a72-6e8b982fc71d", ConcurrencyStamp = "8bfb962e-c8a6-4498-b482-01fa080fa42b", Name = "User", NormalizedName = "USER" }
                     );
                 });
 
@@ -139,6 +139,8 @@ namespace SmartDormitary.Data.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("CreatedOn");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(300);
@@ -216,6 +218,8 @@ namespace SmartDormitary.Data.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
+
+                    b.Property<DateTime>("CreatedOn");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256);

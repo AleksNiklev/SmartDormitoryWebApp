@@ -28,10 +28,11 @@ namespace SmartDormitary.Data.Context
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<IdentityRole>()
-                .HasData(new IdentityRole { Name = "Administrator", NormalizedName = "ADMINISTRATOR" });
-            builder.Entity<IdentityRole>()
-                .HasData(new IdentityRole { Name = "User", NormalizedName = "USER" });
+            // We don't need to seed the roles anymore.
+            //builder.Entity<IdentityRole>()
+            //    .HasData(new IdentityRole { Name = "Administrator", NormalizedName = "ADMINISTRATOR" });
+            //builder.Entity<IdentityRole>()
+            //    .HasData(new IdentityRole { Name = "User", NormalizedName = "USER" });
 
             base.OnModelCreating(builder);
         }

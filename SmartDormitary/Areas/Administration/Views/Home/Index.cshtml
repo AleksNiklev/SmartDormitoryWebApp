@@ -1,0 +1,146 @@
+﻿@model IndexPageViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+    ViewBag.Current = "Dashboard";
+}
+<div class="card card-nav-tabs text-center">
+    <div class="card-header card-header-primary">
+        Important!
+    </div>
+    <div class="card-body">
+        <h4 class="card-title">Welcome to SmartDormitary's ACP</h4>
+        <p class="card-text">With the newly added controls, we hope that you don't mess something up.</p>
+        <a href="#" class="btn btn-primary disabled">Go somewhere</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+        <div class="card card-stats">
+            <div class="card-header card-header-success card-header-icon">
+                <div class="card-icon">
+                    <i class="fa fa-thermometer-half"></i>
+                </div>
+                <p class="card-category">Total Sensors</p>
+                <h3 class="card-title">
+                    @Model.SensorsCount
+                </h3>
+            </div>
+            <div class="card-footer">
+                <div class="stats">
+                    <i class="material-icons text-info">signal_wifi_4_bar</i>
+                    <a asp-action="Index" asp-controller="Sensors" asp-area="Administration" class="info-link font-weight-bold">See all sensors...</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+        <div class="card card-stats">
+            <div class="card-header card-header-info card-header-icon">
+                <div class="card-icon">
+                    <i class="fa fa-users"></i>
+                </div>
+                <p class="card-category">Users</p>
+                <h3 class="card-title">@Model.UsersCount</h3>
+            </div>
+            <div class="card-footer">
+                <div class="stats">
+                    <i class="material-icons">update</i> Just Updated
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+        <div class="card card-stats">
+            <div class="card-header card-header-info card-header-icon">
+                <div class="card-icon">
+                    <i class="fa fa-users"></i>
+                </div>
+                <p class="card-category">Users</p>
+                <h3 class="card-title">@Model.UsersCount</h3>
+            </div>
+            <div class="card-footer">
+                <div class="stats">
+                    <i class="material-icons">update</i> Just Updated
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
+        <div class="card card-stats">
+            <div class="card-header card-header-info card-header-icon">
+                <div class="card-icon">
+                    <i class="fa fa-users"></i>
+                </div>
+                <p class="card-category">Users</p>
+                <h3 class="card-title">@Model.UsersCount</h3>
+            </div>
+            <div class="card-footer">
+                <div class="stats">
+                    <i class="material-icons">update</i> Just Updated
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title">Latest Users</h4>
+                <p class="card-category">Information about newly registered users</p>
+            </div>
+            <div class="card-body table-responsive">
+                <table class="table table-hover">
+                    <thead class="text-warning">
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Sensors</th>
+                            <th>Registered On</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in @Model.UsersList)
+                        {
+                            <tr>
+                                <td>@user.UserName</td>
+                                <td>@user.Email</td>
+                                <td>@user.Sensors.Count</td>
+                                <td>@user.CreatedOn.Humanize()</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title">Latest Sensors</h4>
+                <p class="card-category">Information about newly registered sensors</p>
+            </div>
+            <div class="card-body table-responsive">
+                <table class="table table-hover">
+                    <thead class="text-warning">
+                        <tr>
+                            <th>Name</th>
+                            <th>Value</th>
+                            <th>Owner</th>
+                            <th>Registered On</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var sensor in @Model.SensorsList)
+                        {
+                            <tr>
+                                <td><a class="text-info" asp-action="Details" asp-controller="Sensors" asp-area="Administration" asp-route-id="@sensor.Id">@sensor.Name</a></td>
+                                <td>@sensor.Value</td>
+                                <td>@sensor.User.UserName</td>
+                                <td>@sensor.CreatedOn.Humanize()</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

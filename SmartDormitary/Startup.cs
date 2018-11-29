@@ -46,10 +46,11 @@ namespace SmartDormitary
             services.AddScoped<ISensorTypesService, SensorTypesService>();
             services.AddScoped<IJobScheduleService, JobScheduleService>();
             services.AddScoped<IServiceProvider, ServiceProvider>();
+            services.AddScoped<IUsersService, UsersService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            //// Cron Jobs
+            // Cron Jobs
             var sp = services.BuildServiceProvider();
             var jobService = sp.GetService<IJobScheduleService>();
             jobService.RunJobs();
@@ -75,6 +76,11 @@ namespace SmartDormitary
             
             app.UseMvc(routes =>
             {
+                routes.MapRoute(
+                    name : "areas",
+                    template : "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");

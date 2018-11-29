@@ -2,10 +2,6 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using GoogleMapsApi.Entities.Common;
-using GoogleMapsApi.StaticMaps;
-using GoogleMapsApi.StaticMaps.Entities;
-using GoogleMapsApi.StaticMaps.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -39,31 +35,6 @@ namespace SmartDormitary.Controllers
             var sensors = await sensorsService.GetAllPublicSensorsAsync();
 
             var result = sensors.Select(s => new SensorViewModel(s));
-
-            // Google Maps - Will move it to a service instead probably...
-            var mapsService = new StaticMapsEngine();
-            var sensorMarkers = new List<Marker>();
-            foreach (var sensor in sensors)
-            {
-                if (!sensor.IsPublic) continue;
-
-                sensorMarkers.Add(new Marker
-                    {Locations = new List<ILocationString> {new Location(sensor.Latitude, sensor.Longitude)}});
-            }
-
-            var request = new StaticMapRequest(sensorMarkers, new ImageSize(800, 600))
-            {
-                // TODO: Move API KEY to some "safer" place.
-                ApiKey = "AIzaSyDOc4hXPYpMR4Gos817M6Iz_5hUKrPE0k4",
-                Center = new Location(42.6865786, 23.3335581),
-                IsSSL = true,
-                Zoom = 12,
-                Style = new MapStyle {MapFeature = MapFeature.Road},
-                MapType = MapType.Roadmap
-            };
-            var map = mapsService.GenerateStaticMapURL(request);
-
-            TempData["StaticMapUri"] = map;
 
             return View("Index", result);
         }

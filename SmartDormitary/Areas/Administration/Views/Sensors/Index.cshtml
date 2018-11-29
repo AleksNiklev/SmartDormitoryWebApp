@@ -1,0 +1,113 @@
+﻿@using Humanizer.Localisation
+@model IEnumerable<SmartDormitary.Data.Models.Sensor>
+
+@{
+    ViewData["Title"] = "Sensors";
+    ViewBag.Current = "SensorsIndex";
+}
+<div class="card card-nav-tabs text-center">
+    <div class="card-header card-header-primary">
+        Manage Sensors
+    </div>
+    <div class="card-body">
+        <p class="card-title">Here you can manage all existing sensors and add new ones.</p>
+        <a asp-action="Create" class="btn btn-primary">Add New Sensor</a>
+    </div>
+</div>
+<div class="card card-nav-tabs text-center">
+    <div class="card-body">
+        <table class="table">
+            <thead class="text-primary">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        Refresh Time
+                    </th>
+                    <th>
+                        Is Public
+                    </th>
+                    <th>
+                        Last Updated
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Value)
+                    </th>
+                    <th>
+                        Min Value
+                    </th>
+                    <th>
+                        Max Value
+                    </th>
+                    <th>
+                        Notify
+                    </th>
+                    <th>
+                        Type
+                    </th>
+                    <th>
+                        User
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <strong><a class="text-info" asp-action="Edit" asp-controller="Sensors" asp-route-id="@item.Id">@item.Name</a></strong>
+                        </td>
+                        <td>
+                            <i>@TimeSpan.FromSeconds(item.RefreshTime).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Minute)</i>
+                        </td>
+                        <td>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" disabled checked="@item.IsPublic">
+                                    <span class="form-check-sign">
+                                        <span class="check"></span>
+                                    </span>
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                            <i>@TimeSpan.FromTicks(DateTime.Now.Subtract(item.Timestamp.Value).Ticks).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Minute) ago</i>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Value)@item.SensorType.MeasurementType
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MinAcceptableValue)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.MaxAcceptableValue)
+                        </td>
+                        <td>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" disabled checked="@item.TickOff">
+                                    <span class="form-check-sign">
+                                        <span class="check"></span>
+                                    </span>
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SensorType.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.User.UserName)
+                        </td>
+                        <td class="h4">
+                            <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-edit text-info"></i></a> |
+                            <a asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-search text-success"></i></a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-times text-danger"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

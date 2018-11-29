@@ -108,5 +108,15 @@ namespace SmartDormitary.Services
             return dormitaryContext.Sensors.Where(s => s.Id == sensorId).Include(s => s.User)
                 .Include(s => s.SensorType).FirstOrDefault();
         }
+
+        public async Task<int> GetSensorCountAsync()
+        {
+            return await dormitaryContext.Sensors.CountAsync();
+        }
+
+        public async Task<List<Sensor>> GetLastRegisteredSensorsAsync(int count = 10)
+        {
+            return await dormitaryContext.Sensors.OrderByDescending(t => t.CreatedOn).Take(count).Include(s => s.User).ToListAsync();
+        }
     }
 }

@@ -24,6 +24,7 @@ namespace SmartDormitary.Data.Models
         public bool IsPublic { get; set; }
 
         public DateTime? Timestamp { get; set; }
+        public DateTime CreatedOn { get; set; } = DateTime.Now;
 
         public double Latitude { get; set; }
 
