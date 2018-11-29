@@ -19,6 +19,11 @@ namespace SmartDormitary.Services
             this.dormitaryContext = dormitaryContext;
         }
 
+        public async Task<List<User>> GetAllUsers()
+        {
+            return await dormitaryContext.Users.Include(s => s.Sensors).ToListAsync();
+        }
+
         public async Task<int> GetUsersCountAsync()
         {
             return await dormitaryContext.Users.CountAsync();

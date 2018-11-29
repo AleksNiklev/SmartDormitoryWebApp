@@ -1,0 +1,104 @@
+﻿@using Humanizer.Localisation
+@using SmartDormitary.Data.Models
+@model IEnumerable<SmartDormitary.Data.Models.User>
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@{
+    ViewData["Title"] = "Users";
+    ViewBag.Current = "UsersIndex";
+}
+<div class="card card-nav-tabs text-center">
+    <div class="card-header card-header-primary">
+        Manage Users
+    </div>
+    <div class="card-body">
+        <p class="card-title">Here you can manage all existing users and add new ones.</p>
+        <a asp-action="Create" class="btn btn-primary">Add New User</a>
+    </div>
+</div>
+<div class="card card-nav-tabs text-center">
+    <div class="card-body">
+        <table class="table">
+            <thead class="text-primary">
+                <tr>
+                    <th>
+                        Username
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Sensors
+                    </th>
+                    <th>
+                        Verified
+                    </th>
+                    <th>
+                        Two-Factor
+                    </th>
+                    <th>
+                        Is Staff
+                    </th>
+                    <th>
+                        Registered On
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <strong><a class="text-info" asp-action="Edit" asp-controller="Users" asp-route-id="@item.Id">@item.UserName</a></strong>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @item.Sensors.Count
+                        </td>
+                        <td>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" disabled checked="@item.EmailConfirmed">
+                                    <span class="form-check-sign">
+                                        <span class="check"></span>
+                                    </span>
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" disabled checked="@item.TwoFactorEnabled">
+                                    <span class="form-check-sign">
+                                        <span class="check"></span>
+                                    </span>
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-check">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" disabled checked="@(await UserManager.IsInRoleAsync(@item, "Administrator"))">
+                                    <span class="form-check-sign">
+                                        <span class="check"></span>
+                                    </span>
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                            @item.CreatedOn.Humanize()
+                        </td>
+                        <td class="h4">
+                            <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-edit text-info"></i></a> |
+                            <a asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-search text-success"></i></a> |
+                            <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-times text-danger"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
