@@ -7,6 +7,10 @@
     .saveButton {
         visibility: hidden;
     }
+
+    button {
+        margin: 10px;
+    }
 </style>
 
 @model SensorViewModel
@@ -42,17 +46,22 @@
                 </tr>
             </table>
         </div>
-        <div class="form-group col-md-2"></div>
-        <div class="form-group col-md-4">
-            <button type="reset" class="btn btn-primary editButton"><i class="fas fa-edit"></i> Edit Content</button>
-            <button type="reset" class="btn btn-primary saveButton"><i class="fas fa-save"></i> Save</button>
-
+        <div class="form-group col-md-1"></div>
+        <div class="form-group col-md-5">
+            @if (User.Identity.Name == Model.User.UserName)
+            {
+                <div class="form-row">
+                    <button type="reset" class="btn btn-primary editButton"><i class="fas fa-edit"></i> <span>Edit Content</span></button>
+                    <button type="reset" class="btn btn-primary saveButton"><i class="fas fa-save"></i> <span>Save</span></button>
+                </div>
+            }
+            <br />
+            <div id="map" style="height: 300px;"></div>
         </div>
     </div>
 </div>
 
-
-    <script type="text/javascript">
+<script type="text/javascript">
         $(function () {
             const oldValues = [];
             let restore = false;
@@ -65,6 +74,7 @@
                         oldValues.push(e.innerHTML)
                     })
                     $('.saveButton').css("visibility", "initial");
+                    $('.editButton > span').text("Cancel");
                 } else {
                     $fields.each((i, e) => {
                         e.innerHTML = oldValues[i];
@@ -72,6 +82,7 @@
 
                     oldValues.length = 0;
                     $('.saveButton').css("visibility", "hidden");
+                    $('.editButton > span').text("Edit Content");
                 }
 
                 restore = !restore;
@@ -107,16 +118,34 @@
                     function (data, status) {
                         alert("Data: " + data + "\nStatus: " + status);
                     });
-                  
+
 
                 $('.saveButton').css("visibility", "hidden");
                 $fields.prop('contenteditable', !isEditable).toggleClass('editable');
             })
-
-
         });
 
-    </script>
+    function initMap() {
+        let modelLat = '@Model.Latitude' * 1;
+        let modelLtd = '@Model.Longitude' * 1;
+
+        var myLatLng = { lat: modelLat, lng: modelLtd };
+
+        var map = new google.maps.Map(document.getElementById('map'),
+            {
+                zoom: 12,
+                center: myLatLng
+            });
+
+        new google.maps.Marker({
+            position: myLatLng,
+            map: map,
+            title: '@Model.Name'
+        });
+    };
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOc4hXPYpMR4Gos817M6Iz_5hUKrPE0k4&callback=initMap"></script>
+
 
 
 

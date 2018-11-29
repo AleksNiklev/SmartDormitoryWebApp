@@ -29,6 +29,7 @@ namespace SmartDormitary.Models.SensorViewModels
             this.TickOff = sensor.TickOff;
             this.Timestamp = sensor.Timestamp;
             this.Type = new SensorTypeViewModel(sensor.SensorType);
+            this.User = sensor.User;
         }
 
         public SensorViewModel(SensorTypeViewModel sensorType)
@@ -72,5 +73,7 @@ namespace SmartDormitary.Models.SensorViewModels
         public bool IsPublic { get; set; }
 
         public SensorTypeViewModel Type { get; set; }
+
+        public User User { get; set; }
     }
 }

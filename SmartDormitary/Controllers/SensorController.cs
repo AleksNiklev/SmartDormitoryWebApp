@@ -103,7 +103,7 @@ namespace SmartDormitary.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateSensor(SensorViewModel sensorModel)
+        public async Task<JsonResult> UpdateSensor(SensorViewModel sensorModel)
         {
             var sensor = await this.sensorsService.GetSensorByGuidAsync(sensorModel.Id);
             sensor.Name = sensorModel.Name;
