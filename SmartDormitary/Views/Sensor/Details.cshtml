@@ -19,32 +19,20 @@
 }
 
 <h2>Details</h2>
-
+<br />
 <div class="updateForm">
     <div class="form-row">
         <div class="form-group col-md-6">
-            <table class="table table-condensed">
-                <tr>
-                    <td>Sensor Name:</td>
-                    <td class="editableField">@Model.Name</td>
-                </tr>
-                <tr>
-                    <td>Description:</td>
-                    <td class="editableField">@Model.Description</td>
-                </tr>
-                <tr>
-                    <td>Pulling Interval:</td>
-                    <td>@Model.PullingInterval</td>
-                </tr>
-                <tr>
-                    <td>Sensor Value:</td>
-                    <td>@Model.Value</td>
-                </tr>
-                <tr>
-                    <td>Time stamp:</td>
-                    <td>@Model.Timestamp</td>
-                </tr>
-            </table>
+            <p><span class="font-weight-bold">Sensor Name:</span> @Model.Name</p>
+            <p><span class="font-weight-bold">Description:</span> @Model.Description</p>
+            <p><span class="font-weight-bold">Pulling Interval:</span> @Model.PullingInterval</p>
+            <div class="form-row">
+                <div class="col-md-6">
+                    <p><span class="font-weight-bold">Sensor Value:</span> @Model.Value</p>
+                    <p><span class="font-weight-bold">Time stamp:</span> @Model.Timestamp</p>
+                </div>
+                <canvas id="foo" class="col-md-6"></canvas>
+            </div>
         </div>
         <div class="form-group col-md-1"></div>
         <div class="form-group col-md-5">
@@ -57,16 +45,45 @@
             }
             <br />
 
-            <div id="chart_div" style="width: 400px; height: 120px;"></div>
             <div id="map" style="height: 300px;"></div>
         </div>
     </div>
 </div>
 
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript" src="~/lib/gaugejs/gauge.min.js"></script>
 <script type="text/javascript">
-    google.charts.load('current', { 'packages': ['gauge'] });
-    google.charts.setOnLoadCallback(drawChart);
+    $(document).ready(function () {
+        var opts = {
+            angle: -0.15, // The span of the gauge arc
+            lineWidth: 0.3, // The line thickness
+            radiusScale: 1, // Relative radius
+            pointer: {
+                length: 0.63, // // Relative to gauge radius
+                strokeWidth: 0.064, // The thickness
+                color: '#000000' // Fill color
+            },
+            limitMax: false,     // If false, max value increases automatically if value > maxValue
+            limitMin: false,     // If true, the min value of the gauge will be fixed
+            colorStart: '#6FADCF',   // Colors
+            colorStop: '#8FC0DA',    // just experiment with them
+            strokeColor: '#E0E0E0',  // to see which ones work best for you
+            generateGradient: true,
+            highDpiSupport: true,   // High resolution support
+            staticZones: [
+                { strokeStyle: "#F03E3E", min: '@Model.Type.MinAcceptableValue' * 1, max: '@Model.MinAcceptableValue' * 1 }, // Red from 100 to 130
+                { strokeStyle: "#30B32D", min: '@Model.MinAcceptableValue' * 1, max: '@Model.MaxAcceptableValue' * 1 }, // Green
+                { strokeStyle: "#F03E3E", min: '@Model.MaxAcceptableValue' * 1, max: '@Model.Type.MaxAcceptableValue' * 1 }  // Red
+            ],
+        };
+        var target = document.getElementById('foo'); // your canvas element
+        var gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
+        gauge.colorStart = '#E0E0E0';
+        gauge.minValue = '@Model.Type.MinAcceptableValue' * 1;
+        gauge.maxValue = '@Model.Type.MaxAcceptableValue' * 1;
+        gauge.animationSpeed = 93; // set animation speed (32 is default value)
+        gauge.set('@Model.Value' * 1); 
+    })
+
 
         $(function () {
             const oldValues = [];
@@ -151,26 +168,6 @@
         });
     };
 
-    function drawChart() {
-
-        var data = google.visualization.arrayToDataTable([
-            ['Label', 'Value'],
-            ['Memory', '@Model.Type.MaxAcceptableValue' * 1]
-        ]);
-
-        var options = {
-            width: 100, height: 100,
-            @if (Model.Type.MaxAcceptableValue > 1)
-            {
-                @:redFrom: '@Model.MaxAcceptableValue' * 1, redTo: '@Model.Type.MaxAcceptableValue' * 1,
-                @:redFrom: '@Model.MinAcceptableValue' * 1, redTo: '@Model.Type.MinAcceptableValue' * 1,
-            }
-        };
-
-        var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
-
-        chart.draw(data, options);
-    };
 </script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOc4hXPYpMR4Gos817M6Iz_5hUKrPE0k4&callback=initMap"></script>
 
