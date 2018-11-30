@@ -1,96 +1,39 @@
-﻿@model SmartDormitary.Data.Models.Sensor
+﻿@using Humanizer.Localisation
+@model UserViewModel
 
 @{
     ViewData["Title"] = "Details";
+    ViewData["ShowTitleCard"] = true;
+    ViewData["CardTitle"] = "User Sensors";
 }
 
-<h2>Details</h2>
-
-<div>
-    <h4>Sensor</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.RefreshTime)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.RefreshTime)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.IsPublic)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.IsPublic)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Timestamp)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Timestamp)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Latitude)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Latitude)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Longitude)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Longitude)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Value)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Value)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.MinAcceptableValue)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.MinAcceptableValue)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.MaxAcceptableValue)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.MaxAcceptableValue)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.TickOff)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.TickOff)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.SensorType)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.SensorType.Description)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.User)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.User.Id)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+<h3 class="text-primary mt-0">Details | @Model.Username</h3>
+<hr />
+<div class="row">
+    <div class="col-md-3">
+        <div class="card card-nav-tabs">
+            <div class="card-header card-header-success">
+                User Details
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item text-info"><i class="fa fa-user"></i> @Model.Username</li>
+                @if (Model.EmailConfirmed)
+                {
+                    <li class="list-group-item text-info"><i class="fa fa-envelope"></i> @Model.Email <span class="ml-1 text-success fa fa-check"></span></li>
+                }
+                else
+                {
+                    <li class="list-group-item text-info"><i class="fa fa-envelope"></i> @Model.Email <span class="ml-1 text-danger fa fa-times"></span></li>
+                }
+                <li class="list-group-item text-info"><i class="fas fa-user-clock"></i> @Model.CreatedOn.Humanize()</li>
+            </ul>
+            <div class="form-group ml-3 mr-3">
+                <a asp-action="Edit" class="btn btn-primary" asp-route-id="@Model.Id"><i class="fas fa-edit"></i> Edit</a>
+                <a asp-action="Index" class="btn btn-info float-right"><i class="fas fa-arrow-circle-left"></i> Back to Users</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        @await Html.PartialAsync("_UserSensorsTable", Model.SensorsList, ViewData)
+    </div>
 </div>

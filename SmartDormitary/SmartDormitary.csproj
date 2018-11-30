@@ -29,6 +29,9 @@
     <Content Update="Areas\Administration\Views\Home\Index.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Areas\Administration\Views\Shared\_StatusMessage.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Areas\Administration\Views\Users\Create.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

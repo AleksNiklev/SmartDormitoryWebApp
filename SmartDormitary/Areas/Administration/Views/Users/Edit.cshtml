@@ -1,96 +1,45 @@
-﻿@model SmartDormitary.Data.Models.Sensor
+﻿@model UserViewModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Manage";
 }
 
-<h2>Edit</h2>
-
-<h4>Sensor</h4>
+<h3 class="text-primary mt-0">Manage | @Model.Username</h3>
 <hr />
+<div class="col-md-6 ml-0 pl-0">
+    @Html.Partial("_StatusMessage", TempData["StatusMessage"])
+</div>
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+    <div class="col-md-3">
+        <form asp-action="Edit" asp-controller="Users" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="SensorsList" />
+            <input type="hidden" asp-for="EmailConfirmed" />
+            <input type="hidden" asp-for="TwoFactorEnabled" />
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label asp-for="Username" class="control-label"></label>
+                <input asp-for="Username" class="form-control" />
+                <span asp-validation-for="Username" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="RefreshTime" class="control-label"></label>
-                <input asp-for="RefreshTime" class="form-control" />
-                <span asp-validation-for="RefreshTime" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <div class="checkbox">
-                    <label>
-                        <input asp-for="IsPublic" /> @Html.DisplayNameFor(model => model.IsPublic)
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="Timestamp" class="control-label"></label>
-                <input asp-for="Timestamp" class="form-control" />
-                <span asp-validation-for="Timestamp" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Latitude" class="control-label"></label>
-                <input asp-for="Latitude" class="form-control" />
-                <span asp-validation-for="Latitude" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Longitude" class="control-label"></label>
-                <input asp-for="Longitude" class="form-control" />
-                <span asp-validation-for="Longitude" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Value" class="control-label"></label>
-                <input asp-for="Value" class="form-control" />
-                <span asp-validation-for="Value" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MinAcceptableValue" class="control-label"></label>
-                <input asp-for="MinAcceptableValue" class="form-control" />
-                <span asp-validation-for="MinAcceptableValue" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MaxAcceptableValue" class="control-label"></label>
-                <input asp-for="MaxAcceptableValue" class="form-control" />
-                <span asp-validation-for="MaxAcceptableValue" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <div class="checkbox">
-                    <label>
-                        <input asp-for="TickOff" /> @Html.DisplayNameFor(model => model.TickOff)
-                    </label>
-                </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="SensorTypeId" class="control-label"></label>
-                <select asp-for="SensorTypeId" class="form-control" asp-items="ViewBag.SensorTypeId"></select>
-                <span asp-validation-for="SensorTypeId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
-                <span asp-validation-for="UserId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <button type="submit" class="btn btn-primary"><i class="fas fa-edit"></i> Save Changes</button>
+                <a asp-action="Index" class="btn btn-info float-right"><i class="fas fa-arrow-circle-left"></i> Back to Users</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
+    <div class="col-md-3">
+        <a asp-controller="Users" asp-action="DeleteUserSensors" asp-route-id="@Model.Id" class="btn btn-danger">Remove All Sensors</a>
+        <a asp-controller="Users" class="btn btn-danger">Delete Account</a>
+        <a asp-controller="Users" class="btn btn-danger disabled">Force Email Confirm</a>
+        <a asp-controller="Users" class="btn btn-danger disabled">Force Two Factor</a>
+    </div>
 </div>
 
 @section Scripts {

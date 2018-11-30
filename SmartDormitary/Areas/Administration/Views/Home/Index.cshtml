@@ -101,7 +101,7 @@
                         @foreach (var user in @Model.UsersList)
                         {
                             <tr>
-                                <td>@user.UserName</td>
+                                <td><a class="text-primary" asp-controller="Users" asp-action="Details" asp-route-id="@user.Id">@user.UserName</a></td>
                                 <td>@user.Email</td>
                                 <td>@user.Sensors.Count</td>
                                 <td>@user.CreatedOn.Humanize()</td>
