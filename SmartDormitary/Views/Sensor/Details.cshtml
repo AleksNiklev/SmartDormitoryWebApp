@@ -8,7 +8,7 @@
         visibility: hidden;
     }
 
-    button {
+    button.editButton, button.saveButton {
         margin: 10px;
     }
 </style>
@@ -56,12 +56,18 @@
                 </div>
             }
             <br />
+
+            <div id="chart_div" style="width: 400px; height: 120px;"></div>
             <div id="map" style="height: 300px;"></div>
         </div>
     </div>
 </div>
 
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
+    google.charts.load('current', { 'packages': ['gauge'] });
+    google.charts.setOnLoadCallback(drawChart);
+
         $(function () {
             const oldValues = [];
             let restore = false;
@@ -143,6 +149,27 @@
             map: map,
             title: '@Model.Name'
         });
+    };
+
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Label', 'Value'],
+            ['Memory', '@Model.Type.MaxAcceptableValue' * 1]
+        ]);
+
+        var options = {
+            width: 100, height: 100,
+            @if (Model.Type.MaxAcceptableValue > 1)
+            {
+                @:redFrom: '@Model.MaxAcceptableValue' * 1, redTo: '@Model.Type.MaxAcceptableValue' * 1,
+                @:redFrom: '@Model.MinAcceptableValue' * 1, redTo: '@Model.Type.MinAcceptableValue' * 1,
+            }
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
     };
 </script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOc4hXPYpMR4Gos817M6Iz_5hUKrPE0k4&callback=initMap"></script>
