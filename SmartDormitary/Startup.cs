@@ -40,8 +40,8 @@ namespace SmartDormitary
             // External Login Providers
             services.AddAuthentication().AddFacebook(facebookOptions =>
             {
-                facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
-                facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+                facebookOptions.AppId = "647090609020984";
+                facebookOptions.AppSecret = "5a73b6698ce81b1782eb773cff221f45";
             });
 
             // Cookie Policy (GDPR)
