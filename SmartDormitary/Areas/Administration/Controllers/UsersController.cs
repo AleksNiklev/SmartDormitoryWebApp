@@ -157,9 +157,9 @@ namespace SmartDormitary.Areas.Administration.Controllers
             }
         }
 
-        public IActionResult DeleteUserSensors(Guid id)
+        public async Task<IActionResult> DeleteUserSensors(Guid id)
         {
-            usersService.DeleteUserSensorsAsync(id);
+            await usersService.DeleteUserSensorsAsync(id);
             this.StatusMessage = $"Successfully removed the sensors registered by this user.";
             return RedirectToAction(nameof(Edit), new {id = id});
         }

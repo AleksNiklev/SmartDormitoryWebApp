@@ -15,6 +15,6 @@ namespace SmartDormitary.Services.Contracts
         Task<User> GetUserByGuidAsync(Guid? id);
         Task<bool> UserExistsAsync(Guid id);
         Task<EntityEntry<User>> UpdateUserAsync(User user);
-        void DeleteUserSensorsAsync(Guid id);
+        Task DeleteUserSensorsAsync(Guid id);
     }
 }

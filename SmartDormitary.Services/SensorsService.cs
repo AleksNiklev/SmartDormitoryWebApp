@@ -121,6 +121,13 @@ namespace SmartDormitary.Services
             return await dormitaryContext.Sensors.OrderByDescending(t => t.CreatedOn).Take(count).Include(s => s.User).ToListAsync();
         }
 
+        public async Task DeleteSensorsAsync(Guid id)
+        {
+            var sensor = await dormitaryContext.Sensors.FindAsync(id);
+            dormitaryContext.Sensors.Remove(sensor);
+            dormitaryContext.SaveChanges();
+        }
+
         public async Task<bool> SensorExists(Guid id)
         {
             return await dormitaryContext.Sensors.AnyAsync(e => e.Id == id);

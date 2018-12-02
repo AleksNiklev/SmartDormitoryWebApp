@@ -59,15 +59,15 @@ namespace SmartDormitary.Services
             return returnEntity;
         }
 
-        public void DeleteUserSensorsAsync(Guid id)
+        public async Task DeleteUserSensorsAsync(Guid id)
         {
-            var sensors = dormitaryContext.Sensors.Where(s => s.UserId == id.ToString()).ToList();
+            var sensors = await dormitaryContext.Sensors.Where(s => s.UserId == id.ToString()).ToListAsync();
             foreach (var sensor in sensors)
             {
                 dormitaryContext.Sensors.Remove(sensor);
             }
 
-            dormitaryContext.SaveChanges();
+            await dormitaryContext.SaveChangesAsync();
         }
     }
 }

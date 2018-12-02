@@ -20,5 +20,6 @@ namespace SmartDormitary.Services.Contracts
         Task<int> GetSensorCountAsync();
         Task<List<Sensor>> GetLastRegisteredSensorsAsync(int count = 10);
         Task<bool> SensorExists(Guid id);
+        Task DeleteSensorsAsync(Guid id);
     }
 }

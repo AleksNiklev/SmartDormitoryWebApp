@@ -171,23 +171,21 @@ namespace SmartDormitary.Areas.Administration.Controllers
         }
 
         // GET: Administration/Sensors/Delete/5
-        /*public async Task<IActionResult> Delete(Guid? id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var sensor = await _context.Sensors
-                .Include(s => s.SensorType)
-                .Include(s => s.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var sensor = await sensorsService.GetSensorByGuidAsync(id);
             if (sensor == null)
             {
                 return NotFound();
             }
 
-            return View(sensor);
+            var sensorView = new SensorViewModel(sensor);
+            return View(sensorView);
         }
 
         // POST: Administration/Sensors/Delete/5
@@ -195,10 +193,9 @@ namespace SmartDormitary.Areas.Administration.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
-            var sensor = await _context.Sensors.FindAsync(id);
-            _context.Sensors.Remove(sensor);
-            await _context.SaveChangesAsync();
+            await sensorsService.DeleteSensorsAsync(id);
+            this.StatusMessage = $"Successfully deleted the sensor.";
             return RedirectToAction(nameof(Index));
-        }*/
+        }
     }
 }
