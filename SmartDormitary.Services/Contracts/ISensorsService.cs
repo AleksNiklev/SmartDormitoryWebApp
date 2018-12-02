@@ -10,7 +10,7 @@ namespace SmartDormitary.Services.Contracts
     public interface ISensorsService
     {
         Task<List<Sensor>> GetAllPublicSensorsAsync();
-        Task<Sensor> GetSensorByGuidAsync(Guid sensorId);
+        Task<Sensor> GetSensorByGuidAsync(Guid? sensorId);
         Task<List<Sensor>> GetUserSensorsAsync(string userId);
         Task<EntityEntry<Sensor>> RegisterSensorAsync(Sensor sensor);
         Task<EntityEntry<Sensor>> UpdateSensorAsync(Sensor sensor);
@@ -19,5 +19,6 @@ namespace SmartDormitary.Services.Contracts
         Sensor GetSensorByGuid(Guid sensorId);
         Task<int> GetSensorCountAsync();
         Task<List<Sensor>> GetLastRegisteredSensorsAsync(int count = 10);
+        Task<bool> SensorExists(Guid id);
     }
 }

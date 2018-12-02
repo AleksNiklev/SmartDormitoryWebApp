@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SmartDormitary.Data.Context;
 using SmartDormitary.Data.Models;
+using SmartDormitary.Services.Contracts;
 
 namespace SmartDormitary.Areas.Administration.Controllers
 {
@@ -14,10 +15,18 @@ namespace SmartDormitary.Areas.Administration.Controllers
     [Area("Administration")]
     public class SensorsController : Controller
     {
+        private readonly IUsersService usersService;
+        private readonly ISensorsService sensorsService;
+        private readonly ISensorTypesService sensorTypesService;
         private readonly SmartDormitaryContext _context;
 
-        public SensorsController(SmartDormitaryContext context)
+        [TempData] public string StatusMessage { get; set; }
+        
+        public SensorsController(IUsersService usersService, ISensorsService sensorsService, ISensorTypesService sensorTypesService, SmartDormitaryContext context)
         {
+            this.usersService = usersService;
+            this.sensorsService = sensorsService;
+            this.sensorTypesService = sensorTypesService;
             _context = context;
         }
 
@@ -83,13 +92,14 @@ namespace SmartDormitary.Areas.Administration.Controllers
                 return NotFound();
             }
 
-            var sensor = await _context.Sensors.FindAsync(id);
+            var sensor = await sensorsService.GetSensorByGuidAsync(id);
             if (sensor == null)
             {
                 return NotFound();
             }
-            ViewData["SensorTypeId"] = new SelectList(_context.SensorTypes, "Id", "Description", sensor.SensorTypeId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", sensor.UserId);
+
+            ViewData["SensorTypes"] = new SelectList(await sensorTypesService.GetAllSensorTypesAsync(), "Id", "Description", sensor.SensorTypeId);
+            ViewData["Users"] = new SelectList(await usersService.GetAllUsersAsync(), "Id", "UserName", sensor.UserId);
             return View(sensor);
         }
 
@@ -114,7 +124,7 @@ namespace SmartDormitary.Areas.Administration.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SensorExists(sensor.Id))
+                    if (await sensorsService.SensorExists(sensor.Id) == false)
                     {
                         return NotFound();
                     }
@@ -123,10 +133,11 @@ namespace SmartDormitary.Areas.Administration.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                this.StatusMessage = $"Successfully saved the changes.";
+                return RedirectToAction(nameof(Edit), new {id = id});
             }
-            ViewData["SensorTypeId"] = new SelectList(_context.SensorTypes, "Id", "Description", sensor.SensorTypeId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", sensor.UserId);
+            ViewData["SensorTypes"] = new SelectList(await sensorTypesService.GetAllSensorTypesAsync(), "Id", "Description", sensor.SensorTypeId);
+            ViewData["Users"] = new SelectList(await usersService.GetAllUsersAsync(), "Id", "UserName", sensor.UserId);
             return View(sensor);
         }
 
@@ -159,11 +170,6 @@ namespace SmartDormitary.Areas.Administration.Controllers
             _context.Sensors.Remove(sensor);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool SensorExists(Guid id)
-        {
-            return _context.Sensors.Any(e => e.Id == id);
         }
     }
 }

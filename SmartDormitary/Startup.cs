@@ -14,6 +14,7 @@ using SmartDormitory.API.DormitaryAPI;
 using SmartDormitary.Services.Cron;
 using SmartDormitary.Services.Cron.Contracts;
 using System;
+using Microsoft.AspNetCore.Http;
 
 namespace SmartDormitary
 {
@@ -41,6 +42,21 @@ namespace SmartDormitary
             {
                 facebookOptions.AppId = Configuration["Authentication:Facebook:AppId"];
                 facebookOptions.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
+            });
+
+            // Cookie Policy (GDPR)
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies 
+                // is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
+            // The TempData provider cookie is not essential. Make it essential
+            // So TempData is functional when tracking is disabled.
+            services.Configure<CookieTempDataProviderOptions>(options => {
+                options.Cookie.IsEssential = true;
             });
 
             // Add application services.
@@ -78,7 +94,8 @@ namespace SmartDormitary
             }
 
             app.UseStaticFiles();
-
+            app.UseCookiePolicy();
+            
             app.UseAuthentication();
             
             app.UseMvc(routes =>

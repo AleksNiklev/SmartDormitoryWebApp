@@ -90,7 +90,8 @@ namespace SmartDormitary.Controllers
             var model = new SensorViewModel(sensor);
             return View(model);
         }
-
+        
+        [AllowAnonymous]
         public async Task<JsonResult> GetPublicSensors()
         {
             var sensors = await this.sensorsService.GetAllPublicSensorsAsync();

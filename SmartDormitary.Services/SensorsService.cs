@@ -49,9 +49,11 @@ namespace SmartDormitary.Services
         /// </summary>
         /// <param name="sensorId">(Guid) sensorId</param>
         /// <returns></returns>
-        public async Task<Sensor> GetSensorByGuidAsync(Guid sensorId)
+        public async Task<Sensor> GetSensorByGuidAsync(Guid? sensorId)
         {
-            return await dormitaryContext.Sensors.Where(s => s.Id == sensorId).Include(s => s.User)
+            return sensorId == null
+                ? null
+                : await dormitaryContext.Sensors.Where(s => s.Id == sensorId).Include(s => s.User)
                 .Include(s => s.SensorType).FirstOrDefaultAsync();
         }
 
@@ -117,6 +119,11 @@ namespace SmartDormitary.Services
         public async Task<List<Sensor>> GetLastRegisteredSensorsAsync(int count = 10)
         {
             return await dormitaryContext.Sensors.OrderByDescending(t => t.CreatedOn).Take(count).Include(s => s.User).ToListAsync();
+        }
+
+        public async Task<bool> SensorExists(Guid id)
+        {
+            return await dormitaryContext.Sensors.AnyAsync(e => e.Id == id);
         }
     }
 }
