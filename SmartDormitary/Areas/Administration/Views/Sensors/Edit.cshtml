@@ -105,14 +105,23 @@
     </script>
     <script type="text/javascript">
         function initMap() {
-            var marker;
-            var map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 12,
-                center: { lat: 42.6875236, lng: 23.3139769 }
+            var map = new google.maps.Map(document.getElementById('map'),
+                {
+                    zoom: 12,
+                    center: { lat: 42.6875236, lng: 23.3139769 }
+                });
+
+            var myLatLng = { lat: @Model.Latitude, lng: @Model.Longitude };
+            var marker = new google.maps.Marker({
+                position: myLatLng,
+                map: map,
+                title: '@Model.Name'
             });
-            map.addListener('click', function (e) {
-                placeMarker(e.latLng, map);
-            });
+
+            map.addListener('click',
+                function(e) {
+                    placeMarker(e.latLng, map);
+                });
 
             function placeMarker(position, map) {
                 if (marker) {
