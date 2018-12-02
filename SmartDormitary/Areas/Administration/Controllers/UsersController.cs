@@ -25,7 +25,7 @@ namespace SmartDormitary.Areas.Administration.Controllers
         }
 
         // GET: Users
-        public async Task<ActionResult> Index()
+        public async Task<IActionResult> Index()
         {
             var users = await usersService.GetAllUsersAsync();
             var viewModel = users.Select(u => new UserViewModel(u));
@@ -33,7 +33,7 @@ namespace SmartDormitary.Areas.Administration.Controllers
         }
 
         // GET: Users/Details/5
-        public async Task<ActionResult> Details(Guid? id)
+        public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
             {
@@ -53,7 +53,7 @@ namespace SmartDormitary.Areas.Administration.Controllers
         }
 
         // GET: Users/Create
-        public ActionResult Create()
+        public IActionResult Create()
         {
             return View();
         }
@@ -61,7 +61,7 @@ namespace SmartDormitary.Areas.Administration.Controllers
         // POST: Users/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(UserViewModel userModel)
+        public async Task<IActionResult> Create(UserViewModel userModel)
         {
             if (ModelState.IsValid)
             {
@@ -80,12 +80,12 @@ namespace SmartDormitary.Areas.Administration.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-
+            StatusMessage = "Error: Something went wrong...";
             return View(userModel);
         }
 
         // GET: Users/Edit/5
-        public async Task<ActionResult> Edit(Guid? id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
             {
@@ -104,7 +104,7 @@ namespace SmartDormitary.Areas.Administration.Controllers
         // POST: Users/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(Guid id, UserViewModel userViewModel)
+        public async Task<IActionResult> Edit(Guid id, UserViewModel userViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -130,12 +130,12 @@ namespace SmartDormitary.Areas.Administration.Controllers
                 this.StatusMessage = $"Successfully edited {userViewModel.Username}'s account.";
                 return RedirectToAction(nameof(Edit), new {id = id});
             }
-
+            StatusMessage = "Error: Something went wrong...";
             return View();
         }
 
         // GET: Users/Delete/5
-        public ActionResult Delete(int id)
+        public IActionResult Delete(int id)
         {
             return View();
         }
@@ -143,7 +143,7 @@ namespace SmartDormitary.Areas.Administration.Controllers
         // POST: Users/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public IActionResult Delete(int id, IFormCollection collection)
         {
             try
             {
@@ -157,7 +157,7 @@ namespace SmartDormitary.Areas.Administration.Controllers
             }
         }
 
-        public ActionResult DeleteUserSensors(Guid id)
+        public IActionResult DeleteUserSensors(Guid id)
         {
             usersService.DeleteUserSensorsAsync(id);
             this.StatusMessage = $"Successfully removed the sensors registered by this user.";

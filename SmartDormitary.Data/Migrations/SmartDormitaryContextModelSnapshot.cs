@@ -43,8 +43,7 @@ namespace SmartDormitary.Data.Migrations
                     b.ToTable("AspNetRoles");
 
                     b.HasData(
-                        new { Id = "759094a7-e427-4794-ba83-33bdcf3fe64a", ConcurrencyStamp = "a9b16ad2-01e4-41d5-8e42-430249b32960", Name = "Administrator", NormalizedName = "ADMINISTRATOR" },
-                        new { Id = "72c3f103-7479-464b-9a72-6e8b982fc71d", ConcurrencyStamp = "8bfb962e-c8a6-4498-b482-01fa080fa42b", Name = "User", NormalizedName = "USER" }
+                        new { Id = "f89f40c7-fc6d-4c23-90a8-e5fd3344eec2", ConcurrencyStamp = "958be9e1-c5bd-45f4-bf05-b35050c793a4", Name = "Administrator", NormalizedName = "ADMINISTRATOR" }
                     );
                 });
 
@@ -169,8 +168,7 @@ namespace SmartDormitary.Data.Migrations
 
                     b.Property<string>("UserId");
 
-                    b.Property<string>("Value")
-                        .IsRequired();
+                    b.Property<string>("Value");
 
                     b.HasKey("Id");
 

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using SmartDormitary.Areas.Administration.Models;
 using SmartDormitary.Data.Context;
 using SmartDormitary.Data.Models;
 using SmartDormitary.Services.Contracts;
@@ -18,23 +19,21 @@ namespace SmartDormitary.Areas.Administration.Controllers
         private readonly IUsersService usersService;
         private readonly ISensorsService sensorsService;
         private readonly ISensorTypesService sensorTypesService;
-        private readonly SmartDormitaryContext _context;
 
         [TempData] public string StatusMessage { get; set; }
         
-        public SensorsController(IUsersService usersService, ISensorsService sensorsService, ISensorTypesService sensorTypesService, SmartDormitaryContext context)
+        public SensorsController(IUsersService usersService, ISensorsService sensorsService, ISensorTypesService sensorTypesService)
         {
             this.usersService = usersService;
             this.sensorsService = sensorsService;
             this.sensorTypesService = sensorTypesService;
-            _context = context;
         }
 
         // GET: Administration/Sensors
         public async Task<IActionResult> Index()
         {
-            var smartDormitaryContext = _context.Sensors.Include(s => s.SensorType).Include(s => s.User);
-            return View(await smartDormitaryContext.ToListAsync());
+            var sensorsInclude = await sensorsService.GetAllSensorsAsync();
+            return View(sensorsInclude);
         }
 
         // GET: Administration/Sensors/Details/5
@@ -45,42 +44,55 @@ namespace SmartDormitary.Areas.Administration.Controllers
                 return NotFound();
             }
 
-            var sensor = await _context.Sensors
-                .Include(s => s.SensorType)
-                .Include(s => s.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var sensor = await sensorsService.GetSensorByGuidAsync(id);
             if (sensor == null)
             {
                 return NotFound();
             }
 
-            return View(sensor);
+            var sensorView = new SensorViewModel(sensor);
+            return View(sensorView);
         }
 
         // GET: Administration/Sensors/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["SensorTypeId"] = new SelectList(_context.SensorTypes, "Id", "Description");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["SensorTypes"] = new SelectList(await sensorTypesService.GetAllSensorTypesAsync(), "Id", "Description");
+            ViewData["Users"] = new SelectList(await usersService.GetAllUsersAsync(), "Id", "UserName");
             return View();
         }
 
         // POST: Administration/Sensors/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,RefreshTime,IsPublic,Timestamp,Latitude,Longitude,Value,MinAcceptableValue,MaxAcceptableValue,TickOff,SensorTypeId,UserId")] Sensor sensor)
+        public async Task<IActionResult> Create(SensorViewModel sensor)
         {
             if (ModelState.IsValid)
             {
-                sensor.Id = Guid.NewGuid();
-                _context.Add(sensor);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var newModel = new Sensor
+                {
+                    Id = Guid.NewGuid(),
+                    Name = sensor.Name,
+                    Description = sensor.Description,
+                    RefreshTime = sensor.RefreshTime,
+                    IsPublic = sensor.IsPublic,
+                    CreatedOn = DateTime.Now,
+                    Latitude = sensor.Latitude,
+                    Longitude = sensor.Longitude,
+                    MinAcceptableValue = sensor.MinAcceptableValue,
+                    MaxAcceptableValue = sensor.MaxAcceptableValue,
+                    TickOff = sensor.TickOff,
+                    SensorTypeId = sensor.SensorTypeId,
+                    UserId = sensor.UserId,
+                };
+
+                await this.sensorsService.RegisterSensorAsync(newModel);
+                this.StatusMessage = $"Successfully saved the changes.";
+                return RedirectToAction(nameof(Details), new {id = newModel.Id});
             }
-            ViewData["SensorTypeId"] = new SelectList(_context.SensorTypes, "Id", "Description", sensor.SensorTypeId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", sensor.UserId);
+            ViewData["SensorTypes"] = new SelectList(await sensorTypesService.GetAllSensorTypesAsync(), "Id", "Description", sensor.SensorTypeId);
+            ViewData["Users"] = new SelectList(await usersService.GetAllUsersAsync(), "Id", "UserName", sensor.UserId);
+            StatusMessage = "Error: Something went wrong...";
             return View(sensor);
         }
 
@@ -100,15 +112,14 @@ namespace SmartDormitary.Areas.Administration.Controllers
 
             ViewData["SensorTypes"] = new SelectList(await sensorTypesService.GetAllSensorTypesAsync(), "Id", "Description", sensor.SensorTypeId);
             ViewData["Users"] = new SelectList(await usersService.GetAllUsersAsync(), "Id", "UserName", sensor.UserId);
-            return View(sensor);
+            var sensorView = new SensorViewModel(sensor);
+            return View(sensorView);
         }
 
         // POST: Administration/Sensors/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Name,Description,RefreshTime,IsPublic,Timestamp,Latitude,Longitude,Value,MinAcceptableValue,MaxAcceptableValue,TickOff,SensorTypeId,UserId")] Sensor sensor)
+        public async Task<IActionResult> Edit(Guid id, SensorViewModel sensor)
         {
             if (id != sensor.Id)
             {
@@ -119,8 +130,25 @@ namespace SmartDormitary.Areas.Administration.Controllers
             {
                 try
                 {
-                    _context.Update(sensor);
-                    await _context.SaveChangesAsync();
+                    var newModel = new Sensor
+                    {
+                        Id = sensor.Id,
+                        Name = sensor.Name,
+                        Description = sensor.Description,
+                        RefreshTime = sensor.RefreshTime,
+                        IsPublic = sensor.IsPublic,
+                        CreatedOn = sensor.CreatedOn,
+                        Latitude = sensor.Latitude,
+                        Longitude = sensor.Longitude,
+                        Value = sensor.Value,
+                        MinAcceptableValue = sensor.MinAcceptableValue,
+                        MaxAcceptableValue = sensor.MaxAcceptableValue,
+                        TickOff = sensor.TickOff,
+                        SensorTypeId = sensor.SensorTypeId,
+                        UserId = sensor.UserId,
+                    };
+
+                    await this.sensorsService.UpdateSensorAsync(newModel);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -138,11 +166,12 @@ namespace SmartDormitary.Areas.Administration.Controllers
             }
             ViewData["SensorTypes"] = new SelectList(await sensorTypesService.GetAllSensorTypesAsync(), "Id", "Description", sensor.SensorTypeId);
             ViewData["Users"] = new SelectList(await usersService.GetAllUsersAsync(), "Id", "UserName", sensor.UserId);
+            StatusMessage = "Error: Something went wrong...";
             return View(sensor);
         }
 
         // GET: Administration/Sensors/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
+        /*public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
@@ -170,6 +199,6 @@ namespace SmartDormitary.Areas.Administration.Controllers
             _context.Sensors.Remove(sensor);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }
+        }*/
     }
 }

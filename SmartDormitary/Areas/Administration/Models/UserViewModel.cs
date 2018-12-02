@@ -25,7 +25,6 @@ namespace SmartDormitary.Areas.Administration.Models
             this.SensorsList = user.Sensors;
         }
 
-        [Required]
         public string Id { get; set; }
         [Required]
         [StringLength(50, MinimumLength = 4)]

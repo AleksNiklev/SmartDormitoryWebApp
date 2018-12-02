@@ -30,7 +30,6 @@ namespace SmartDormitary.Data.Models
 
         public double Longitude { get; set; }
         
-        [Required]
         public string Value { get; set; }
 
         public double MinAcceptableValue { get; set; }
