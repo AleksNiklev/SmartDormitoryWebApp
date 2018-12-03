@@ -1,5 +1,7 @@
-﻿@model UserViewModel
-
+﻿@using SmartDormitary.Data.Models
+@model UserViewModel
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 @{
     ViewData["Title"] = "Manage";
 }
@@ -36,9 +38,18 @@
     </div>
     <div class="col-md-3">
         <a asp-controller="Users" asp-action="DeleteUserSensors" asp-route-id="@Model.Id" class="btn btn-danger">Remove All Sensors</a>
-        <a asp-controller="Users" class="btn btn-danger">Delete Account</a>
-        <a asp-controller="Users" class="btn btn-danger disabled">Force Email Confirm</a>
-        <a asp-controller="Users" class="btn btn-danger disabled">Force Two Factor</a>
+        @{
+            if (await UserManager.IsInRoleAsync(Model.RealUser, "Administrator") == false)
+            {
+                // TODO: Finish
+                <a asp-controller="Users" class="btn btn-warning">Grant Admin</a>
+            }
+            else
+            {
+                // TODO: Finish
+                <a asp-controller="Users" class="btn btn-success">Revoke Admin</a>
+            }
+        }
     </div>
 </div>
 

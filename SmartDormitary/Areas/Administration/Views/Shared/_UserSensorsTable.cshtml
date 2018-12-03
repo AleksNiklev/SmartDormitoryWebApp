@@ -50,7 +50,16 @@
                 {
                     <tr>
                         <td>
-                            <strong><a class="text-info" asp-action="Edit" asp-controller="Sensors" asp-route-id="@item.Id">@item.Name</a></strong>
+                            <strong>
+                                @{
+                                    if (item.Value != "true" && item.Value != "false" &&
+                                        item.MinAcceptableValue > double.Parse(item.Value) && item.MaxAcceptableValue < double.Parse(item.Value))
+                                    {
+                                        <span class="text-danger fas fa-exclamation-triangle" data-toggle="tooltip" title="Critical Value"></span>
+                                    }
+                                }
+                                <a class="text-info" asp-action="Edit" asp-controller="Sensors" asp-route-id="@item.Id">@item.Name</a>
+                            </strong>
                         </td>
                         <td>
                             <i>@TimeSpan.FromSeconds(item.RefreshTime).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Minute)</i>

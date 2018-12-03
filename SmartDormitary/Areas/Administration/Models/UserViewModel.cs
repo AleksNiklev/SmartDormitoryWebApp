@@ -23,6 +23,8 @@ namespace SmartDormitary.Areas.Administration.Models
             this.TwoFactorEnabled = user.TwoFactorEnabled;
             this.CreatedOn = user.CreatedOn;
             this.SensorsList = user.Sensors;
+
+            this.RealUser = user;
         }
 
         public string Id { get; set; }
@@ -36,5 +38,7 @@ namespace SmartDormitary.Areas.Administration.Models
         public bool TwoFactorEnabled { get; set; }
         public DateTime CreatedOn { get; set; }
         public IList<Sensor> SensorsList { get; set; }
+
+        public User RealUser { get; set; }
     }
 }
