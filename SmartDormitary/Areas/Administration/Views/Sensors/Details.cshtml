@@ -1,4 +1,5 @@
-﻿@model SensorViewModel
+﻿@using Humanizer.Localisation
+@model SensorViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -35,7 +36,26 @@
                         <li class="list-group-item text-info"><i class="fa fa-bell" data-toggle="tooltip" title="Notify on Critical Value"></i> Notify: <span class="ml-1 text-danger fa fa-times" data-toggle="tooltip" title="No"></span></li>
                     }
                 }
-                <li class="list-group-item text-info"><i class="fa fa-bolt" data-toggle="tooltip" title="Value"></i> @Model.Value@Model.SensorType.MeasurementType</li>
+                @{
+                    if (Model.Timestamp == null)
+                    {
+                        <li class="list-group-item text-info"><i class="fa fa-stopwatch" data-toggle="tooltip" title="Last Updated"></i> Never</li>
+                    }
+                    else
+                    {
+                        <li class="list-group-item text-info"><i class="fa fa-stopwatch" data-toggle="tooltip" title="Last Updated"></i> @TimeSpan.FromTicks(DateTime.Now.Subtract(Model.Timestamp.Value).Ticks).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Minute) ago</li>
+                    }
+                }
+                @{
+                    if (String.IsNullOrEmpty(Model.Value))
+                    {
+                        <li class="list-group-item text-info"><i class="fa fa-bolt" data-toggle="tooltip" title="Value"></i> None</li>
+                    }
+                    else
+                    {
+                        <li class="list-group-item text-info"><i class="fa fa-bolt" data-toggle="tooltip" title="Value"></i> @Model.Value@Model.SensorType.MeasurementType</li>
+                    }
+                }
                 <li class="list-group-item text-info"><i class="fa fa-minus-square" data-toggle="tooltip" title="Min Value"></i> @Model.MinAcceptableValue@Model.SensorType.MeasurementType</li>
                 <li class="list-group-item text-info"><i class="fa fa-plus-square" data-toggle="tooltip" title="Max Value"></i> @Model.MaxAcceptableValue@Model.SensorType.MeasurementType</li>
                 <li class="list-group-item text-info"><i class="fa fa-fingerprint" data-toggle="tooltip" title="SensorType Id"></i> @Model.SensorTypeId</li>

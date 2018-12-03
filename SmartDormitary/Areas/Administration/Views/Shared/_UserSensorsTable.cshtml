@@ -66,10 +66,28 @@
                             </div>
                         </td>
                         <td>
-                            <i>@TimeSpan.FromTicks(DateTime.Now.Subtract(item.Timestamp.Value).Ticks).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Minute) ago</i>
+                            @{
+                                if (item.Timestamp == null)
+                                {
+                                    <i>Never</i>
+                                }
+                                else
+                                {
+                                    <i>@TimeSpan.FromTicks(DateTime.Now.Subtract(item.Timestamp.Value).Ticks).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Minute) ago</i>
+                                }
+                            }
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Value)@item.SensorType.MeasurementType
+                            @{
+                                if (String.IsNullOrEmpty(item.Value))
+                                {
+                                    <span>None</span>
+                                }
+                                else
+                                {
+                                    @Html.DisplayFor(modelItem => item.Value)@item.SensorType.MeasurementType
+                                }
+                            }
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.MinAcceptableValue)

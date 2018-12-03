@@ -145,7 +145,7 @@ namespace SmartDormitary.Areas.Administration.Controllers
                         MaxAcceptableValue = sensor.MaxAcceptableValue,
                         TickOff = sensor.TickOff,
                         SensorTypeId = sensor.SensorTypeId,
-                        UserId = sensor.UserId,
+                        UserId = sensor.UserId
                     };
 
                     await this.sensorsService.UpdateSensorAsync(newModel);

@@ -41,7 +41,7 @@ namespace SmartDormitary.Controllers
         [HttpGet]
         public async Task<IActionResult> Register(Guid Id)
         {
-            var model = await this.sensorTypesService.GetSensorTypesByIdAsync(Id);
+            var model = await this.sensorTypesService.GetSensorTypeByIdAsync(Id);
             var sensor = new RegisterSensorViewModel(new SensorTypeViewModel(model));
             return View(sensor);
         }

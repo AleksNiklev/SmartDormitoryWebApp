@@ -22,6 +22,7 @@ namespace SmartDormitary.Areas.Administration.Models
             this.RefreshTime = sensor.RefreshTime;
             this.IsPublic = sensor.IsPublic;
             this.CreatedOn = sensor.CreatedOn;
+            this.Timestamp = sensor.Timestamp;
             this.Latitude = sensor.Latitude;
             this.Longitude = sensor.Longitude;
             this.Value = sensor.Value;
@@ -54,6 +55,7 @@ namespace SmartDormitary.Areas.Administration.Models
 
         [Required]
         public DateTime CreatedOn { get; set; }
+        public DateTime? Timestamp { get; set; }
 
         public double Latitude { get; set; }
 

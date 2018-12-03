@@ -7,7 +7,7 @@ namespace SmartDormitary.Services.Contracts
 {
     public interface ISensorTypesService
     {
-        Task<SensorType> GetSensorTypesByIdAsync(Guid id);
+        Task<SensorType> GetSensorTypeByIdAsync(Guid id);
         Task<List<SensorType>> GetAllSensorTypesAsync();
         Task<List<SensorType>> SeedSensorTypesAsync();
     }
