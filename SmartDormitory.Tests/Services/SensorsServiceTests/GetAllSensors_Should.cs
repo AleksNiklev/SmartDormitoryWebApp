@@ -1,7 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using SmartDormitary.Data.Context;
 using SmartDormitary.Services;
+using SmartDormitary.Services.Hubs;
 using SmartDormitory.Tests.HelpersMethods;
 using System.Linq;
 
@@ -20,7 +23,8 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
             // Assert
             using (var assertContext = new SmartDormitaryContext(contextOptions))
             {
-                var service = new SensorsService(assertContext);
+                var hubMock = new Mock<IHubContext<NotifyHub>>();
+                var service = new SensorsService(assertContext, hubMock.Object);
 
                 Assert.AreEqual(0, service.GetAllSensors().Count);
             }
@@ -46,7 +50,8 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
             // Assert
             using (var assertContext = new SmartDormitaryContext(contextOptions))
             {
-                var service = new SensorsService(assertContext);
+                var hubMock = new Mock<IHubContext<NotifyHub>>();
+                var service = new SensorsService(assertContext, hubMock.Object);
                 var result = service.GetAllSensors();
 
                 Assert.AreEqual(1, result.Count);

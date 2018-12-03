@@ -1,7 +1,9 @@
 ﻿using FluentScheduler;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using SmartDormitary.Data.Context;
 using SmartDormitary.Services.Contracts;
+using SmartDormitary.Services.Hubs;
 using SmartDormitory.API.DormitaryAPI;
 using System;
 using System.Collections.Generic;
@@ -15,13 +17,15 @@ namespace SmartDormitary.Services.Cron.Jobs
     {
         private readonly ISensorsAPI api;
         private readonly IServiceProvider serviceProvider;
+        private readonly IHubContext<NotifyHub> hubContext;
         private readonly Guid sensorId;
 
-        public SensorJob(ISensorsAPI api, IServiceProvider serviceProvider, Guid sensorId)
+        public SensorJob(ISensorsAPI api, IServiceProvider serviceProvider, IHubContext<NotifyHub> hubContext, Guid sensorId)
         {
             this.api = api;
             this.serviceProvider = serviceProvider;
             this.sensorId = sensorId;
+            this.hubContext = hubContext;
         }
 
         public async void Execute()
@@ -32,7 +36,7 @@ namespace SmartDormitary.Services.Cron.Jobs
                     .ServiceProvider
                     .GetService<SmartDormitaryContext>())
                 {
-                    var sensorService = new SensorsService(dbContext);
+                    var sensorService = new SensorsService(dbContext, this.hubContext);
                     var sensor = await sensorService.GetSensorByGuidAsync(sensorId);
 
                     var sensorApi = await this.api.GetSensorAsync(sensor.SensorTypeId);
@@ -46,6 +50,7 @@ namespace SmartDormitary.Services.Cron.Jobs
             }
             catch (Exception ex)
             {
+                throw ex;
                 Debug.WriteLine("Got Execption in job: " + ex.Message);
             }
         }

@@ -4,7 +4,7 @@
 }
 
 <h2>Register</h2>
-<p>@Model.DefaultPullingInterval</p>
+
 <div class="table">
     <form asp-controller="Sensor" asp-action="Register" method="post" id="registerForm">
         <div asp-validation-summary="All" class="text-danger"></div>
@@ -77,8 +77,9 @@
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
+}
 
-    <script type="text/javascript">
+<script type="text/javascript">
     $(document).ready(function () {
 
         $("#registerForm").validate({
@@ -145,10 +146,9 @@
             $('#lngField').val(position.lng);
         }
     }
-    </script>
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOc4hXPYpMR4Gos817M6Iz_5hUKrPE0k4&callback=initMap"></script>
 
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOc4hXPYpMR4Gos817M6Iz_5hUKrPE0k4&callback=initMap"></script>
-}
 
 <div>
     <a asp-action="Index">Back to List</a>

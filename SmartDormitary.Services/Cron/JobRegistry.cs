@@ -1,9 +1,11 @@
 ﻿using FluentScheduler;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using SmartDormitary.Data.Context;
 using SmartDormitary.Data.Models;
 using SmartDormitary.Services.Contracts;
 using SmartDormitary.Services.Cron.Jobs;
+using SmartDormitary.Services.Hubs;
 using SmartDormitory.API.DormitaryAPI;
 using System;
 using System.Collections.Generic;
@@ -16,19 +18,21 @@ namespace SmartDormitary.Services.Cron
         private readonly ISensorsAPI api;
         private readonly IServiceProvider serviceProvider;
         private readonly ISensorsService sensorsService;
+        private readonly IHubContext<NotifyHub> hubContext;
 
-        public JobRegistry(ISensorsAPI api, IServiceProvider serviceProvider, Guid sensorId, int refreshTime)
+        public JobRegistry(ISensorsAPI api, IServiceProvider serviceProvider, IHubContext<NotifyHub> hubContext, Guid sensorId, int refreshTime)
         {
             this.api = api;
-            this.serviceProvider = serviceProvider; 
+            this.serviceProvider = serviceProvider;
+            this.hubContext = hubContext;
 
-            Schedule(() => new SensorJob(api, this.serviceProvider, sensorId))
+            Schedule(() => new SensorJob(api, this.serviceProvider, hubContext, sensorId))
                 .ToRunNow()
                 .AndEvery(refreshTime)
                 .Seconds();
         }
 
-        public JobRegistry(ISensorsAPI api, IServiceProvider serviceProvider)
+        public JobRegistry(ISensorsAPI api, IServiceProvider serviceProvider, IHubContext<NotifyHub> hubContext)
         {
             this.api = api;
             this.serviceProvider = serviceProvider;
@@ -38,7 +42,7 @@ namespace SmartDormitary.Services.Cron
             Schedule(() => new SensorTypesJob(api, this.serviceProvider)).ToRunEvery(10).Minutes();
             foreach (var sensor in sensors)
             {
-                Schedule(() => new SensorJob(api, this.serviceProvider, sensor.Id))
+                Schedule(() => new SensorJob(api, this.serviceProvider, hubContext, sensor.Id))
                     .ToRunNow()
                     .AndEvery(sensor.RefreshTime)
                     .Seconds();

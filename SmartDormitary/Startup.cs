@@ -15,6 +15,8 @@ using SmartDormitary.Services.Cron;
 using SmartDormitary.Services.Cron.Contracts;
 using System;
 using Microsoft.AspNetCore.Http;
+using SmartDormitary.Services.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace SmartDormitary
 {
@@ -70,6 +72,8 @@ namespace SmartDormitary
             services.AddScoped<IJobScheduleService, JobScheduleService>();
             services.AddScoped<IServiceProvider, ServiceProvider>();
             services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<NotifyHub>();
+            services.AddSignalR();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -98,6 +102,11 @@ namespace SmartDormitary
             
             app.UseAuthentication();
             
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<NotifyHub>("/notifyHub");
+            });
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

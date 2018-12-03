@@ -3,20 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using SmartDormitary.Data.Context;
 using SmartDormitary.Data.Models;
 using SmartDormitary.Services.Contracts;
+using SmartDormitary.Services.Hubs;
 
 namespace SmartDormitary.Services
 {
     public class SensorsService : ISensorsService
     {
         private readonly SmartDormitaryContext dormitaryContext;
+        private readonly IHubContext<NotifyHub> _hubContext;
 
-        public SensorsService(SmartDormitaryContext dormitaryContext)
+        public SensorsService(SmartDormitaryContext dormitaryContext, IHubContext<NotifyHub> hubContext)
         {
+            this._hubContext = hubContext;
             this.dormitaryContext = dormitaryContext;
         }
 
@@ -39,6 +43,7 @@ namespace SmartDormitary.Services
         /// <returns>ChangeTracking-EntityEntry</returns>
         public async Task<EntityEntry<Sensor>> UpdateSensorAsync(Sensor sensor)
         {
+            await _hubContext.Clients.User(sensor.UserId).SendAsync("Notify");
             var returnEntity = dormitaryContext.Sensors.Update(sensor);
             await dormitaryContext.SaveChangesAsync();
             return returnEntity;
