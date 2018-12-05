@@ -5,6 +5,7 @@ using Moq;
 using SmartDormitary.Data.Context;
 using SmartDormitary.Services;
 using SmartDormitary.Services.Hubs;
+using SmartDormitary.Services.Hubs.Service;
 using SmartDormitory.Tests.HelpersMethods;
 using System;
 using System.Collections.Generic;
@@ -38,8 +39,8 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
             // Assert
             using (var assertContext = new SmartDormitaryContext(contextOptions))
             {
-                var hubMock = new Mock<IHubContext<NotifyHub>>();
-                var service = new SensorsService(assertContext, hubMock.Object);
+                var hubServiceMock = new Mock<IHubService>();
+                var service = new SensorsService(assertContext, hubServiceMock.Object);
                 var result = await service.GetAllPublicSensorsAsync();
 
                 Assert.AreEqual(1, result.Count);
@@ -67,8 +68,8 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
             // Assert
             using (var assertContext = new SmartDormitaryContext(contextOptions))
             {
-                var hubMock = new Mock<IHubContext<NotifyHub>>();
-                var service = new SensorsService(assertContext, hubMock.Object);
+                var hubServiceMock = new Mock<IHubService>();
+                var service = new SensorsService(assertContext, hubServiceMock.Object);
                 var result = await service.GetAllPublicSensorsAsync();
 
                 Assert.AreEqual(0, result.Count);

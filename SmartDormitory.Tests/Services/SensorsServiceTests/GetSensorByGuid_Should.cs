@@ -5,6 +5,7 @@ using Moq;
 using SmartDormitary.Data.Context;
 using SmartDormitary.Services;
 using SmartDormitary.Services.Hubs;
+using SmartDormitary.Services.Hubs.Service;
 using SmartDormitory.Tests.HelpersMethods;
 using System;
 using System.Collections.Generic;
@@ -25,8 +26,8 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
             // Assert
             using (var assertContext = new SmartDormitaryContext(contextOptions))
             {
-                var hubMock = new Mock<IHubContext<NotifyHub>>();
-                var service = new SensorsService(assertContext, hubMock.Object);
+                var hubServiceMock = new Mock<IHubService>();
+                var service = new SensorsService(assertContext, hubServiceMock.Object);
 
                 Assert.IsNull(service.GetSensorByGuid(TestHelpers.TestGuid()));
             }
@@ -51,8 +52,8 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
             // Assert
             using (var assertContext = new SmartDormitaryContext(contextOptions))
             {
-                var hubMock = new Mock<IHubContext<NotifyHub>>();
-                var service = new SensorsService(assertContext, hubMock.Object);
+                var hubServiceMock = new Mock<IHubService>();
+                var service = new SensorsService(assertContext, hubServiceMock.Object);
                 var result = service.GetSensorByGuid(sensor.Id);
 
                 Assert.AreEqual(sensor.Id, result.Id);

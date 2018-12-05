@@ -9,7 +9,6 @@ using SmartDormitary.Data.Models;
 using SmartDormitary.Models.SensorViewModels;
 using SmartDormitary.Services.Contracts;
 using SmartDormitary.Services.Cron;
-using SmartDormitary.Services.Cron.Contracts;
 using Newtonsoft.Json;
 using SmartDormitory.API.DormitaryAPI;
 

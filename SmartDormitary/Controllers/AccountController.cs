@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
@@ -14,6 +15,7 @@ using SmartDormitary.Data.Models;
 using SmartDormitary.Models;
 using SmartDormitary.Models.AccountViewModels;
 using SmartDormitary.Services;
+using SmartDormitary.Services.Cron;
 
 namespace SmartDormitary.Controllers
 {
@@ -24,17 +26,20 @@ namespace SmartDormitary.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IEmailSender _emailSender;
+        private readonly IJobService cron;
         private readonly ILogger _logger;
 
         public AccountController(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             IEmailSender emailSender,
+            IJobService cron,
             ILogger<AccountController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
+            this.cron = cron;
             _logger = logger;
         }
 
@@ -66,6 +71,7 @@ namespace SmartDormitary.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+                    this.cron.RunJob();
                     return RedirectToLocal(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

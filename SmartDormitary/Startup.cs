@@ -11,12 +11,14 @@ using RestSharp;
 using SmartDormitary.Data.Context;
 using SmartDormitary.Services.Contracts;
 using SmartDormitory.API.DormitaryAPI;
-using SmartDormitary.Services.Cron;
-using SmartDormitary.Services.Cron.Contracts;
 using System;
 using Microsoft.AspNetCore.Http;
 using SmartDormitary.Services.Hubs;
 using Microsoft.AspNetCore.SignalR;
+using SmartDormitary.Services.Cron;
+using FluentScheduler;
+using SmartDormitary.Services.Cron.Jobs;
+using SmartDormitary.Services.Hubs.Service;
 
 namespace SmartDormitary
 {
@@ -69,18 +71,15 @@ namespace SmartDormitary
             services.AddScoped<ISensorsAPI, SensorsAPI>();
             services.AddScoped<ISensorsService, SensorsService>();
             services.AddScoped<ISensorTypesService, SensorTypesService>();
-            services.AddScoped<IJobScheduleService, JobScheduleService>();
             services.AddScoped<IServiceProvider, ServiceProvider>();
             services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<IHubService, HubService>();
             services.AddScoped<NotifyHub>();
+            services.AddScoped<IJobService, JobService>();
+            services.AddScoped<ISensorJob, SensorJob>();
             services.AddSignalR();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
-            // Cron Jobs
-            var sp = services.BuildServiceProvider();
-            var jobService = sp.GetService<IJobScheduleService>();
-            jobService.RunJobs();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
