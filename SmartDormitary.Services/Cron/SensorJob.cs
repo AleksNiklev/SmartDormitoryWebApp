@@ -30,15 +30,15 @@ namespace SmartDormitary.Services.Cron
             foreach (var sensor in sensors)
             {
                 var sensorApi = await api.GetSensorAsync(sensor.SensorTypeId);
-                sensor.Value = sensorApi.Value;
-                await sensorService.UpdateSensorAsync(sensor);
 
-                Debug.WriteLine(sensor.Id + " was updated: value: " + sensor.Value);
+                if ((sensorApi.Timestamp.Value - sensor.Timestamp.Value).TotalSeconds > sensor.RefreshTime)
+                {
+                    sensor.Value = sensorApi.Value;
+                    sensor.Timestamp = sensorApi.Timestamp;
+                    await sensorService.UpdateSensorAsync(sensor);
+                }
+
             }
-
-
-
-            Debug.WriteLine("jobbbbbbb **************");
         }
     }
 }

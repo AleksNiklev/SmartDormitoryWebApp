@@ -21,5 +21,6 @@ namespace SmartDormitary.Services.Extensions
 
             return result.ToArray();
         }
+
     }
 }

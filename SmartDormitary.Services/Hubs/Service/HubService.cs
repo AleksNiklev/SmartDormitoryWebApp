@@ -15,9 +15,9 @@ namespace SmartDormitary.Services.Hubs.Service
             this.hubContext = hubContext;
         }
 
-        public async Task Notify(string userId)
+        public async Task Notify(string userId, string name, string value, string measurementType)
         {
-            await hubContext.Clients.User(userId).SendAsync("Notify");
+            await hubContext.Clients.User(userId).SendAsync("Notify", name, value, measurementType);
         }
     }
 }

@@ -44,7 +44,7 @@ namespace SmartDormitary.Services
         /// <returns>ChangeTracking-EntityEntry</returns>
         public async Task<EntityEntry<Sensor>> UpdateSensorAsync(Sensor sensor)
         {
-            await hubService.Notify(sensor.UserId);
+            await hubService.Notify(sensor.UserId, sensor.Name, sensor.Value, sensor.SensorType.MeasurementType);
             var returnEntity = dormitaryContext.Sensors.Update(sensor);
             await dormitaryContext.SaveChangesAsync();
             return returnEntity;
