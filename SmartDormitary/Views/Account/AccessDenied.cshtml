@@ -1,8 +1,14 @@
 ﻿@{
-    ViewData["Title"] = "Access denied";
+    ViewData["Title"] = "Access Denied";
 }
-
-<header>
-    <h2 class="text-danger">@ViewData["Title"]</h2>
-    <p class="text-danger">You do not have access to this resource.</p>
-</header>
+<div class="page-header header-filter" data-parallax="true" style="background-image: url('/assets/img/city-profile.jpg');"></div>
+<div class="main main-raised">
+    <div class="section">
+        <div class="container">
+            <header>
+                <h2 class="text-danger"><i class="material-icons">error</i> @ViewData["Title"]</h2>
+                <p class="text-danger">You do not have access to this resource.</p>
+            </header>
+        </div>
+    </div>
+</div>
