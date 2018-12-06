@@ -1,30 +1,39 @@
 ﻿@model IEnumerable<SensorViewModel>
 @{
-     ViewData["Title"] = "Sensors";
+    ViewData["Title"] = "Sensors";
 }
-
-<h2>Your Sensors</h2>
-
-<table class="table table-bordered">
-    <tr>
-        <td class="col-lg-3">Name</td>
-        <td class="col-lg-2">Description</td>
-        <td class="col-lg-2">Value</td>
-        <td class="col-lg-2">TimeStamp</td>
-        <td class="col-lg-1"></td>
-    </tr>
-    @foreach (var sensor in Model)
-    {
-        <tr>
-            <td>@sensor.Name</td>
-            <td>@sensor.Description</td>
-            <td>@sensor.Value</td>
-            <td>@sensor.Timestamp</td>
-            <td><a asp-action="Details" asp-controller="Sensor" asp-route-id="@sensor.Id" class="btn btn-success">Details</a></td>
-        </tr>
-
-    }
-</table>
-
-
-
+<div class="page-header header-filter" data-parallax="true" style="background-image: url('/assets/img/city-profile.jpg');"></div>
+<div class="main main-raised">
+    <div class="section">
+        <div class="container">
+            <div class="row">
+                <div class="title">
+                    <h2>Your Sensors</h2>
+                </div>
+                <table class="table table-striped table-responsive border border-info">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Value</th>
+                            <th scope="col">Last Updated</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var sensor in Model)
+                        {
+                            <tr>
+                                <td scope="row">@sensor.Name</td>
+                                <td>@sensor.Description</td>
+                                <td>@sensor.Value</td>
+                                <td>@sensor.Timestamp</td>
+                                <td><a asp-action="Details" asp-controller="Sensor" asp-route-id="@sensor.Id" class="btn btn-success"><i class="material-icons">info</i> Details</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

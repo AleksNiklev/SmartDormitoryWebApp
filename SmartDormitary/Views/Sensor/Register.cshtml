@@ -2,77 +2,92 @@
 @{
     ViewData["Title"] = "Register";
 }
-
-<h2>Register</h2>
-
-<div class="table">
-    <form asp-controller="Sensor" asp-action="Register" method="post" id="registerForm">
-        <div asp-validation-summary="All" class="text-danger"></div>
-
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <label asp-for="Name">Name</label>
-                <input asp-for="Name" class="form-control" name="Name" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group col-md-6">
-                <label asp-for="PullingInterval">Pulling Data Interval</label>
-                <input asp-for="PullingInterval" class="form-control" name="PullingInterval" />
-                <span asp-validation-for="PullingInterval" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label asp-for="Description">Description</label>
-            <textarea asp-for="Description" class="form-control" name="Description"></textarea>
-            <span asp-validation-for="Description" class="text-danger"></span>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label asp-for="MinAcceptableValue">Min Acceptable Value</label>
-                        <input asp-for="MinAcceptableValue" class="form-control" name="MinAcceptableValue" />
-                        <span asp-validation-for="MinAcceptableValue" class="text-danger"></span>
-                    </div>
+<div class="page-header header-filter" data-parallax="true" style="background-image: url('/assets/img/city-profile.jpg');"></div>
+<div class="main main-raised">
+    <div class="section">
+        <div class="container">
+            <div class="row">
+                <div class="title">
+                    <h2>Register Sensor</h2>
                 </div>
+                <div class="table">
+                    <form asp-controller="Sensor" asp-action="Register" method="post" id="registerForm">
+                        <div asp-validation-summary="All" class="text-danger"></div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label asp-for="MaxAcceptableValue">Max Acceptable Value</label>
-                        <input asp-for="MaxAcceptableValue" class="form-control" name="MaxAcceptableValue" />
-                        <span asp-validation-for="MaxAcceptableValue" class="text-danger"></span>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label asp-for="TickOff">
-                            Tick-Off
-                            <input type="checkbox" asp-for="TickOff" class="form-control" />
-                        </label>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label asp-for="IsPublic">
-                            Is Public
-                            <input type="checkbox" asp-for="IsPublic" class="form-control" />
-                        </label>
-                    </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label asp-for="Name">Name</label>
+                                <input asp-for="Name" class="form-control" name="Name" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label asp-for="PullingInterval">Pulling Data Interval</label>
+                                <input asp-for="PullingInterval" class="form-control" name="PullingInterval" />
+                                <span asp-validation-for="PullingInterval" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Description">Description</label>
+                            <textarea asp-for="Description" class="form-control" name="Description"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label asp-for="MinAcceptableValue">Min Acceptable Value</label>
+                                        <input asp-for="MinAcceptableValue" class="form-control" name="MinAcceptableValue" />
+                                        <span asp-validation-for="MinAcceptableValue" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label asp-for="MaxAcceptableValue">Max Acceptable Value</label>
+                                        <input asp-for="MaxAcceptableValue" class="form-control" name="MaxAcceptableValue" />
+                                        <span asp-validation-for="MaxAcceptableValue" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="checkbox" asp-for="TickOff"> Notify When Critical
+                                                <span class="form-check-sign">
+                                                    <span class="check"></span>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="checkbox" asp-for="IsPublic"> Is Public
+                                                <span class="form-check-sign">
+                                                    <span class="check"></span>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-success"><i class="material-icons">add_location</i> Register</button>
+                                        <button class="btn btn-info" asp-action="Index"><i class="material-icons">explore</i> Back to List</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <div id="map" class="rounded" style="height: 300px;"></div>
+                                <input asp-for="Latitude" class="form-control" type="hidden" id="latField" />
+                                <span asp-validation-for="Latitude" class="text-danger"></span>
+                                <input asp-for="Longitude" class="form-control" type="hidden" id="lngField" />
+                                <span asp-validation-for="Longitude" class="text-danger"></span>
+                                <input type="checkbox" name="MapMarker" style="visibility:hidden" id="mapMarker" />
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <div class="form-group col-md-6">
-                <div id="map" style="height: 300px;"></div>
-                <input asp-for="Latitude" class="form-control" type="hidden" id="latField" />
-                <span asp-validation-for="Latitude" class="text-danger"></span>
-                <input asp-for="Longitude" class="form-control" type="hidden" id="lngField" />
-                <span asp-validation-for="Longitude" class="text-danger"></span>
-                <input type="checkbox" name="MapMarker" style="visibility:hidden" id="mapMarker" />
-            </div>
         </div>
-        <div class="form-group">
-            <input type="submit" value="Save" class="btn btn-success" />
-        </div>
-    </form>
+    </div>
 </div>
 
 @section Scripts {
@@ -148,8 +163,3 @@
     }
 </script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOc4hXPYpMR4Gos817M6Iz_5hUKrPE0k4&callback=initMap"></script>
-
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>

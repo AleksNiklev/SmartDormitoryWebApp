@@ -2,27 +2,38 @@
 @{
     ViewData["Title"] = "Index";
 }
-
-<h2>Sensor Manager Panel</h2>
-
-<table class="table table-bordered">
-    <tr>
-        <td class="col-lg-3">Description</td>
-        <td class="col-lg-2">Name</td>
-        <td class="col-lg-2">MeasurementType</td>
-        <td class="col-lg-2">MinRefreshTime</td>
-        <td class="col-lg-1"></td>
-    </tr>
-    @foreach (var sensorType in Model)
-    {
-    <tr>
-        <td>@sensorType.Description</td>
-        <td>@sensorType.Tag</td>
-        <td>@sensorType.MeasurementType</td>
-        <td>@sensorType.MinRefreshTime</td>
-        <td><a asp-action="Register" asp-controller="Sensor" asp-route-id="@sensorType.Id" class="btn btn-success">Register Sensor</a></td>
-    </tr>
-
-    }
-</table>
-
+<div class="page-header header-filter" data-parallax="true" style="background-image: url('/assets/img/city-profile.jpg');"></div>
+<div class="main main-raised">
+    <div class="section">
+        <div class="container">
+            <div class="row">
+                <div class="title">
+                    <h2>Sensor Manager Panel</h2>
+                </div>
+                <table class="table table-striped table-responsive border border-info">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Measurement Type</th>
+                            <th scope="col">Refresh Time</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var sensorType in Model)
+                        {
+                            <tr>
+                                <td scope="row">@sensorType.Tag</td>
+                                <td>@sensorType.Description</td>
+                                <td>@sensorType.MeasurementType</td>
+                                <td>@sensorType.MinRefreshTime</td>
+                                <td><a asp-action="Register" asp-controller="Sensor" asp-route-id="@sensorType.Id" class="btn btn-success"><i class="material-icons">add_location</i> Register Sensor</a></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

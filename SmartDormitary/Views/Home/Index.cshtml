@@ -2,62 +2,64 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-<div class="container">
-    <div id="map" style="height: 400px;"></div>
-    <table class="table table-bordered">
-        <tr>
-            <td class="col-md-2">Sensor Name</td>
-            <td class="col-md-2">Description</td>
-            <td class="col-md-2">Value</td>
-            <td class="col-md-2">TimeStamp</td>
-            <td class="col-md-2">Link</td>
-        </tr>
-        @foreach (var sensor in Model)
-        {
-            <tr>
-                <td>@sensor.Name</td>
-                <td>@sensor.Description</td>
-                <td>@sensor.Value</td>
-                <td>@sensor.Timestamp</td>
-                <td><a asp-action="Details" asp-controller="Sensor" asp-route-id="@sensor.Id">Details</a></td>
-            </tr>
-        }
-    </table>
-    @section Scripts {
-        <script type="text/javascript">
+<div class="page-header header-filter" data-parallax="true" style="background-image: url('./assets/img/bg7.jpg');">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 ml-auto mr-auto">
+                <div class="brand">
+                    <h1>Smart Dormitary</h1>
+                    <h3>A Badass Sensor Manager Created With <i class="material-icons">favorite</i></h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="main main-raised">
+    <div class="section">
+        <div class="container">
+            <div class="title text-center">
+                <h2>Live Sensors Grid</h2>
+            </div>
+            <div id="map" style="height: 500px;" class="rounded"></div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script type="text/javascript">
 
-            function initMap() {
+        function initMap() {
 
-                $.ajax({
-                    url: "/Sensor/GetPublicSensors",
-                    type: "GET",
-                    success: function(response) {
+            $.ajax({
+                url: "/Sensor/GetPublicSensors",
+                type: "GET",
+                success: function(response) {
 
-                        var map = new google.maps.Map(document.getElementById('map'),
-                            {
-                                zoom: 12,
-                                center: { lat: 42.6875236, lng: 23.3139769 }
-                            });
+                    var map = new google.maps.Map(document.getElementById('map'),
+                        {
+                            zoom: 12,
+                            center: { lat: 42.6875236, lng: 23.3139769 }
 
-                        JSON.parse(response).forEach(function(marker) {
-
-                            var myLatLng = { lat: marker.x, lng: marker.y };
-
-                            new google.maps.Marker({
-                                position: myLatLng,
-                                map: map,
-                                title: marker.name
-                            });
                         });
 
-                    },
-                    error: function(response) {
-                        alert(response);
-                    }
-                });
-            }
+                    JSON.parse(response).forEach(function(marker) {
 
-        </script>
-        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOc4hXPYpMR4Gos817M6Iz_5hUKrPE0k4&callback=initMap"></script>
-    }
-</div>
+                        var myLatLng = { lat: marker.x, lng: marker.y };
+
+                        new google.maps.Marker({
+                            position: myLatLng,
+                            map: map,
+                            title: marker.name,
+                            animation: google.maps.Animation.DROP
+                        });
+                    });
+
+                },
+                error: function(response) {
+                    alert(response);
+                }
+            });
+        }
+
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOc4hXPYpMR4Gos817M6Iz_5hUKrPE0k4&callback=initMap"></script>
+}
