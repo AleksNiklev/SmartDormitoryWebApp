@@ -95,9 +95,9 @@
         console.log(dateSpan);
         console.log(modelDate);
         console.log(now);
+        
+        setInterval(sendRequest, 5000);
 
-
-        //setInterval(sendRequest, 5000);
         function sendRequest() {
             $.get("/Sensor/GetSensorById", { id: '@Model.Id' }, function (response, status) {
                 console.log(Date.parse(response.timeStamp).toLocaleString());
@@ -150,7 +150,7 @@
             let name = $fields[0].innerHTML;
             let description = $fields[1].innerHTML;
 
-            $.post("/Sensor/UpdateSensor", JSON.stringify({
+            $.post("/Sensor/UpdateSensor", {
                 Id: id,
                 Name: name,
                 Description: description,
@@ -163,7 +163,7 @@
                 PullingInterval: '@Model.PullingInterval',
                 TickOff: '@Model.TickOff',
                 Timestamp: '@Model.Timestamp'
-            }),
+            }).done(
                 function (data, status) {
                     alert("Data: " + data + "\nStatus: " + status);
                 });

@@ -58,8 +58,7 @@ namespace SmartDormitory.Tests.HelpersMethods
                 Latitude = 41.1231,
                 Longitude = 41.1231,
                 RefreshTime = 40,
-                Value = "123",
-                Timestamp = new DateTime(),
+                SensorData = new SensorData() { Value = "123", Timestamp = new DateTime() },
                 User = TestUser1()
             };
         }
@@ -80,8 +79,7 @@ namespace SmartDormitory.Tests.HelpersMethods
                 Latitude = 41.1231,
                 Longitude = 41.1231,
                 RefreshTime = 40,
-                Value = "123",
-                Timestamp = new DateTime(),
+                SensorData = new SensorData() { Value = "123", Timestamp = new DateTime() },
                 User = TestUser1()
             };
         }

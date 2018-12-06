@@ -23,14 +23,11 @@ namespace SmartDormitary.Data.Models
 
         public bool IsPublic { get; set; }
 
-        public DateTime? Timestamp { get; set; }
         public DateTime CreatedOn { get; set; } = DateTime.Now;
 
         public double Latitude { get; set; }
 
         public double Longitude { get; set; }
-        
-        public string Value { get; set; }
 
         public double MinAcceptableValue { get; set; }
 
@@ -44,5 +41,7 @@ namespace SmartDormitary.Data.Models
         public string UserId { get; set; }
         public User User { get; set; }
 
+        public int SensorDataId { get; set; }
+        public SensorData SensorData { get; set; }
     }
 }

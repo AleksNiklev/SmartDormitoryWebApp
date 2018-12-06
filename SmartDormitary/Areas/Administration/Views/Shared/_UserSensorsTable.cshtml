@@ -51,13 +51,13 @@
                     <tr>
                         <td>
                             <strong>
-                                @{
+                                @*@{
                                     if (item.Value != "true" && item.Value != "false" &&
                                         item.MinAcceptableValue > double.Parse(item.Value) && item.MaxAcceptableValue < double.Parse(item.Value))
                                     {
                                         <span class="text-danger fas fa-exclamation-triangle" data-toggle="tooltip" title="Critical Value"></span>
                                     }
-                                }
+                                }*@
                                 <a class="text-info" asp-action="Edit" asp-controller="Sensors" asp-route-id="@item.Id">@item.Name</a>
                             </strong>
                         </td>
@@ -75,7 +75,7 @@
                             </div>
                         </td>
                         <td>
-                            @{
+                            @*@{
                                 if (item.Timestamp == null)
                                 {
                                     <i>Never</i>
@@ -84,18 +84,18 @@
                                 {
                                     <i>@TimeSpan.FromTicks(DateTime.Now.Subtract(item.Timestamp.Value).Ticks).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Minute) ago</i>
                                 }
-                            }
+                            }*@
                         </td>
                         <td>
                             @{
-                                if (String.IsNullOrEmpty(item.Value))
+                                @*if (String.IsNullOrEmpty(item.Value))
                                 {
                                     <span>None</span>
                                 }
                                 else
                                 {
                                     @Html.DisplayFor(modelItem => item.Value)@item.SensorType.MeasurementType
-                                }
+                                }*@
                             }
                         </td>
                         <td>

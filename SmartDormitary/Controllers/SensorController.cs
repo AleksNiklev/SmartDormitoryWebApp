@@ -57,12 +57,20 @@ namespace SmartDormitary.Controllers
             var typeId = model.Id;
             var sensorApi = await this.sensorApi.GetSensorAsync(typeId);
             model.Id = Guid.Empty;
+
+            var sensorData = new SensorData()
+            {
+                Value = sensorApi.Value,
+                Timestamp = sensorApi.Timestamp
+            };
+
+            var sensrDataEntity = await this.sensorsService.RegisterSensorDataAsync(sensorData);
+
             var sensor = new Sensor()
             {
                 Name = model.Name,
                 Description = model.Description,
                 RefreshTime = model.PullingInterval,
-                Timestamp = sensorApi.Timestamp,
                 Longitude = model.Longitude,
                 Latitude = model.Latitude,
                 IsPublic = model.IsPublic,
@@ -70,7 +78,7 @@ namespace SmartDormitary.Controllers
                 MinAcceptableValue = model.MinAcceptableValue,
                 MaxAcceptableValue = model.MaxAcceptableValue,
                 SensorTypeId = typeId,
-                Value = sensorApi.Value,
+                SensorDataId = sensrDataEntity.Entity.Id,
                 UserId = this.userManager.Users.First(u => u.UserName == User.Identity.Name).Id
             };
 
@@ -159,8 +167,8 @@ namespace SmartDormitary.Controllers
 
             return Json(new {
                 result.Entity.Name,
-                result.Entity.Value,
-                result.Entity.Timestamp,
+                result.Entity.SensorData.Value,
+                result.Entity.SensorData.Timestamp,
                 result.Entity.RefreshTime,
                 result.Entity.MinAcceptableValue,
                 result.Entity.MaxAcceptableValue,
@@ -178,7 +186,7 @@ namespace SmartDormitary.Controllers
         public async Task<JsonResult> GetSensorById(Guid id)
         {
             var result = await this.sensorsService.GetSensorByGuidAsync(id);
-            return Json(new { name = result.Name, value = result.Value, timeStamp = result.Timestamp, refreshTime = result.RefreshTime });
+            return Json(new { name = result.Name, value = result.SensorData.Value, timeStamp = result.SensorData.Timestamp, refreshTime = result.RefreshTime });
         }
     }
 }

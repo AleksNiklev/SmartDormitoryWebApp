@@ -21,5 +21,7 @@ namespace SmartDormitary.Services.Contracts
         Task<List<Sensor>> GetLastRegisteredSensorsAsync(int count = 10);
         Task<bool> SensorExists(Guid id);
         Task DeleteSensorsAsync(Guid id);
+        Task<EntityEntry<SensorData>> UpdateSensorDataAsync(Sensor sensor);
+        Task<EntityEntry<SensorData>> RegisterSensorDataAsync(SensorData sensorData);
     }
 }

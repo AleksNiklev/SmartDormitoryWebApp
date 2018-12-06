@@ -14,6 +14,7 @@ namespace SmartDormitary.Data.Context
     public class SmartDormitaryContext : IdentityDbContext<User>
     {
         public DbSet<Sensor> Sensors { get; set; }
+        public DbSet<SensorData> SensorData { get; set; }
         public DbSet<SensorType> SensorTypes { get; set; }
 
         public SmartDormitaryContext()
