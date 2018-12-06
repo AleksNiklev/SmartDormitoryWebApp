@@ -1,0 +1,74 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model SensorViewModel
+
+<canvas id="foo" class="col-md-6"></canvas>
+<div class="form-row">
+    <div class="col-md-6">
+        <p><span class="font-weight-bold">Sensor Value:</span> <span id="valueField">@Model.Value</span></p>
+        <p><span class="font-weight-bold">Time stamp:</span> <span id="timeStampField">@Model.Timestamp.Value.ToString("yyyy-mm-dd hh:mm:ss tt")</span></p>
+    </div>
+</div>
+
+<script type="text/javascript" src="~/lib/gaugejs/gauge.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var opts = {
+            angle: -0.15, // The span of the gauge arc
+            lineWidth: 0.3, // The line thickness
+            radiusScale: 1, // Relative radius
+            pointer: {
+                length: 0.63, // // Relative to gauge radius
+                strokeWidth: 0.064, // The thickness
+                color: '#000000' // Fill color
+            },
+            limitMax: false,     // If false, max value increases automatically if value > maxValue
+            limitMin: false,     // If true, the min value of the gauge will be fixed
+            colorStart: '#6FADCF',   // Colors
+            colorStop: '#8FC0DA',    // just experiment with them
+            strokeColor: '#E0E0E0',  // to see which ones work best for you
+            generateGradient: true,
+            highDpiSupport: true,   // High resolution support
+            staticZones: [
+                { strokeStyle: "#F03E3E", min: '@Model.Type.MinAcceptableValue' * 1, max: '@Model.MinAcceptableValue' * 1 }, // Red from 100 to 130
+                { strokeStyle: "#30B32D", min: '@Model.MinAcceptableValue' * 1, max: '@Model.MaxAcceptableValue' * 1 }, // Green
+                { strokeStyle: "#F03E3E", min: '@Model.MaxAcceptableValue' * 1, max: '@Model.Type.MaxAcceptableValue' * 1 }  // Red
+            ],
+        };
+        var target = document.getElementById('foo'); // your canvas element
+        var gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
+        gauge.colorStart = '#E0E0E0';
+        gauge.minValue = '@Model.Type.MinAcceptableValue' * 1;
+        gauge.maxValue = '@Model.Type.MaxAcceptableValue' * 1;
+        gauge.animationSpeed = 93; // set animation speed (32 is default value)
+        gauge.set('@Model.Value' * 1);
+
+        var modelDate = new Date('@Model.Timestamp.Value.Year.ToString()'
+            , '@Model.Timestamp.Value.Month.ToString()' - 1
+            , '@Model.Timestamp.Value.Day.ToString()'
+            , '@Model.Timestamp.Value.Hour.ToString()'
+            , '@Model.Timestamp.Value.Minute.ToString()'
+            , '@Model.Timestamp.Value.Second.ToString()'
+        )
+        var now = new Date($.now());
+        var dateSpan = (now - modelDate) / 1000;
+        console.log(dateSpan);
+        console.log(modelDate);
+        console.log(now);
+
+
+        setInterval(sendRequest, 5000);
+        function sendRequest() {
+            $.get("/Sensor/GetSensorById", { id: '@Model.Id' }, function (response, status) {
+                console.log(Date.parse(response.timeStamp).toLocaleString());
+                console.log(response.value);
+                gauge.set(response.value)
+                $('#timeStampField').text(new Date(response.timeStamp).toISOString().
+                    replace(/T/, ' ').replace(/\..+/, ''));
+                $('#valueField').text(response.value);
+            })
+        };
+
+    });
+</script>

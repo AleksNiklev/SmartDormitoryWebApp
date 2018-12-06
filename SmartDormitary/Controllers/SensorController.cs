@@ -78,6 +78,54 @@ namespace SmartDormitary.Controllers
             return RedirectToAction("Details", new { id = result.Entity.Id });
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Update(Guid Id)
+        {
+            var model = await this.sensorsService.GetSensorByGuidAsync(Id);
+            var sensor = new RegisterSensorViewModel()
+            {
+                Id = model.Id,
+                Description = model.Description,
+                Name = model.Name,
+                MinAcceptableValue = model.MinAcceptableValue,
+                MaxAcceptableValue = model.MaxAcceptableValue,
+                IsPublic = model.IsPublic,
+                TickOff = model.TickOff,
+                Latitude = model.Latitude,
+                Longitude = model.Longitude,
+                PullingInterval = model.RefreshTime,
+                DefaultMaxAcceptableValue = model.SensorType.MaxAcceptableValue,
+                DefaultMinAcceptableValue = model.SensorType.MinAcceptableValue,
+                DefaultPullingInterval = model.SensorType.MinRefreshTime
+            };
+
+            return View(sensor);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(RegisterSensorViewModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View("Update");
+            }
+
+            var sensor = await this.sensorsService.GetSensorByGuidAsync(model.Id);
+            sensor.Name = model.Name;
+            sensor.Description = model.Description;
+            sensor.RefreshTime = model.PullingInterval;
+            sensor.MinAcceptableValue = model.MinAcceptableValue;
+            sensor.MaxAcceptableValue = model.MaxAcceptableValue;
+            sensor.Longitude = model.Longitude;
+            sensor.Latitude = model.Latitude;
+            sensor.IsPublic = model.IsPublic;
+            sensor.TickOff = model.TickOff;
+
+            var result = await this.sensorsService.UpdateSensorAsync(sensor);
+            return RedirectToAction("Details", new { id = result.Entity.Id });
+        }
+
         public async Task<IActionResult> Details(Guid id)
         {
             var sensor = await this.sensorsService.GetSensorByGuidAsync(id);
@@ -109,7 +157,28 @@ namespace SmartDormitary.Controllers
             sensor.Latitude = sensorModel.Latitude;
             var result = await this.sensorsService.UpdateSensorAsync(sensor);
 
-            return Json(result);
+            return Json(new {
+                result.Entity.Name,
+                result.Entity.Value,
+                result.Entity.Timestamp,
+                result.Entity.RefreshTime,
+                result.Entity.MinAcceptableValue,
+                result.Entity.MaxAcceptableValue,
+                result.Entity.Longitude,
+                result.Entity.Latitude,
+                result.Entity.Description,
+                result.Entity.SensorType,
+                result.Entity.SensorTypeId,
+                result.Entity.IsPublic,
+                result.Entity.TickOff,
+                result.Entity.UserId
+            });
+        }
+
+        public async Task<JsonResult> GetSensorById(Guid id)
+        {
+            var result = await this.sensorsService.GetSensorByGuidAsync(id);
+            return Json(new { name = result.Name, value = result.Value, timeStamp = result.Timestamp, refreshTime = result.RefreshTime });
         }
     }
 }

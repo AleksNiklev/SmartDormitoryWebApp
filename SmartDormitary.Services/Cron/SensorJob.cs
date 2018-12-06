@@ -31,7 +31,7 @@ namespace SmartDormitary.Services.Cron
             {
                 var sensorApi = await api.GetSensorAsync(sensor.SensorTypeId);
 
-                if ((sensorApi.Timestamp.Value - sensor.Timestamp.Value).TotalSeconds > sensor.RefreshTime)
+                if (sensor.TickOff && (sensorApi.Timestamp.Value - sensor.Timestamp.Value).TotalSeconds > sensor.RefreshTime)
                 {
                     sensor.Value = sensorApi.Value;
                     sensor.Timestamp = sensorApi.Timestamp;
