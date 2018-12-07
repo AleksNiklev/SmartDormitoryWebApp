@@ -18,7 +18,7 @@
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label asp-for="Name">Name</label>
-                                <input asp-for="Name" class="form-control" name="Name" minLength="2" maxlength="50" required/>
+                                <input asp-for="Name" class="form-control" name="Name" minLength="2" maxlength="50" required />
                                 <span asp-validation-for="Name" class="text-danger"></span>
                             </div>
                             <div class="form-group col-md-6">
@@ -77,11 +77,11 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <div id="map" class="rounded" style="height: 300px;"></div>
-                                <input asp-for="Latitude" class="form-control" type="hidden" id="latField" />
+                                <input asp-for="Latitude" class="form-control" type="hidden" id="latField" required />
                                 <span asp-validation-for="Latitude" class="text-danger"></span>
-                                <input asp-for="Longitude" class="form-control" type="hidden" id="lngField" />
+                                <input asp-for="Longitude" class="form-control" type="hidden" id="lngField" required/>
                                 <span asp-validation-for="Longitude" class="text-danger"></span>
-                                <input type="checkbox" name="MapMarker" style="visibility:hidden" id="mapMarker" />
+                                <input type="checkbox" name="MapMarker" style="visibility:hidden" id="mapMarker" required title="You need to set location on the map."/>
                             </div>
                         </div>
                     </form>
