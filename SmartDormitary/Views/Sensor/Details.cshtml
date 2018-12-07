@@ -11,47 +11,123 @@
         margin: 10px;
     }
 </style>
+@using Humanizer
+@using Humanizer.Localisation
 @model SensorViewModel
 @{
     ViewData["Title"] = "Details";
 }
-<div class="page-header header-filter" data-parallax="true" style="        background-image: url('/assets/img/city-profile.jpg');"></div>
+<div class="page-header header-filter" data-parallax="true" style="background-image: url('/assets/img/city-profile.jpg');"></div>
 <div class="main main-raised">
     <div class="section">
         <div class="container">
             <h2>Details</h2>
-<br />
-<div class="updateForm">
-    <div class="form-row">
-        <div class="form-group col-md-6">
-            <p><span class="font-weight-bold">Sensor Name:</span> <span class="editableField">@Model.Name</span></p>
-            <p><span class="font-weight-bold">Description:</span> <span class="editableField">@Model.Description</span></p>
-            <p><span class="font-weight-bold">Pulling Interval:</span> @Model.PullingInterval</p>
-        </div>
-        <div class="form-group col-md-1"></div>
-        <div class="form-row">
-            <div class="col-md-6">
-                <p><span class="font-weight-bold">Sensor Value:</span> <span id="valueField">@Model.Value</span></p>
-                <p><span class="font-weight-bold">Time stamp:</span> <span id="timeStampField">@Model.Timestamp.Value.ToString("yyyy-mm-dd hh:mm:ss tt")</span></p>
-            </div>
-        </div>
-        <div class="form-group col-md-5">
-            @if (User.Identity.Name == Model.User.UserName)
-            {
-                <div class="form-row">
-                    <button type="reset" class="btn btn-primary editButton"><i class="fas fa-edit"></i> <span>Edit Content</span></button>
-                    <button type="reset" class="btn btn-primary saveButton"><i class="fas fa-save"></i> <span>Save</span></button>
+            <hr />
+            <div class="updateForm">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card card-nav-tabs">
+                            <div class="card-header card-header-info">
+                                <div class="card-icon">
+                                    <i class="material-icons">edit</i>
+                                </div>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item text-info"><i class="fa fa-signature" data-toggle="tooltip" title="Name"></i> <span class="editableField">@Model.Name</span></li>
+                                <li class="list-group-item text-info text-truncate"><i class="fa fa-pen-square" data-toggle="tooltip" title="Description"></i> <span class="editableField">@Model.Description</span></li>
+                                <li class="list-group-item text-info"><i class="fa fa-stopwatch" data-toggle="tooltip" title="Refresh Time"></i> @Model.PullingInterval.Seconds() </li>
+                                @{
+                                    if (Model.IsPublic)
+                                    {
+                                        <li class="list-group-item text-info"><i class="fa fa-globe-americas" data-toggle="tooltip" title="Is Visible for Public"></i> Public: <span class="ml-1 text-success fa fa-check" data-toggle="tooltip" title="Yes"></span></li>
+                                    }
+                                    else
+                                    {
+                                        <li class="list-group-item text-info"><i class="fa fa-globe-americas" data-toggle="tooltip" title="Is Visible for Public"></i> Public: <span class="ml-1 text-danger fa fa-times" data-toggle="tooltip" title="No"></span></li>
+                                    }
+                                    if (Model.TickOff)
+                                    {
+                                        <li class="list-group-item text-info"><i class="fa fa-bell" data-toggle="tooltip" title="Notify on Critical Value"></i> Notify: <span class="ml-1 text-success fa fa-check" data-toggle="tooltip" title="Yes"></span></li>
+                                    }
+                                    else
+                                    {
+                                        <li class="list-group-item text-info"><i class="fa fa-bell" data-toggle="tooltip" title="Notify on Critical Value"></i> Notify: <span class="ml-1 text-danger fa fa-times" data-toggle="tooltip" title="No"></span></li>
+                                    }
+                                }
+                                @{
+                                    if (Model.Timestamp == null)
+                                    {
+                                        <li class="list-group-item text-info"><i class="fa fa-stopwatch" data-toggle="tooltip" title="Last Updated"></i> Never</li>
+                                    }
+                                    else
+                                    {
+                                        <li class="list-group-item text-info"><i class="fa fa-stopwatch" data-toggle="tooltip" title="Last Updated"></i> @TimeSpan.FromTicks(DateTime.Now.Subtract(Model.Timestamp.Value).Ticks).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Minute) ago</li>
+                                    }
+                                }
+                                @{
+                                    if (String.IsNullOrEmpty(Model.Value))
+                                    {
+                                        <li class="list-group-item text-info"><i class="fa fa-bolt" data-toggle="tooltip" title="Value"></i> <span id="valueField">None</span></li>
+                                    }
+                                    else
+                                    {
+                                        <li class="list-group-item text-info"><i class="fa fa-bolt" data-toggle="tooltip" title="Value"></i> <span id="valueField">@Model.Value</span>@Model.Type.MeasurementType</li>
+                                    }
+                                }
+                            </ul>
+                            <div class="form-group">
+                                <button type="reset" class="btn btn-primary editButton"><i class="fas fa-edit"></i> <span>Edit</span></button>
+                                <button type="reset" class="btn btn-primary saveButton"><i class="fas fa-save"></i> <span>Save Changes</span></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card card-nav-tabs">
+                            <div class="card-header card-header-success">
+                                <div class="card-icon">
+                                    <i class="material-icons">place</i>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="border border-primary rounded" id="map" style="height: 350px;"></div>
+                                <input asp-for="Latitude" class="form-control" type="hidden" id="latField" />
+                                <span asp-validation-for="Latitude" class="text-danger"></span>
+                                <input asp-for="Longitude" class="form-control" type="hidden" id="lngField" />
+                                <span asp-validation-for="Longitude" class="text-danger"></span>
+                                <input type="checkbox" name="MapMarker" style="visibility: hidden" id="mapMarker" />
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            }
-            <br />
-            <canvas id="foo" class="col-md-6"></canvas>
-            <div id="map" style="height: 300px;
-    ">
-
             </div>
-        </div>
-    </div>
-</div>
+            @*<div class="updateForm">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <p><span class="font-weight-bold">Sensor Name:</span> <span class="editableField">@Model.Name</span></p>
+                        <p><span class="font-weight-bold">Description:</span> <span class="editableField">@Model.Description</span></p>
+                        <p><span class="font-weight-bold">Pulling Interval:</span> @Model.PullingInterval</p>
+                    </div>
+                    <div class="form-group col-md-1"></div>
+                    <div class="form-row">
+                        <div class="col-md-6">
+                            <p><span class="font-weight-bold">Sensor Value:</span> <span id="valueField">@Model.Value</span></p>
+                            <p><span class="font-weight-bold">Time stamp:</span> <span id="timeStampField">@Model.Timestamp.Value.Humanize()</span></p>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-5">
+                        @if (User.Identity.Name == Model.User.UserName)
+                        {
+                            <div class="form-row">
+                                <button type="reset" class="btn btn-primary editButton"><i class="fas fa-edit"></i> <span>Edit Content</span></button>
+                                <button type="reset" class="btn btn-primary saveButton"><i class="fas fa-save"></i> <span>Save</span></button>
+                            </div>
+                        }
+                        <br />
+                        <canvas id="foo" class="col-md-6"></canvas>
+                        <div id="map" style="height: 300px;"></div>
+                    </div>
+                </div>
+            </div>*@
         </div>
     </div>
 </div>
@@ -78,7 +154,7 @@
                 { strokeStyle: "#F03E3E", min: '@Model.Type.MinAcceptableValue' * 1, max: '@Model.MinAcceptableValue' * 1 }, // Red from 100 to 130
                 { strokeStyle: "#30B32D", min: '@Model.MinAcceptableValue' * 1, max: '@Model.MaxAcceptableValue' * 1 }, // Green
                 { strokeStyle: "#F03E3E", min: '@Model.MaxAcceptableValue' * 1, max: '@Model.Type.MaxAcceptableValue' * 1 }  // Red
-            ],
+            ]
         };
         var target = document.getElementById('foo'); // your canvas element
         var gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
@@ -104,14 +180,16 @@
         setInterval(sendRequest, 5000);
 
         function sendRequest() {
-            $.get("/Sensor/GetSensorById", { id: '@Model.Id' }, function (response, status) {
-                console.log(Date.parse(response.timeStamp).toLocaleString());
-                console.log(response.value);
-                gauge.set(response.value)
-                $('#timeStampField').text(new Date(response.timeStamp).toISOString().
-                    replace(/T/, ' ').replace(/\..+/, ''));
-                $('#valueField').text(response.value);
-            })
+            $.get("/Sensor/GetSensorById",
+                { id: '@Model.Id' },
+                function(response, status) {
+                    console.log(Date.parse(response.timeStamp).toLocaleString());
+                    console.log(response.value);
+                    gauge.set(response.value)
+                    $('#timeStampField').text(new Date(response.timeStamp).toISOString().replace(/T/, ' ')
+                        .replace(/\..+/, ''));
+                    $('#valueField').text(response.value);
+                });
         };
 
     });
@@ -120,13 +198,13 @@
         const oldValues = [];
         let restore = false;
 
-        $('.editButton').click(function () {
+        $('.editButton').click(function() {
             let $fields = $('.editableField');
 
             if (!restore) {
                 $fields.each((i, e) => {
-                    oldValues.push(e.innerHTML)
-                })
+                    oldValues.push(e.innerHTML);
+                });
                 $('.saveButton').css("visibility", "initial");
                 $('.editButton > span').text("Cancel");
             } else {
@@ -136,15 +214,15 @@
 
                 oldValues.length = 0;
                 $('.saveButton').css("visibility", "hidden");
-                $('.editButton > span').text("Edit Content");
+                $('.editButton > span').text("Edit");
             }
 
             restore = !restore;
             var isEditable = $fields.is('.editable');
             $fields.prop('contenteditable', !isEditable).toggleClass('editable');
-        })
+        });
 
-        $('.saveButton').click(function () {
+        $('.saveButton').click(function() {
             let $fields = $('.editableField');
             var isEditable = $fields.is('.editable');
 
@@ -155,29 +233,27 @@
             let name = $fields[0].innerHTML;
             let description = $fields[1].innerHTML;
 
-            $.post("/Sensor/UpdateSensor", {
-                Id: id,
-                Name: name,
-                Description: description,
-                Latitude: '@Model.Latitude',
-                Longitude: '@Model.Longitude',
-                IsPublic: '@Model.IsPublic',
-                MinAcceptableValue: '@Model.MinAcceptableValue',
-                MaxAcceptableValue: '@Model.MaxAcceptableValue',
-                Value: '@Model.Value',
-                PullingInterval: '@Model.PullingInterval',
-                TickOff: '@Model.TickOff',
-                Timestamp: '@Model.Timestamp'
-            }).done(
-                function (data, status) {
-                    alert("Data: " + data + "\nStatus: " + status);
+            $.post("/Sensor/UpdateSensor",
+                {
+                    Id: id,
+                    Name: name,
+                    Description: description,
+                    Latitude: '@Model.Latitude',
+                    Longitude: '@Model.Longitude',
+                    IsPublic: '@Model.IsPublic',
+                    MinAcceptableValue: '@Model.MinAcceptableValue',
+                    MaxAcceptableValue: '@Model.MaxAcceptableValue',
+                    Value: '@Model.Value',
+                    PullingInterval: '@Model.PullingInterval',
+                    TickOff: '@Model.TickOff',
+                    Timestamp: '@Model.Timestamp'
                 });
 
 
             $('.saveButton').css("visibility", "hidden");
-            $('.editButton > span').text("Edit Content");
+            $('.editButton > span').text("Edit");
             $fields.prop('contenteditable', !isEditable).toggleClass('editable');
-        })
+        });
     });
 
     function initMap() {

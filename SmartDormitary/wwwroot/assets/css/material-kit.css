@@ -11188,7 +11188,6 @@ label {
   z-index: 2;
   width: 100%;
   height: calc(100vh - 70px);
-  margin-top: 70px;
 }
 
 .tim-typo {
@@ -13899,7 +13898,7 @@ textarea {
 }
 
 .list-group-item :first-child {
-  margin-right: 2rem;
+  margin-right: 0.5rem;
 }
 
 .list-group-item>.pull-xs-right,
