@@ -25,15 +25,16 @@
             <p><span class="font-weight-bold">Sensor Name:</span> <span class="editableField">@Model.Name</span></p>
             <p><span class="font-weight-bold">Description:</span> <span class="editableField">@Model.Description</span></p>
             <p><span class="font-weight-bold">Pulling Interval:</span> @Model.PullingInterval</p>
-            <div class="form-row">
-                <div class="col-md-6">
-                    <p><span class="font-weight-bold">Sensor Value:</span> @Model.Value</p>
-                    <p><span class="font-weight-bold">Time stamp:</span> @Model.Timestamp</p>
-                </div>
-                <canvas id="foo" class="col-md-6"></canvas>
-            </div>
         </div>
         <div class="form-group col-md-1"></div>
+        <div class="form-row">
+            <div class="col-md-6">
+                <p><span class="font-weight-bold">Sensor Value:</span> <span id="valueField">@Model.Value</span></p>
+                <p><span class="font-weight-bold">Time stamp:</span> <span id="timeStampField">@Model.Timestamp.Value.ToString("yyyy-mm-dd hh:mm:ss tt")</span></p>
+            </div>
+            <canvas id="foo" class="col-md-6"></canvas>
+        </div>
+
         <div class="form-group col-md-5">
             @if (User.Identity.Name == Model.User.UserName)
             {
@@ -80,73 +81,99 @@
         gauge.minValue = '@Model.Type.MinAcceptableValue' * 1;
         gauge.maxValue = '@Model.Type.MaxAcceptableValue' * 1;
         gauge.animationSpeed = 93; // set animation speed (32 is default value)
-        gauge.set('@Model.Value' * 1); 
-    })
+        gauge.set('@Model.Value' * 1);
 
+        var modelDate = new Date('@Model.Timestamp.Value.Year.ToString()'
+            , '@Model.Timestamp.Value.Month.ToString()' - 1
+            , '@Model.Timestamp.Value.Day.ToString()'
+            , '@Model.Timestamp.Value.Hour.ToString()'
+            , '@Model.Timestamp.Value.Minute.ToString()'
+            , '@Model.Timestamp.Value.Second.ToString()'
+        )
+        var now = new Date($.now());
+        var dateSpan = (now - modelDate) / 1000;
+        console.log(dateSpan);
+        console.log(modelDate);
+        console.log(now);
+        
+        setInterval(sendRequest, 5000);
 
-        $(function () {
-            const oldValues = [];
-            let restore = false;
-
-            $('.editButton').click(function () {
-                let $fields = $('.editableField');
-
-                if (!restore) {
-                    $fields.each((i, e) => {
-                        oldValues.push(e.innerHTML)
-                    })
-                    $('.saveButton').css("visibility", "initial");
-                    $('.editButton > span').text("Cancel");
-                } else {
-                    $fields.each((i, e) => {
-                        e.innerHTML = oldValues[i];
-                    });
-
-                    oldValues.length = 0;
-                    $('.saveButton').css("visibility", "hidden");
-                    $('.editButton > span').text("Edit Content");
-                }
-
-                restore = !restore;
-                var isEditable = $fields.is('.editable');
-                $fields.prop('contenteditable', !isEditable).toggleClass('editable');
+        function sendRequest() {
+            $.get("/Sensor/GetSensorById", { id: '@Model.Id' }, function (response, status) {
+                console.log(Date.parse(response.timeStamp).toLocaleString());
+                console.log(response.value);
+                gauge.set(response.value)
+                $('#timeStampField').text(new Date(response.timeStamp).toISOString().
+                    replace(/T/, ' ').replace(/\..+/, ''));
+                $('#valueField').text(response.value);
             })
+        };
 
-            $('.saveButton').click(function () {
-                let $fields = $('.editableField');
-                var isEditable = $fields.is('.editable');
+    });
+
+    $(function () {
+        const oldValues = [];
+        let restore = false;
+
+        $('.editButton').click(function () {
+            let $fields = $('.editableField');
+
+            if (!restore) {
+                $fields.each((i, e) => {
+                    oldValues.push(e.innerHTML)
+                })
+                $('.saveButton').css("visibility", "initial");
+                $('.editButton > span').text("Cancel");
+            } else {
+                $fields.each((i, e) => {
+                    e.innerHTML = oldValues[i];
+                });
 
                 oldValues.length = 0;
-                restore = !restore;
-
-                let id = '@Model.Id';
-                let name = $fields[0].innerHTML;
-                let description = $fields[1].innerHTML;
-
-                $.post("/Sensor/UpdateSensor", {
-                    Id: id,
-                    Name: name,
-                    Description: description,
-                    Latitude: '@Model.Latitude',
-                    Longitude: '@Model.Longitude',
-                    IsPublic: '@Model.IsPublic',
-                    MinAcceptableValue: '@Model.MinAcceptableValue',
-                    MaxAcceptableValue: '@Model.MaxAcceptableValue',
-                    Value: '@Model.Value',
-                    PullingInterval: '@Model.PullingInterval',
-                    TickOff: '@Model.TickOff',
-                    Timestamp: '@Model.Timestamp'
-                },
-                    function (data, status) {
-                        alert("Data: " + data + "\nStatus: " + status);
-                    });
-
-
                 $('.saveButton').css("visibility", "hidden");
                 $('.editButton > span').text("Edit Content");
-                $fields.prop('contenteditable', !isEditable).toggleClass('editable');
-            })
-        });
+            }
+
+            restore = !restore;
+            var isEditable = $fields.is('.editable');
+            $fields.prop('contenteditable', !isEditable).toggleClass('editable');
+        })
+
+        $('.saveButton').click(function () {
+            let $fields = $('.editableField');
+            var isEditable = $fields.is('.editable');
+
+            oldValues.length = 0;
+            restore = !restore;
+
+            let id = '@Model.Id';
+            let name = $fields[0].innerHTML;
+            let description = $fields[1].innerHTML;
+
+            $.post("/Sensor/UpdateSensor", {
+                Id: id,
+                Name: name,
+                Description: description,
+                Latitude: '@Model.Latitude',
+                Longitude: '@Model.Longitude',
+                IsPublic: '@Model.IsPublic',
+                MinAcceptableValue: '@Model.MinAcceptableValue',
+                MaxAcceptableValue: '@Model.MaxAcceptableValue',
+                Value: '@Model.Value',
+                PullingInterval: '@Model.PullingInterval',
+                TickOff: '@Model.TickOff',
+                Timestamp: '@Model.Timestamp'
+            }).done(
+                function (data, status) {
+                    alert("Data: " + data + "\nStatus: " + status);
+                });
+
+
+            $('.saveButton').css("visibility", "hidden");
+            $('.editButton > span').text("Edit Content");
+            $fields.prop('contenteditable', !isEditable).toggleClass('editable');
+        })
+    });
 
     function initMap() {
         let modelLat = '@Model.Latitude' * 1;

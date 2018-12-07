@@ -22,10 +22,10 @@ namespace SmartDormitary.Areas.Administration.Models
             this.RefreshTime = sensor.RefreshTime;
             this.IsPublic = sensor.IsPublic;
             this.CreatedOn = sensor.CreatedOn;
-            this.Timestamp = sensor.Timestamp;
+            this.Timestamp = sensor.SensorData.Timestamp;
             this.Latitude = sensor.Latitude;
             this.Longitude = sensor.Longitude;
-            this.Value = sensor.Value;
+            this.Value = sensor.SensorData.Value;
             this.MinAcceptableValue = sensor.MinAcceptableValue;
             this.MaxAcceptableValue = sensor.MaxAcceptableValue;
             this.TickOff = sensor.TickOff;

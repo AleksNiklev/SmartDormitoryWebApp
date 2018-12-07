@@ -43,7 +43,7 @@ namespace SmartDormitary.Data.Migrations
                     b.ToTable("AspNetRoles");
 
                     b.HasData(
-                        new { Id = "f89f40c7-fc6d-4c23-90a8-e5fd3344eec2", ConcurrencyStamp = "958be9e1-c5bd-45f4-bf05-b35050c793a4", Name = "Administrator", NormalizedName = "ADMINISTRATOR" }
+                        new { Id = "fd9823f6-43ec-464e-8ee7-a29212fe779c", ConcurrencyStamp = "e3a1a418-5641-4474-bcdb-b42079f8fa30", Name = "Administrator", NormalizedName = "ADMINISTRATOR" }
                     );
                 });
 
@@ -160,23 +160,38 @@ namespace SmartDormitary.Data.Migrations
 
                     b.Property<int>("RefreshTime");
 
+                    b.Property<int>("SensorDataId");
+
                     b.Property<Guid>("SensorTypeId");
 
                     b.Property<bool>("TickOff");
 
-                    b.Property<DateTime?>("Timestamp");
-
                     b.Property<string>("UserId");
 
-                    b.Property<string>("Value");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("SensorDataId");
 
                     b.HasIndex("SensorTypeId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("Sensors");
+                });
+
+            modelBuilder.Entity("SmartDormitary.Data.Models.SensorData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime?>("Timestamp");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SensorData");
                 });
 
             modelBuilder.Entity("SmartDormitary.Data.Models.SensorType", b =>
@@ -307,6 +322,11 @@ namespace SmartDormitary.Data.Migrations
 
             modelBuilder.Entity("SmartDormitary.Data.Models.Sensor", b =>
                 {
+                    b.HasOne("SmartDormitary.Data.Models.SensorData", "SensorData")
+                        .WithMany()
+                        .HasForeignKey("SensorDataId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("SmartDormitary.Data.Models.SensorType", "SensorType")
                         .WithMany()
                         .HasForeignKey("SensorTypeId")

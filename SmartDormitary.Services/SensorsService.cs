@@ -44,9 +44,9 @@ namespace SmartDormitary.Services
         /// <returns>ChangeTracking-EntityEntry</returns>
         public async Task<EntityEntry<Sensor>> UpdateSensorAsync(Sensor sensor)
         {
-            await hubService.Notify(sensor.UserId, sensor.Name, sensor.Value, sensor.SensorType.MeasurementType);
             var returnEntity = dormitaryContext.Sensors.Update(sensor);
             await dormitaryContext.SaveChangesAsync();
+            //await hubService.Notify(returnEntity.Entity.UserId, returnEntity.Entity.Name, returnEntity.Entity.Value, returnEntity.Entity.SensorType.MeasurementType);
             return returnEntity;
         }
 
@@ -59,8 +59,11 @@ namespace SmartDormitary.Services
         {
             return sensorId == null
                 ? null
-                : await dormitaryContext.Sensors.Where(s => s.Id == sensorId).Include(s => s.User)
-                .Include(s => s.SensorType).FirstOrDefaultAsync();
+                : await dormitaryContext.Sensors.Where(s => s.Id == sensorId)
+                .Include(s => s.User)
+                .Include(s => s.SensorType)
+                .Include(s => s.SensorData)
+                .FirstOrDefaultAsync();
         }
 
         /// <summary>
@@ -70,8 +73,11 @@ namespace SmartDormitary.Services
         /// <returns></returns>
         public async Task<List<Sensor>> GetUserSensorsAsync(string userId)
         {
-            return await dormitaryContext.Sensors.Where(s => s.User.Id == userId).Include(s => s.User)
-                .Include(s => s.SensorType).ToListAsync();
+            return await dormitaryContext.Sensors.Where(s => s.User.Id == userId)
+                .Include(s => s.User)
+                .Include(s => s.SensorData)
+                .Include(s => s.SensorType)
+                .ToListAsync();
         }
 
         /// <summary>
@@ -80,7 +86,10 @@ namespace SmartDormitary.Services
         /// <returns></returns>
         public async Task<List<Sensor>> GetAllPublicSensorsAsync()
         {
-            return await dormitaryContext.Sensors.Where(s => s.IsPublic).Include(s => s.User).Include(s => s.SensorType)
+            return await dormitaryContext.Sensors.Where(s => s.IsPublic)
+                .Include(s => s.User)
+                .Include(s => s.SensorType)
+                .Include(s => s.SensorData)
                 .ToListAsync();
         }
         /// <summary>
@@ -92,6 +101,7 @@ namespace SmartDormitary.Services
             return await dormitaryContext.Sensors
                 .Include(s => s.User)
                 .Include(s => s.SensorType)
+                .Include(s => s.SensorData)
                 .ToListAsync();
         }
 
@@ -104,6 +114,7 @@ namespace SmartDormitary.Services
             return dormitaryContext.Sensors
                 .Include(s => s.User)
                 .Include(s => s.SensorType)
+                .Include(s => s.SensorData)
                 .ToList();
         }
         /// <summary>
@@ -115,6 +126,24 @@ namespace SmartDormitary.Services
         {
             return dormitaryContext.Sensors.Where(s => s.Id == sensorId).Include(s => s.User)
                 .Include(s => s.SensorType).FirstOrDefault();
+        }
+
+        public async Task<EntityEntry<SensorData>> UpdateSensorDataAsync(Sensor sensor)
+        {
+            var sensorData = sensor.SensorData;
+            var returnEntity = dormitaryContext.SensorData.Update(sensorData);
+            await dormitaryContext.SaveChangesAsync();
+
+            await hubService.Notify(sensor.UserId, sensor.Name, returnEntity.Entity.Value, sensor.SensorType.MeasurementType);
+
+            return returnEntity;
+        }
+
+        public async Task<EntityEntry<SensorData>> RegisterSensorDataAsync(SensorData sensorData)
+        {
+            var returnEntity = await dormitaryContext.SensorData.AddAsync(sensorData);
+            await dormitaryContext.SaveChangesAsync();
+            return returnEntity;
         }
 
         public async Task<int> GetSensorCountAsync()

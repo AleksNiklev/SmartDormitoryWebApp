@@ -39,7 +39,7 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
             using (var assertContext = new SmartDormitaryContext(contextOptions))
             {
                 var hubServiceMock = new Mock<IHubService>();
-                hubServiceMock.Setup(s => s.Notify(It.IsAny<string>())).Returns(Task.CompletedTask);
+                hubServiceMock.Setup(s => s.Notify(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
                     
                 var service = new SensorsService(assertContext, hubServiceMock.Object);
                 var toUbdate = await assertContext.Sensors.SingleAsync();

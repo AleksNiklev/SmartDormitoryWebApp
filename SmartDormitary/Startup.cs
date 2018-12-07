@@ -35,7 +35,7 @@ namespace SmartDormitary
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<SmartDormitaryContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("LocalDBConnection")));
 
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<SmartDormitaryContext>()

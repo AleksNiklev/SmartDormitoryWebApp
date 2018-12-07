@@ -24,10 +24,10 @@ namespace SmartDormitary.Models.SensorViewModels
             this.IsPublic = sensor.IsPublic;
             this.MinAcceptableValue = sensor.MinAcceptableValue;
             this.MaxAcceptableValue = sensor.MaxAcceptableValue;
-            this.Value = sensor.Value;
+            this.Value = sensor.SensorData.Value;
             this.PullingInterval = sensor.RefreshTime;
             this.TickOff = sensor.TickOff;
-            this.Timestamp = sensor.Timestamp;
+            this.Timestamp = sensor.SensorData.Timestamp;
             this.Type = new SensorTypeViewModel(sensor.SensorType);
             this.User = sensor.User;
         }

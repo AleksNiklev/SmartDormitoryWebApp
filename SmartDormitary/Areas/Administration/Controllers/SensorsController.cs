@@ -140,7 +140,7 @@ namespace SmartDormitary.Areas.Administration.Controllers
                         CreatedOn = sensor.CreatedOn,
                         Latitude = sensor.Latitude,
                         Longitude = sensor.Longitude,
-                        Value = sensor.Value,
+                        //Value = sensor.Value,
                         MinAcceptableValue = sensor.MinAcceptableValue,
                         MaxAcceptableValue = sensor.MaxAcceptableValue,
                         TickOff = sensor.TickOff,

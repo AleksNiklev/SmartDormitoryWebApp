@@ -52,8 +52,8 @@
                         <td>
                             <strong>
                                 @{
-                                    if (item.Value != "true" && item.Value != "false" &&
-                                        item.MinAcceptableValue > double.Parse(item.Value) && item.MaxAcceptableValue < double.Parse(item.Value))
+                                    if (item.SensorData.Value != "true" && item.SensorData.Value != "false" &&
+                                        item.MinAcceptableValue > double.Parse(item.SensorData.Value) && item.MaxAcceptableValue < double.Parse(item.SensorData.Value))
                                     {
                                         <span class="text-danger fas fa-exclamation-triangle" data-toggle="tooltip" title="Critical Value"></span>
                                     }
@@ -76,25 +76,25 @@
                         </td>
                         <td>
                             @{
-                                if (item.Timestamp == null)
+                                if (item.SensorData.Timestamp == null)
                                 {
                                     <i>Never</i>
                                 }
                                 else
                                 {
-                                    <i>@TimeSpan.FromTicks(DateTime.Now.Subtract(item.Timestamp.Value).Ticks).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Minute) ago</i>
+                                    <i>@TimeSpan.FromTicks(DateTime.Now.Subtract(item.SensorData.Timestamp.Value).Ticks).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Minute) ago</i>
                                 }
                             }
                         </td>
                         <td>
                             @{
-                                if (String.IsNullOrEmpty(item.Value))
+                                if (String.IsNullOrEmpty(item.SensorData.Value))
                                 {
                                     <span>None</span>
                                 }
                                 else
                                 {
-                                    @Html.DisplayFor(modelItem => item.Value)@item.SensorType.MeasurementType
+                                    @Html.DisplayFor(modelItem => item.SensorData.Value)@item.SensorType.MeasurementType
                                 }
                             }
                         </td>
