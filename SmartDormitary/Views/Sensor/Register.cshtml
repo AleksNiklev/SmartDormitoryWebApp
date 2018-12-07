@@ -9,6 +9,7 @@
             <div class="row">
                 <div class="title">
                     <h2>Register Sensor</h2>
+                    <h3 class="text-danger">@TempData["InvalidModel"]</h3>
                 </div>
                 <div class="table">
                     <form asp-controller="Sensor" asp-action="Register" method="post" id="registerForm">
@@ -17,12 +18,12 @@
                         <div class="form-row">
                             <div class="form-group col-md-6">
                                 <label asp-for="Name">Name</label>
-                                <input asp-for="Name" class="form-control" name="Name" />
+                                <input asp-for="Name" class="form-control" name="Name" minLength="2" maxlength="50" required/>
                                 <span asp-validation-for="Name" class="text-danger"></span>
                             </div>
                             <div class="form-group col-md-6">
                                 <label asp-for="PullingInterval">Pulling Data Interval</label>
-                                <input asp-for="PullingInterval" class="form-control" name="PullingInterval" />
+                                <input asp-for="PullingInterval" class="form-control" name="PullingInterval" min="@Model.DefaultPullingInterval"/>
                                 <span asp-validation-for="PullingInterval" class="text-danger"></span>
                             </div>
                         </div>
@@ -36,14 +37,14 @@
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label asp-for="MinAcceptableValue">Min Acceptable Value</label>
-                                        <input asp-for="MinAcceptableValue" class="form-control" name="MinAcceptableValue" />
+                                        <input asp-for="MinAcceptableValue" class="form-control" name="MinAcceptableValue" required min="@Model.DefaultMinAcceptableValue" max="@Model.DefaultMaxAcceptableValue"/>
                                         <span asp-validation-for="MinAcceptableValue" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label asp-for="MaxAcceptableValue">Max Acceptable Value</label>
-                                        <input asp-for="MaxAcceptableValue" class="form-control" name="MaxAcceptableValue" />
+                                        <input asp-for="MaxAcceptableValue" class="form-control" name="MaxAcceptableValue"  required min="@Model.DefaultMinAcceptableValue" max="@Model.DefaultMaxAcceptableValue" />
                                         <span asp-validation-for="MaxAcceptableValue" class="text-danger"></span>
                                     </div>
                                 </div>
@@ -97,7 +98,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
-        $("#registerForm").validate({
+        @*$("#registerForm").validate({
             rules: {
                 PullingInterval: {
                     required: true,
@@ -131,7 +132,7 @@
             messages: {
                 MapMarker: "Enter sensor Location!"
             }
-        });
+        });*@
     });
 
     function initMap() {

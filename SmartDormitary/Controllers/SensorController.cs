@@ -53,6 +53,11 @@ namespace SmartDormitary.Controllers
             {
                 return this.View("Index");
             }
+            if (model.MinAcceptableValue >= model.MaxAcceptableValue)
+            {
+                this.TempData["InvalidModel"] = "Error! Max Acceptable value should be grater than Min Acceptable Value.";
+                return View(model);
+            }
 
             var typeId = model.Id;
             var sensorApi = await this.sensorApi.GetSensorAsync(typeId);
