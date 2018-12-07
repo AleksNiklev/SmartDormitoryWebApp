@@ -124,7 +124,9 @@ namespace SmartDormitary.Services
         /// <returns></returns>
         public Sensor GetSensorByGuid(Guid sensorId)
         {
-            return dormitaryContext.Sensors.Where(s => s.Id == sensorId).Include(s => s.User)
+            return dormitaryContext.Sensors.Where(s => s.Id == sensorId)
+                .Include(s => s.User)
+                .Include(s => s.SensorData)
                 .Include(s => s.SensorType).FirstOrDefault();
         }
 
@@ -153,7 +155,9 @@ namespace SmartDormitary.Services
 
         public async Task<List<Sensor>> GetLastRegisteredSensorsAsync(int count = 10)
         {
-            return await dormitaryContext.Sensors.OrderByDescending(t => t.CreatedOn).Take(count).Include(s => s.User).ToListAsync();
+            return await dormitaryContext.Sensors.OrderByDescending(t => t.CreatedOn).Take(count)
+                .Include(s => s.User)
+                .Include(s => s.SensorData).ToListAsync();
         }
 
         public async Task DeleteSensorsAsync(Guid id)
