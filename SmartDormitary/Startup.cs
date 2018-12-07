@@ -35,7 +35,7 @@ namespace SmartDormitary
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<SmartDormitaryContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("LocalDBConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<SmartDormitaryContext>()
@@ -59,7 +59,8 @@ namespace SmartDormitary
 
             // The TempData provider cookie is not essential. Make it essential
             // So TempData is functional when tracking is disabled.
-            services.Configure<CookieTempDataProviderOptions>(options => {
+            services.Configure<CookieTempDataProviderOptions>(options =>
+            {
                 options.Cookie.IsEssential = true;
             });
 
@@ -98,9 +99,9 @@ namespace SmartDormitary
 
             app.UseStaticFiles();
             app.UseCookiePolicy();
-            
+
             app.UseAuthentication();
-            
+
             app.UseSignalR(routes =>
             {
                 routes.MapHub<NotifyHub>("/notifyHub");
@@ -109,8 +110,8 @@ namespace SmartDormitary
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
-                    name : "areas",
-                    template : "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                    name: "areas",
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
                 );
 
                 routes.MapRoute(

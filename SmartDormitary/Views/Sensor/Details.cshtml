@@ -11,13 +11,15 @@
         margin: 10px;
     }
 </style>
-
 @model SensorViewModel
 @{
     ViewData["Title"] = "Details";
 }
-
-<h2>Details</h2>
+<div class="page-header header-filter" data-parallax="true" style="        background-image: url('/assets/img/city-profile.jpg');"></div>
+<div class="main main-raised">
+    <div class="section">
+        <div class="container">
+            <h2>Details</h2>
 <br />
 <div class="updateForm">
     <div class="form-row">
@@ -32,9 +34,7 @@
                 <p><span class="font-weight-bold">Sensor Value:</span> <span id="valueField">@Model.Value</span></p>
                 <p><span class="font-weight-bold">Time stamp:</span> <span id="timeStampField">@Model.Timestamp.Value.ToString("yyyy-mm-dd hh:mm:ss tt")</span></p>
             </div>
-            <canvas id="foo" class="col-md-6"></canvas>
         </div>
-
         <div class="form-group col-md-5">
             @if (User.Identity.Name == Model.User.UserName)
             {
@@ -44,12 +44,16 @@
                 </div>
             }
             <br />
+            <div id="map" style="height: 300px;
+    ">
 
-            <div id="map" style="height: 300px;"></div>
+            </div>
         </div>
     </div>
 </div>
-
+        </div>
+    </div>
+</div>
 <script type="text/javascript" src="~/lib/gaugejs/gauge.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -95,7 +99,7 @@
         console.log(dateSpan);
         console.log(modelDate);
         console.log(now);
-        
+
         setInterval(sendRequest, 5000);
 
         function sendRequest() {
@@ -196,7 +200,3 @@
 
 </script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOc4hXPYpMR4Gos817M6Iz_5hUKrPE0k4&callback=initMap"></script>
-
-
-
-
