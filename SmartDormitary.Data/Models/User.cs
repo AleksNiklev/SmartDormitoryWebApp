@@ -8,5 +8,6 @@ namespace SmartDormitary.Data.Models
     {
         public IList<Sensor> Sensors { get; set; } = new List<Sensor>();
         public DateTime CreatedOn { get; set; } = DateTime.Now;
+        public bool AcceptedGDPR { get; set; } = false;
     }
 }
