@@ -1,7 +1,4 @@
-@using Microsoft.AspNetCore.Identity
 @using SmartDormitary.Data.Models
-@using SmartDormitary.Models
-
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
 
@@ -25,10 +22,16 @@ else
 {
     <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Register"><i class="material-icons">person_add</i> Register<div class="ripple-container"></div></a>
+            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Register">
+                <i class="material-icons">person_add</i> Register
+                <div class="ripple-container"></div>
+            </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login"><i class="material-icons">whatshot</i> Login<div class="ripple-container"></div></a>
+            <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">
+                <i class="material-icons">whatshot</i> Login
+                <div class="ripple-container"></div>
+            </a>
         </li>
     </ul>
 }

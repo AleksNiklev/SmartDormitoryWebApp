@@ -24,6 +24,7 @@
         </div>
     </div>
 </div>
+
 @section Scripts {
     <script type="text/javascript">
 
@@ -43,7 +44,7 @@
 
                     JSON.parse(response).forEach(function(marker) {
 
-                        var myLatLng = { lat: marker.x, lng: marker.y };
+                        const myLatLng = { lat: marker.x, lng: marker.y };
 
                         new google.maps.Marker({
                             position: myLatLng,

@@ -1,5 +1,4 @@
 ﻿@using SmartDormitary.Data.Models
-@using SmartDormitary.Views.Manage
 @inject SignInManager<User> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();

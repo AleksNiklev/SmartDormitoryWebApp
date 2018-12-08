@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartDormitary.Areas.Administration.Models;
@@ -13,8 +10,8 @@ namespace SmartDormitary.Areas.Administration.Controllers
     [Area("Administration")]
     public class HomeController : Controller
     {
-        private readonly IUsersService usersService;
         private readonly ISensorsService sensorsService;
+        private readonly IUsersService usersService;
 
         public HomeController(IUsersService usersService, ISensorsService sensorsService)
         {

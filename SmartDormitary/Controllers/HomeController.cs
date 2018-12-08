@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -10,7 +9,6 @@ using SmartDormitary.Data.Models;
 using SmartDormitary.Models;
 using SmartDormitary.Models.SensorViewModels;
 using SmartDormitary.Services.Contracts;
-using SmartDormitory.API.DormitaryAPI;
 
 namespace SmartDormitary.Controllers
 {

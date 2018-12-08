@@ -1,7 +1,6 @@
-﻿using SmartDormitary.Data.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using SmartDormitary.Data.Models;
 
 namespace SmartDormitory.Tests.HelpersMethods
 {
@@ -9,12 +8,12 @@ namespace SmartDormitory.Tests.HelpersMethods
     {
         public static User TestUser1()
         {
-            return new User() { Id = "00000000-0000-0000-0000-000000000001", Sensors = new List<Sensor>() };
+            return new User {Id = "00000000-0000-0000-0000-000000000001", Sensors = new List<Sensor>()};
         }
 
         public static User TestUser2()
         {
-            return new User() { Id = "00000000-0000-0000-0000-000000000002", Sensors = new List<Sensor>() };
+            return new User {Id = "00000000-0000-0000-0000-000000000002", Sensors = new List<Sensor>()};
         }
 
         public static Guid TestGuid()
@@ -39,12 +38,12 @@ namespace SmartDormitory.Tests.HelpersMethods
 
         public static SensorType TestSensorType()
         {
-            return new SensorType() { Id = TestGuid() };
+            return new SensorType {Id = TestGuid()};
         }
 
         public static Sensor TestPublicSensor()
         {
-            return new Sensor()
+            return new Sensor
             {
                 Name = "test",
                 Description = "test",
@@ -58,14 +57,14 @@ namespace SmartDormitory.Tests.HelpersMethods
                 Latitude = 41.1231,
                 Longitude = 41.1231,
                 RefreshTime = 40,
-                SensorData = new SensorData() { Id = 1, Value = "123", Timestamp = new DateTime() },
+                SensorData = new SensorData {Id = 1, Value = "123", Timestamp = new DateTime()},
                 User = TestUser1()
             };
         }
 
         public static Sensor TestPrivateSensor()
         {
-            return new Sensor()
+            return new Sensor
             {
                 Name = "test2",
                 Description = "test2",
@@ -79,7 +78,7 @@ namespace SmartDormitory.Tests.HelpersMethods
                 Latitude = 41.1231,
                 Longitude = 41.1231,
                 RefreshTime = 40,
-                SensorData = new SensorData() { Id = 2, Value = "123", Timestamp = new DateTime() },
+                SensorData = new SensorData {Id = 2, Value = "123", Timestamp = new DateTime()},
                 User = TestUser1()
             };
         }

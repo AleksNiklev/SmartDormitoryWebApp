@@ -1,8 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SmartDormitary.Services.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SmartDormitory.Tests.Services.ExtensionsTests
 {

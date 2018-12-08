@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -6,10 +6,6 @@ using SmartDormitary.Data.Context;
 using SmartDormitary.Services;
 using SmartDormitary.Services.Hubs.Service;
 using SmartDormitory.Tests.HelpersMethods;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartDormitory.Tests.Services.SensorsServiceTests
 {
@@ -20,7 +16,7 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
         public async Task Update_SensorData_Value()
         {
             var contextOptions = new DbContextOptionsBuilder<SmartDormitaryContext>()
-                .UseInMemoryDatabase(databaseName: "Update_SensorData_Value")
+                .UseInMemoryDatabase("Update_SensorData_Value")
                 .Options;
 
             var sensor = TestHelpers.TestPublicSensor();
@@ -37,7 +33,9 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
             using (var assertContext = new SmartDormitaryContext(contextOptions))
             {
                 var hubServiceMock = new Mock<IHubService>();
-                hubServiceMock.Setup(s => s.Notify(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(Task.CompletedTask);
+                hubServiceMock
+                    .Setup(s => s.Notify(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
+                        It.IsAny<string>())).Returns(Task.CompletedTask);
 
                 var service = new SensorsService(assertContext, hubServiceMock.Object);
                 var toUbdate = await assertContext.Sensors
@@ -49,7 +47,6 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
 
                 Assert.AreEqual(val, result.Entity.Value);
             }
-
         }
     }
 }

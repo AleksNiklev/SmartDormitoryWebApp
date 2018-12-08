@@ -5,7 +5,7 @@
 }
 
 <h3 class="text-primary mt-0">Manage | @Model.User's sensor</h3>
-<hr />
+<hr/>
 <div class="col-md-6 ml-0 pl-0">
     @Html.Partial("_StatusMessage", TempData["StatusMessage"])
 </div>
@@ -14,20 +14,20 @@
         <form asp-action="Edit" class="row">
             <div class="col-md-4">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="Id"/>
                 <div class="form-group">
                     <label asp-for="Name" class="control-label"></label>
-                    <input asp-for="Name" class="form-control" />
+                    <input asp-for="Name" class="form-control"/>
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="Description" class="control-label"></label>
-                    <input asp-for="Description" class="form-control" />
+                    <input asp-for="Description" class="form-control"/>
                     <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="RefreshTime" class="control-label"></label>
-                    <input asp-for="RefreshTime" class="form-control" />
+                    <input asp-for="RefreshTime" class="form-control"/>
                     <span asp-validation-for="RefreshTime" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -43,17 +43,17 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="Value" class="control-label"></label>
-                    <input asp-for="Value" class="form-control" />
+                    <input asp-for="Value" class="form-control"/>
                     <span asp-validation-for="Value" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="MinAcceptableValue" class="control-label"></label>
-                    <input asp-for="MinAcceptableValue" class="form-control" />
+                    <input asp-for="MinAcceptableValue" class="form-control"/>
                     <span asp-validation-for="MinAcceptableValue" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="MaxAcceptableValue" class="control-label"></label>
-                    <input asp-for="MaxAcceptableValue" class="form-control" />
+                    <input asp-for="MaxAcceptableValue" class="form-control"/>
                     <span asp-validation-for="MaxAcceptableValue" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -89,11 +89,11 @@
                     </div>
                     <div class="card-body">
                         <div class="border border-primary rounded" id="map" style="height: 400px;"></div>
-                        <input asp-for="Latitude" class="form-control" type="hidden" id="latField" />
+                        <input asp-for="Latitude" class="form-control" type="hidden" id="latField"/>
                         <span asp-validation-for="Latitude" class="text-danger"></span>
-                        <input asp-for="Longitude" class="form-control" type="hidden" id="lngField" />
+                        <input asp-for="Longitude" class="form-control" type="hidden" id="lngField"/>
                         <span asp-validation-for="Longitude" class="text-danger"></span>
-                        <input type="checkbox" name="MapMarker" style="visibility: hidden" id="mapMarker" />
+                        <input type="checkbox" name="MapMarker" style="visibility: hidden" id="mapMarker"/>
                     </div>
                 </div>
             </div>
@@ -102,7 +102,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
     <script>
         $(".chosen-select").chosen({ no_results_text: "Oops, nothing found!" });
     </script>
@@ -114,7 +114,7 @@
                     center: { lat: 42.6875236, lng: 23.3139769 }
                 });
 
-            var myLatLng = { lat: @Model.Latitude, lng: @Model.Longitude };
+            const myLatLng = { lat: @Model.Latitude, lng: @Model.Longitude };
             var marker = new google.maps.Marker({
                 position: myLatLng,
                 map: map,

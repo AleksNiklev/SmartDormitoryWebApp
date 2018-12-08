@@ -56,7 +56,7 @@
                     <i class="material-icons">info_outline</i>
                 </div>
                 <p class="card-category">Critical Sensors</p>
-                <h3 class="card-title">@Model.SensorsList.Count(s => (s.SensorData.Value != "true" && s.SensorData.Value != "false") && s.MinAcceptableValue > double.Parse(s.SensorData.Value) && s.MaxAcceptableValue < double.Parse(s.SensorData.Value))</h3>
+                <h3 class="card-title">@Model.SensorsList.Count(s => s.SensorData.Value != "true" && s.SensorData.Value != "false" && s.MinAcceptableValue > double.Parse(s.SensorData.Value) && s.MaxAcceptableValue < double.Parse(s.SensorData.Value))</h3>
             </div>
             <div class="card-footer">
                 <div class="stats">
@@ -74,23 +74,25 @@
             <div class="card-body table-responsive">
                 <table class="table table-hover">
                     <thead class="text-warning">
-                        <tr>
-                            <th>Username</th>
-                            <th>Email</th>
-                            <th>Sensors</th>
-                            <th>Registered On</th>
-                        </tr>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Sensors</th>
+                        <th>Registered On</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        @foreach (var user in @Model.UsersList)
-                        {
-                            <tr>
-                                <td><a class="text-primary" asp-controller="Users" asp-action="Details" asp-route-id="@user.Id">@user.UserName</a></td>
-                                <td>@user.Email</td>
-                                <td>@user.Sensors.Count</td>
-                                <td>@user.CreatedOn.Humanize()</td>
-                            </tr>
-                        }
+                    @foreach (var user in Model.UsersList)
+                    {
+                        <tr>
+                            <td>
+                                <a class="text-primary" asp-controller="Users" asp-action="Details" asp-route-id="@user.Id">@user.UserName</a>
+                            </td>
+                            <td>@user.Email</td>
+                            <td>@user.Sensors.Count</td>
+                            <td>@user.CreatedOn.Humanize()</td>
+                        </tr>
+                    }
                     </tbody>
                 </table>
             </div>
@@ -105,23 +107,25 @@
             <div class="card-body table-responsive">
                 <table class="table table-hover">
                     <thead class="text-warning">
-                        <tr>
-                            <th>Name</th>
-                            <th>Value</th>
-                            <th>Owner</th>
-                            <th>Registered On</th>
-                        </tr>
+                    <tr>
+                        <th>Name</th>
+                        <th>Value</th>
+                        <th>Owner</th>
+                        <th>Registered On</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        @foreach (var sensor in @Model.SensorsList)
-                        {
-                            <tr>
-                                <td><a class="text-info" asp-action="Details" asp-controller="Sensors" asp-area="Administration" asp-route-id="@sensor.Id">@sensor.Name</a></td>
-                                <td>@*@sensor.Value*@</td>
-                                <td>@sensor.User.UserName</td>
-                                <td>@sensor.CreatedOn.Humanize()</td>
-                            </tr>
-                        }
+                    @foreach (var sensor in Model.SensorsList)
+                    {
+                        <tr>
+                            <td>
+                                <a class="text-info" asp-action="Details" asp-controller="Sensors" asp-area="Administration" asp-route-id="@sensor.Id">@sensor.Name</a>
+                            </td>
+                            <td>@*@sensor.Value*@</td>
+                            <td>@sensor.User.UserName</td>
+                            <td>@sensor.CreatedOn.Humanize()</td>
+                        </tr>
+                    }
                     </tbody>
                 </table>
             </div>

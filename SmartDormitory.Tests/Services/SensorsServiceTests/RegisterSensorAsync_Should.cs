@@ -1,18 +1,12 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SmartDormitary.Data.Context;
-using SmartDormitary.Data.Models;
 using SmartDormitary.Services;
-using SmartDormitary.Services.Hubs;
 using SmartDormitary.Services.Hubs.Service;
 using SmartDormitory.Tests.HelpersMethods;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartDormitory.Tests.Services.SensorsServiceTests
 {
@@ -23,7 +17,7 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
         public async Task Register_Sensor()
         {
             var contextOptions = new DbContextOptionsBuilder<SmartDormitaryContext>()
-                .UseInMemoryDatabase(databaseName: "Register_Sensor_Async")
+                .UseInMemoryDatabase("Register_Sensor_Async")
                 .Options;
 
             var sensor1 = TestHelpers.TestPublicSensor();
@@ -43,8 +37,8 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
             {
                 var sensors = assertContext.Sensors;
                 Assert.AreEqual(2, sensors.Count());
-                Assert.IsTrue(sensors.Contains<Sensor>(sensor1));
-                Assert.IsTrue(sensors.Contains<Sensor>(sensor2));
+                Assert.IsTrue(sensors.Contains(sensor1));
+                Assert.IsTrue(sensors.Contains(sensor2));
             }
         }
 
@@ -52,11 +46,11 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
         public async Task Register_AddedSensor()
         {
             var contextOptions = new DbContextOptionsBuilder<SmartDormitaryContext>()
-                .UseInMemoryDatabase(databaseName: "Register_AddedSensor_Async")
+                .UseInMemoryDatabase("Register_AddedSensor_Async")
                 .Options;
 
             var sensor = TestHelpers.TestPublicSensor();
-            
+
             // Assert
             using (var assertContext = new SmartDormitaryContext(contextOptions))
             {

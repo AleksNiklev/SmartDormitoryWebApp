@@ -7,7 +7,7 @@
 }
 
 <h3 class="text-primary mt-0">Manage | @Model.Username</h3>
-<hr />
+<hr/>
 <div class="col-md-6 ml-0 pl-0">
     @Html.Partial("_StatusMessage", TempData["StatusMessage"])
 </div>
@@ -15,19 +15,19 @@
     <div class="col-md-3">
         <form asp-action="Edit" asp-controller="Users" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="CreatedOn" />
-            <input type="hidden" asp-for="SensorsList" />
-            <input type="hidden" asp-for="EmailConfirmed" />
-            <input type="hidden" asp-for="TwoFactorEnabled" />
+            <input type="hidden" asp-for="Id"/>
+            <input type="hidden" asp-for="CreatedOn"/>
+            <input type="hidden" asp-for="SensorsList"/>
+            <input type="hidden" asp-for="EmailConfirmed"/>
+            <input type="hidden" asp-for="TwoFactorEnabled"/>
             <div class="form-group">
                 <label asp-for="Username" class="control-label"></label>
-                <input asp-for="Username" class="form-control" />
+                <input asp-for="Username" class="form-control"/>
                 <span asp-validation-for="Username" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
+                <input asp-for="Email" class="form-control"/>
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -54,5 +54,5 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

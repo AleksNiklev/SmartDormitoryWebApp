@@ -1,17 +1,12 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SmartDormitary.Data.Context;
 using SmartDormitary.Services;
-using SmartDormitary.Services.Hubs;
 using SmartDormitary.Services.Hubs.Service;
 using SmartDormitory.Tests.HelpersMethods;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartDormitory.Tests.Services.SensorsServiceTests
 {
@@ -22,7 +17,7 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
         public async Task Return_ListOfPublicSensors()
         {
             var contextOptions = new DbContextOptionsBuilder<SmartDormitaryContext>()
-                .UseInMemoryDatabase(databaseName: "Return_ListOfPublicSensors_Async")
+                .UseInMemoryDatabase("Return_ListOfPublicSensors_Async")
                 .Options;
 
             var publicSensor = TestHelpers.TestPublicSensor();
@@ -45,7 +40,6 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
 
                 Assert.AreEqual(1, result.Count);
                 Assert.AreEqual(publicSensor.Id, result.First().Id);
-
             }
         }
 
@@ -53,7 +47,7 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
         public async Task Return_EmptyList()
         {
             var contextOptions = new DbContextOptionsBuilder<SmartDormitaryContext>()
-                .UseInMemoryDatabase(databaseName: "Return_EmptyList_Async")
+                .UseInMemoryDatabase("Return_EmptyList_Async")
                 .Options;
 
             var privateSensor = TestHelpers.TestPrivateSensor();

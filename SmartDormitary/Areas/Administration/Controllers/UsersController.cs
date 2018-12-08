@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -17,12 +16,13 @@ namespace SmartDormitary.Areas.Administration.Controllers
     public class UsersController : Controller
     {
         private readonly IUsersService usersService;
-        [TempData] public string StatusMessage { get; set; }
 
         public UsersController(IUsersService usersService)
         {
             this.usersService = usersService;
         }
+
+        [TempData] public string StatusMessage { get; set; }
 
         // GET: Users
         public async Task<IActionResult> Index()
@@ -35,17 +35,11 @@ namespace SmartDormitary.Areas.Administration.Controllers
         // GET: Users/Details/5
         public async Task<IActionResult> Details(Guid? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var user = await usersService.GetUserByGuidAsync(id);
 
-            if (user == null)
-            {
-                return NotFound();
-            }
+            if (user == null) return NotFound();
 
             var userModel = new UserViewModel(user);
 
@@ -80,6 +74,7 @@ namespace SmartDormitary.Areas.Administration.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
+
             StatusMessage = "Error: Something went wrong...";
             return View(userModel);
         }
@@ -87,16 +82,10 @@ namespace SmartDormitary.Areas.Administration.Controllers
         // GET: Users/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var user = await usersService.GetUserByGuidAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
+            if (user == null) return NotFound();
 
             return View(new UserViewModel(user));
         }
@@ -113,23 +102,20 @@ namespace SmartDormitary.Areas.Administration.Controllers
                     var user = await usersService.GetUserByGuidAsync(id);
                     user.UserName = userViewModel.Username;
                     user.Email = userViewModel.Email;
-                    
+
                     await usersService.UpdateUserAsync(user);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     if (await usersService.UserExistsAsync(id) == false)
-                    {
                         return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
-                this.StatusMessage = $"Successfully edited {userViewModel.Username}'s account.";
-                return RedirectToAction(nameof(Edit), new {id = id});
+
+                StatusMessage = $"Successfully edited {userViewModel.Username}'s account.";
+                return RedirectToAction(nameof(Edit), new {id});
             }
+
             StatusMessage = "Error: Something went wrong...";
             return View();
         }
@@ -160,8 +146,8 @@ namespace SmartDormitary.Areas.Administration.Controllers
         public async Task<IActionResult> DeleteUserSensors(Guid id)
         {
             await usersService.DeleteUserSensorsAsync(id);
-            this.StatusMessage = $"Successfully removed the sensors registered by this user.";
-            return RedirectToAction(nameof(Edit), new {id = id});
+            StatusMessage = "Successfully removed the sensors registered by this user.";
+            return RedirectToAction(nameof(Edit), new {id});
         }
     }
 }

@@ -1,14 +1,12 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SmartDormitary.Data.Context;
 using SmartDormitary.Services;
-using SmartDormitary.Services.Hubs;
 using SmartDormitary.Services.Hubs.Service;
 using SmartDormitory.Tests.HelpersMethods;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SmartDormitory.Tests.Services.SensorsServiceTests
 {
@@ -19,7 +17,7 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
         public async Task Return_EmptySensorList()
         {
             var contextOptions = new DbContextOptionsBuilder<SmartDormitaryContext>()
-                .UseInMemoryDatabase(databaseName: "Return_EmptySensorList_Async")
+                .UseInMemoryDatabase("Return_EmptySensorList_Async")
                 .Options;
 
             // Assert
@@ -38,7 +36,7 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
         public async Task Return_AllSensors()
         {
             var contextOptions = new DbContextOptionsBuilder<SmartDormitaryContext>()
-                .UseInMemoryDatabase(databaseName: "Return_AllSensors_Async")
+                .UseInMemoryDatabase("Return_AllSensors_Async")
                 .Options;
 
             var sensor = TestHelpers.TestPublicSensor();

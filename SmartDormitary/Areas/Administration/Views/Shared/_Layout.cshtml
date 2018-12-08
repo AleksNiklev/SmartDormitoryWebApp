@@ -4,113 +4,113 @@
 <head>
     <title>@ViewData["Title"] - Admin Panel</title>
     <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <link href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons"/>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-    <link href="~/administrator/assets/css/material-dashboard.css?v=2.1.0" rel="stylesheet" />
-    <link href="~/administrator/assets/css/chosen.min.css" rel="stylesheet" />
-    <link href="~/administrator/assets/css/chosen-dark.css" rel="stylesheet" />
+    <link href="~/administrator/assets/css/material-dashboard.css?v=2.1.0" rel="stylesheet"/>
+    <link href="~/administrator/assets/css/chosen.min.css" rel="stylesheet"/>
+    <link href="~/administrator/assets/css/chosen-dark.css" rel="stylesheet"/>
 </head>
 
 <body class="dark-edition">
-    <div class="wrapper ">
-        <div class="sidebar" data-color="azure" data-background-color="black">
-            <!--
-                Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
+<div class="wrapper ">
+    <div class="sidebar" data-color="azure" data-background-color="black">
+        <!--
+        Tip 1: You can change the color of the sidebar using: data-color="purple | azure | green | orange | danger"
 
-                Tip 2: you can also add an image using data-image tag
-            -->
-            <div class="logo">
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="simple-text logo-normal">
-                    SmartDormitary ACP
-                </a>
-            </div>
-            <div class="sidebar-wrapper">
-                <ul class="nav">
-                    <li class="nav-item @(ViewBag.Current == "Dashboard" ? "active" : "")">
-                        <a class="nav-link " asp-action="Index" asp-controller="Home" asp-area="Administration">
-                            <i class="material-icons">dashboard</i>
-                            <p>Dashboard</p>
-                        </a>
-                    </li>
-                    <li class="nav-item @(ViewBag.Current == "SensorsIndex" ? "active" : "")">
-                        <a class="nav-link" asp-action="Index" asp-controller="Sensors" asp-area="Administration">
-                            <i class="material-icons">flash_on</i>
-                            <p>Sensors</p>
-                        </a>
-                    </li>
-                    <li class="nav-item @(ViewBag.Current == "UsersIndex" ? "active" : "")">
-                        <a class="nav-link" asp-action="Index" asp-controller="Users" asp-area="Administration">
-                            <i class="material-icons">people</i>
-                            <p>Users</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-action="Index" asp-controller="Home" asp-area="">
-                            <i class="material-icons">explore</i>
-                            <p>Back To Site</p>
-                        </a>
-                    </li>
-                    <!-- your sidebar here -->
-                </ul>
-            </div>
+        Tip 2: you can also add an image using data-image tag
+        -->
+        <div class="logo">
+            <a asp-area="" asp-controller="Home" asp-action="Index" class="simple-text logo-normal">
+                SmartDormitary ACP
+            </a>
         </div>
-        <div class="main-panel">
-            <!-- Navbar -->
-            <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
-                <div class="container-fluid">
-                    <div class="navbar-wrapper">
-                        <h4 class="text-white">@ViewData["Title"]</h4>
-                    </div>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="navbar-toggler-icon icon-bar"></span>
-                        <span class="navbar-toggler-icon icon-bar"></span>
-                        <span class="navbar-toggler-icon icon-bar"></span>
-                    </button>
-                    <div class="collapse navbar-collapse justify-content-end">
-                        <ul class="navbar-nav">
-                            <li class="nav-item">
-                                <a class="nav-link" href="javascript:void(0)">
-                                    <i class="material-icons">notifications</i>
-                                    <p class="d-lg-none d-md-block">
-                                        Notifications
-                                    </p>
-                                </a>
-                            </li>
-                            <!-- your navbar here -->
-                        </ul>
-                    </div>
+        <div class="sidebar-wrapper">
+            <ul class="nav">
+                <li class="nav-item @(ViewBag.Current == "Dashboard" ? "active" : "")">
+                    <a class="nav-link " asp-action="Index" asp-controller="Home" asp-area="Administration">
+                        <i class="material-icons">dashboard</i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li class="nav-item @(ViewBag.Current == "SensorsIndex" ? "active" : "")">
+                    <a class="nav-link" asp-action="Index" asp-controller="Sensors" asp-area="Administration">
+                        <i class="material-icons">flash_on</i>
+                        <p>Sensors</p>
+                    </a>
+                </li>
+                <li class="nav-item @(ViewBag.Current == "UsersIndex" ? "active" : "")">
+                    <a class="nav-link" asp-action="Index" asp-controller="Users" asp-area="Administration">
+                        <i class="material-icons">people</i>
+                        <p>Users</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-action="Index" asp-controller="Home" asp-area="">
+                        <i class="material-icons">explore</i>
+                        <p>Back To Site</p>
+                    </a>
+                </li>
+                <!-- your sidebar here -->
+            </ul>
+        </div>
+    </div>
+    <div class="main-panel">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top ">
+            <div class="container-fluid">
+                <div class="navbar-wrapper">
+                    <h4 class="text-white">@ViewData["Title"]</h4>
                 </div>
-            </nav>
-            <!-- End Navbar -->
-            <div class="content">
-                <div class="container-fluid">
-                    @RenderBody()
+                <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="navbar-toggler-icon icon-bar"></span>
+                    <span class="navbar-toggler-icon icon-bar"></span>
+                    <span class="navbar-toggler-icon icon-bar"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="javascript:void(0)">
+                                <i class="material-icons">notifications</i>
+                                <p class="d-lg-none d-md-block">
+                                    Notifications
+                                </p>
+                            </a>
+                        </li>
+                        <!-- your navbar here -->
+                    </ul>
                 </div>
+            </div>
+        </nav>
+        <!-- End Navbar -->
+        <div class="content">
+            <div class="container-fluid">
+                @RenderBody()
             </div>
         </div>
     </div>
-    <!--   Core JS Files   -->
-    <script src="~/administrator/assets/js/core/jquery.min.js"></script>
-    <script src="~/administrator/assets/js/core/popper.min.js"></script>
-    <script src="~/administrator/assets/js/core/bootstrap-material-design.min.js"></script>
-    <script src="~/administrator/assets/js/plugins/chosen.jquery.min.js"></script>
-    @*<script src="https://unpkg.com/default-passive-events"></script>*@
-    <script src="~/administrator/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
-    <!-- Chartist JS -->
-    <script src="~/administrator/assets/js/plugins/chartist.min.js"></script>
-    <!--  Notifications Plugin    -->
-    <script src="~/administrator/assets/js/plugins/bootstrap-notify.js"></script>
-    <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
-    <script src="~/administrator/assets/js/material-dashboard.js?v=2.1.0"></script>
+</div>
+<!--   Core JS Files   -->
+<script src="~/administrator/assets/js/core/jquery.min.js"></script>
+<script src="~/administrator/assets/js/core/popper.min.js"></script>
+<script src="~/administrator/assets/js/core/bootstrap-material-design.min.js"></script>
+<script src="~/administrator/assets/js/plugins/chosen.jquery.min.js"></script>
+@*<script src="https://unpkg.com/default-passive-events"></script>*@
+<script src="~/administrator/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+<!-- Chartist JS -->
+<script src="~/administrator/assets/js/plugins/chartist.min.js"></script>
+<!--  Notifications Plugin    -->
+<script src="~/administrator/assets/js/plugins/bootstrap-notify.js"></script>
+<!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+<script src="~/administrator/assets/js/material-dashboard.js?v=2.1.0"></script>
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('[data-toggle=tooltip]').tooltip();
-        $().ready(function () {
+        $().ready(function() {
             $sidebar = $('.sidebar');
 
             $sidebar_img_container = $sidebar.find('.sidebar-background');
@@ -121,7 +121,7 @@
 
             window_width = $(window).width();
 
-            $('.fixed-plugin a').click(function (event) {
+            $('.fixed-plugin a').click(function(event) {
                 // Alex if we click on switch, stop propagation of the event, so the dropdown will not be hide, otherwise we set the  section active
                 if ($(this).hasClass('switch-trigger')) {
                     if (event.stopPropagation) {
@@ -132,13 +132,13 @@
                 }
             });
 
-            $('.fixed-plugin .active-color span').click(function () {
+            $('.fixed-plugin .active-color span').click(function() {
                 $full_page_background = $('.full-page-background');
 
                 $(this).siblings().removeClass('active');
                 $(this).addClass('active');
 
-                var new_color = $(this).data('color');
+                const new_color = $(this).data('color');
 
                 if ($sidebar.length != 0) {
                     $sidebar.attr('data-color', new_color);
@@ -153,18 +153,18 @@
                 }
             });
 
-            $('.fixed-plugin .background-color .badge').click(function () {
+            $('.fixed-plugin .background-color .badge').click(function() {
                 $(this).siblings().removeClass('active');
                 $(this).addClass('active');
 
-                var new_color = $(this).data('background-color');
+                const new_color = $(this).data('background-color');
 
                 if ($sidebar.length != 0) {
                     $sidebar.attr('data-background-color', new_color);
                 }
             });
 
-            $('.fixed-plugin .img-holder').click(function () {
+            $('.fixed-plugin .img-holder').click(function() {
                 $full_page_background = $('.full-page-background');
 
                 $(this).parent('li').siblings().removeClass('active');
@@ -174,35 +174,37 @@
                 var new_image = $(this).find("img").attr('src');
 
                 if ($sidebar_img_container.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
-                    $sidebar_img_container.fadeOut('fast', function () {
-                        $sidebar_img_container.css('background-image', 'url("' + new_image + '")');
-                        $sidebar_img_container.fadeIn('fast');
-                    });
+                    $sidebar_img_container.fadeOut('fast',
+                        function() {
+                            $sidebar_img_container.css('background-image', `url("${new_image}")`);
+                            $sidebar_img_container.fadeIn('fast');
+                        });
                 }
 
                 if ($full_page_background.length != 0 && $('.switch-sidebar-image input:checked').length != 0) {
                     var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
 
-                    $full_page_background.fadeOut('fast', function () {
-                        $full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
-                        $full_page_background.fadeIn('fast');
-                    });
+                    $full_page_background.fadeOut('fast',
+                        function() {
+                            $full_page_background.css('background-image', `url("${new_image_full_page}")`);
+                            $full_page_background.fadeIn('fast');
+                        });
                 }
 
                 if ($('.switch-sidebar-image input:checked').length == 0) {
                     var new_image = $('.fixed-plugin li.active .img-holder').find("img").attr('src');
                     var new_image_full_page = $('.fixed-plugin li.active .img-holder').find('img').data('src');
 
-                    $sidebar_img_container.css('background-image', 'url("' + new_image + '")');
-                    $full_page_background.css('background-image', 'url("' + new_image_full_page + '")');
+                    $sidebar_img_container.css('background-image', `url("${new_image}")`);
+                    $full_page_background.css('background-image', `url("${new_image_full_page}")`);
                 }
 
                 if ($sidebar_responsive.length != 0) {
-                    $sidebar_responsive.css('background-image', 'url("' + new_image + '")');
+                    $sidebar_responsive.css('background-image', `url("${new_image}")`);
                 }
             });
 
-            $('.switch-sidebar-image input').change(function () {
+            $('.switch-sidebar-image input').change(function() {
                 $full_page_background = $('.full-page-background');
 
                 $input = $(this);
@@ -234,7 +236,7 @@
                 }
             });
 
-            $('.switch-sidebar-mini input').change(function () {
+            $('.switch-sidebar-mini input').change(function() {
                 $body = $('body');
 
                 $input = $(this);
@@ -249,22 +251,25 @@
 
                     $('.sidebar .sidebar-wrapper, .main-panel').perfectScrollbar('destroy');
 
-                    setTimeout(function () {
-                        $('body').addClass('sidebar-mini');
+                    setTimeout(function() {
+                            $('body').addClass('sidebar-mini');
 
-                        md.misc.sidebar_mini_active = true;
-                    }, 300);
+                            md.misc.sidebar_mini_active = true;
+                        },
+                        300);
                 }
 
                 // we simulate the window Resize so the charts will get updated in realtime.
-                var simulateWindowResize = setInterval(function () {
-                    window.dispatchEvent(new Event('resize'));
-                }, 180);
+                var simulateWindowResize = setInterval(function() {
+                        window.dispatchEvent(new Event('resize'));
+                    },
+                    180);
 
                 // we stop the simulation of Window Resize after the animations are completed
-                setTimeout(function () {
-                    clearInterval(simulateWindowResize);
-                }, 1000);
+                setTimeout(function() {
+                        clearInterval(simulateWindowResize);
+                    },
+                    1000);
 
             });
         });

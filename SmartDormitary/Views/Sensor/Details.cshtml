@@ -1,15 +1,9 @@
 ﻿<style type="text/css">
-    .editable {
-        background-color: antiquewhite;
-    }
+    .editable { background-color: antiquewhite; }
 
-    .saveButton {
-        visibility: hidden;
-    }
+    .saveButton { visibility: hidden; }
 
-    button.editButton, button.saveButton {
-        margin: 10px;
-    }
+    button.editButton, button.saveButton { margin: 10px; }
 </style>
 @using Humanizer
 @using Humanizer.Localisation
@@ -22,7 +16,7 @@
     <div class="section">
         <div class="container">
             <h2>Details</h2>
-            <hr />
+            <hr/>
             <div class="updateForm">
                 <div class="row">
                     <div class="col-md-4">
@@ -33,9 +27,15 @@
                                 </div>
                             </div>
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item text-info"><i class="fa fa-signature" data-toggle="tooltip" title="Name"></i> <span class="editableField">@Model.Name</span></li>
-                                <li class="list-group-item text-info text-truncate"><i class="fa fa-pen-square" data-toggle="tooltip" title="Description"></i> <span class="editableField">@Model.Description</span></li>
-                                <li class="list-group-item text-info"><i class="fa fa-stopwatch" data-toggle="tooltip" title="Refresh Time"></i> @Model.PullingInterval.Seconds() </li>
+                                <li class="list-group-item text-info">
+                                    <i class="fa fa-signature" data-toggle="tooltip" title="Name"></i> <span class="editableField">@Model.Name</span>
+                                </li>
+                                <li class="list-group-item text-info text-truncate">
+                                    <i class="fa fa-pen-square" data-toggle="tooltip" title="Description"></i> <span class="editableField">@Model.Description</span>
+                                </li>
+                                <li class="list-group-item text-info">
+                                    <i class="fa fa-stopwatch" data-toggle="tooltip" title="Refresh Time"></i> @Model.PullingInterval.Seconds()
+                                </li>
                                 @{
                                     if (Model.IsPublic)
                                     {
@@ -65,19 +65,26 @@
                                     }
                                 }
                                 @{
-                                    if (String.IsNullOrEmpty(Model.Value))
+                                    if (string.IsNullOrEmpty(Model.Value))
                                     {
-                                        <li class="list-group-item text-info"><i class="fa fa-bolt" data-toggle="tooltip" title="Value"></i> <span id="valueField">None</span></li>
+                                        <li class="list-group-item text-info">
+                                            <i class="fa fa-bolt" data-toggle="tooltip" title="Value"></i> <span id="valueField">None</span>
+                                        </li>
                                     }
                                     else
                                     {
-                                        <li class="list-group-item text-info"><i class="fa fa-bolt" data-toggle="tooltip" title="Value"></i> <span id="valueField">@Model.Value</span>@Model.Type.MeasurementType</li>
+                                        <li class="list-group-item text-info">
+                                            <i class="fa fa-bolt" data-toggle="tooltip" title="Value"></i> <span id="valueField">@Model.Value</span>@Model.Type.MeasurementType</li>
                                     }
                                 }
                             </ul>
                             <div class="form-group">
-                                <button type="reset" class="btn btn-primary editButton"><i class="fas fa-edit"></i> <span>Edit</span></button>
-                                <button type="reset" class="btn btn-primary saveButton"><i class="fas fa-save"></i> <span>Save Changes</span></button>
+                                <button type="reset" class="btn btn-primary editButton">
+                                    <i class="fas fa-edit"></i> <span>Edit</span>
+                                </button>
+                                <button type="reset" class="btn btn-primary saveButton">
+                                    <i class="fas fa-save"></i> <span>Save Changes</span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -90,11 +97,11 @@
                             </div>
                             <div class="card-body">
                                 <div class="border border-primary rounded" id="map" style="height: 350px;"></div>
-                                <input asp-for="Latitude" class="form-control" type="hidden" id="latField" />
+                                <input asp-for="Latitude" class="form-control" type="hidden" id="latField"/>
                                 <span asp-validation-for="Latitude" class="text-danger"></span>
-                                <input asp-for="Longitude" class="form-control" type="hidden" id="lngField" />
+                                <input asp-for="Longitude" class="form-control" type="hidden" id="lngField"/>
                                 <span asp-validation-for="Longitude" class="text-danger"></span>
-                                <input type="checkbox" name="MapMarker" style="visibility: hidden" id="mapMarker" />
+                                <input type="checkbox" name="MapMarker" style="visibility: hidden" id="mapMarker"/>
                             </div>
                         </div>
                     </div>
@@ -133,7 +140,7 @@
 </div>
 <script type="text/javascript" src="~/lib/gaugejs/gauge.min.js"></script>
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(document).ready(function() {
         @*var opts = {
             angle: -0.15, // The span of the gauge arc
             lineWidth: 0.3, // The line thickness
@@ -164,15 +171,15 @@
         gauge.animationSpeed = 93; // set animation speed (32 is default value)
         gauge.set('@Model.Value' * 1);*@
 
-        var modelDate = new Date('@Model.Timestamp.Value.Year.ToString()'
-            , '@Model.Timestamp.Value.Month.ToString()' - 1
-            , '@Model.Timestamp.Value.Day.ToString()'
-            , '@Model.Timestamp.Value.Hour.ToString()'
-            , '@Model.Timestamp.Value.Minute.ToString()'
-            , '@Model.Timestamp.Value.Second.ToString()'
-        )
-        var now = new Date($.now());
-        var dateSpan = (now - modelDate) / 1000;
+        const modelDate = new Date('@Model.Timestamp.Value.Year.ToString()',
+            '@Model.Timestamp.Value.Month.ToString()' - 1,
+            '@Model.Timestamp.Value.Day.ToString()',
+            '@Model.Timestamp.Value.Hour.ToString()',
+            '@Model.Timestamp.Value.Minute.ToString()',
+            '@Model.Timestamp.Value.Second.ToString()'
+        );
+        const now = new Date($.now());
+        const dateSpan = (now - modelDate) / 1000;
         console.log(dateSpan);
         console.log(modelDate);
         console.log(now);
@@ -194,12 +201,12 @@
 
     });
 
-    $(function () {
+    $(function() {
         const oldValues = [];
         let restore = false;
 
         $('.editButton').click(function() {
-            let $fields = $('.editableField');
+            const $fields = $('.editableField');
 
             if (!restore) {
                 $fields.each((i, e) => {
@@ -218,20 +225,20 @@
             }
 
             restore = !restore;
-            var isEditable = $fields.is('.editable');
+            const isEditable = $fields.is('.editable');
             $fields.prop('contenteditable', !isEditable).toggleClass('editable');
         });
 
         $('.saveButton').click(function() {
-            let $fields = $('.editableField');
-            var isEditable = $fields.is('.editable');
+            const $fields = $('.editableField');
+            const isEditable = $fields.is('.editable');
 
             oldValues.length = 0;
             restore = !restore;
 
-            let id = '@Model.Id';
-            let name = $fields[0].innerHTML;
-            let description = $fields[1].innerHTML;
+            const id = '@Model.Id';
+            const name = $fields[0].innerHTML;
+            const description = $fields[1].innerHTML;
 
             $.post("/Sensor/UpdateSensor",
                 {
@@ -257,12 +264,12 @@
     });
 
     function initMap() {
-        let modelLat = '@Model.Latitude' * 1;
-        let modelLtd = '@Model.Longitude' * 1;
+        const modelLat = '@Model.Latitude' * 1;
+        const modelLtd = '@Model.Longitude' * 1;
 
-        var myLatLng = { lat: modelLat, lng: modelLtd };
+        const myLatLng = { lat: modelLat, lng: modelLtd };
 
-        var map = new google.maps.Map(document.getElementById('map'),
+        const map = new google.maps.Map(document.getElementById('map'),
             {
                 zoom: 12,
                 center: myLatLng

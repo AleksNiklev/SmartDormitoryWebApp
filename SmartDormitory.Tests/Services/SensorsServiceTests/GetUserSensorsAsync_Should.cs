@@ -1,30 +1,22 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SmartDormitary.Data.Context;
-using SmartDormitary.Data.Models;
 using SmartDormitary.Services;
-using SmartDormitary.Services.Hubs;
 using SmartDormitary.Services.Hubs.Service;
 using SmartDormitory.Tests.HelpersMethods;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartDormitory.Tests.Services.SensorsServiceTests
 {
     [TestClass]
     public class GetUserSensorsAsync_Should
     {
-
         [TestMethod]
         public async Task Return_EmptyList_IfUser_DontHaveSensors()
         {
             var contextOptions = new DbContextOptionsBuilder<SmartDormitaryContext>()
-                .UseInMemoryDatabase(databaseName: "Return_EmptyList_IfUser_DontHaveSensors_Async")
+                .UseInMemoryDatabase("Return_EmptyList_IfUser_DontHaveSensors_Async")
                 .Options;
 
             var user = TestHelpers.TestUser1();
@@ -44,7 +36,7 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
         public async Task Return_AllSensors_OfUser()
         {
             var contextOptions = new DbContextOptionsBuilder<SmartDormitaryContext>()
-                .UseInMemoryDatabase(databaseName: "Return_AllSensors_OfUser_Async")
+                .UseInMemoryDatabase("Return_AllSensors_OfUser_Async")
                 .Options;
 
             var user1 = TestHelpers.TestUser1();

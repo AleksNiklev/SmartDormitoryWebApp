@@ -1,5 +1,4 @@
-﻿@using Humanizer.Localisation
-@using SmartDormitary.Data.Models
+﻿@using SmartDormitary.Data.Models
 @model IEnumerable<UserViewModel>
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
@@ -52,7 +51,9 @@
             {
                 <tr>
                     <td>
-                        <strong><a class="text-info" asp-action="Details" asp-controller="Users" asp-route-id="@item.Id">@item.Username</a></strong>
+                        <strong>
+                            <a class="text-info" asp-action="Details" asp-controller="Users" asp-route-id="@item.Id">@item.Username</a>
+                        </strong>
                     </td>
                     <td>
                         <strong>@Html.DisplayFor(modelItem => item.Email)</strong>
@@ -94,9 +95,15 @@
                         @item.CreatedOn.Humanize()
                     </td>
                     <td class="h4">
-                        <a asp-action="Edit" asp-route-id="@item.Id"><i class="fa fa-edit text-info"></i></a> |
-                        <a asp-action="Details" asp-route-id="@item.Id"><i class="fa fa-search text-success"></i></a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id"><i class="fa fa-times text-danger"></i></a>
+                        <a asp-action="Edit" asp-route-id="@item.Id">
+                            <i class="fa fa-edit text-info"></i>
+                        </a> |
+                        <a asp-action="Details" asp-route-id="@item.Id">
+                            <i class="fa fa-search text-success"></i>
+                        </a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">
+                            <i class="fa fa-times text-danger"></i>
+                        </a>
                     </td>
                 </tr>
             }
@@ -104,6 +111,7 @@
         </table>
     </div>
 </div>
+
 @section Scripts
 {
     <script src="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css"></script>
@@ -115,6 +123,6 @@
                 responsive: true,
                 stateSave: true
             });
-        } );
+        });
     </script>
 }
