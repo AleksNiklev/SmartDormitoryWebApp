@@ -52,6 +52,17 @@
                                     <input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm Password...">
                                     <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                                 </div>
+                                <div class="input-group mt-0 pt-0">
+                                    <div class="form-check mt-1 pt-1">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="checkbox" asp-for="AcceptedGDPR"> @Html.DisplayNameFor(m => m.AcceptedGDPR)
+                                            <span class="form-check-sign">
+                                                <span class="check"></span>
+                                            </span>
+                                        </label>
+                                        <span asp-validation-for="AcceptedGDPR" class="text-danger"></span>
+                                    </div>
+                                </div>
                             </div>
                             <div class="footer text-center">
                                 <button type="submit" class="btn btn-primary">Register</button>

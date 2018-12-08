@@ -28,5 +28,9 @@ namespace SmartDormitary.Models.AccountViewModels
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Range(typeof(bool), "true", "true", ErrorMessage="You must give consent for GDPR Compliance.")]
+        [Display(Name = "Accept GDPR")]
+        public bool AcceptedGDPR { get;set; }
     }
 }
