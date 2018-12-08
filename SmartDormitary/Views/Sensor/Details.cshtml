@@ -134,7 +134,7 @@
 <script type="text/javascript" src="~/lib/gaugejs/gauge.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        var opts = {
+        @*var opts = {
             angle: -0.15, // The span of the gauge arc
             lineWidth: 0.3, // The line thickness
             radiusScale: 1, // Relative radius
@@ -162,7 +162,7 @@
         gauge.minValue = '@Model.Type.MinAcceptableValue' * 1;
         gauge.maxValue = '@Model.Type.MaxAcceptableValue' * 1;
         gauge.animationSpeed = 93; // set animation speed (32 is default value)
-        gauge.set('@Model.Value' * 1);
+        gauge.set('@Model.Value' * 1);*@
 
         var modelDate = new Date('@Model.Timestamp.Value.Year.ToString()'
             , '@Model.Timestamp.Value.Month.ToString()' - 1
@@ -185,7 +185,7 @@
                 function(response, status) {
                     console.log(Date.parse(response.timeStamp).toLocaleString());
                     console.log(response.value);
-                    gauge.set(response.value)
+                    //gauge.set(response.value)
                     $('#timeStampField').text(new Date(response.timeStamp).toISOString().replace(/T/, ' ')
                         .replace(/\..+/, ''));
                     $('#valueField').text(response.value);
