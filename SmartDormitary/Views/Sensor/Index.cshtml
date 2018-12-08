@@ -10,7 +10,9 @@
                 <h2>Sensor Manager Panel</h2>
             </div>
             <hr/>
-            @await Html.PartialAsync("_SensorsTable", Model)
+            <div class="table-responsive">
+                @await Html.PartialAsync("_SensorsTable", Model)
+            </div>
         </div>
     </div>
 </div>

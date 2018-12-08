@@ -1,26 +1,27 @@
-﻿@using Humanizer.Localisation
+﻿@using Humanizer
+@using Humanizer.Localisation
 @model IEnumerable<SensorViewModel>
 
-<table id="table" class="table table-striped table-responsive border border-info">
+<table id="table" class="table table-striped border border-info">
     <thead>
         <tr>
-            <th scope="col" class="col-md-2">Name</th>
-            <th scope="col" class="col-md-3">Description</th>
-            <th scope="col" class="col-md-2">Value</th>
-            <th scope="col" class="col-md-3">Last Updated</th>
-            <th scope="col" class="col-md-2">Actions</th>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Value</th>
+            <th scope="col">Last Updated</th>
+            <th scope="col">Actions</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var sensor in Model)
-    {
-        <tr>
-            <td scope="row">@sensor.Name</td>
-            <td>@sensor.Description</td>
-            <td>@sensor.Value</td>
-            <td>@sensor.Timestamp</td>
-            <td><a asp-action="Details" asp-controller="Sensor" asp-route-id="@sensor.Id" class="btn btn-success"><i class="material-icons">info</i> Details</a></td>
-        </tr>
-    }
+        {
+            <tr>
+                <td scope="row">@sensor.Name</td>
+                <td>@sensor.Description</td>
+                <td>@sensor.Value@sensor.Type.MeasurementType</td>
+                <td>@sensor.Timestamp.Humanize()</td>
+                <td><a asp-action="Details" asp-controller="Sensor" asp-route-id="@sensor.Id" class="btn btn-success"><i class="material-icons">info</i> Details</a></td>
+            </tr>
+        }
     </tbody>
 </table>

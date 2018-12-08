@@ -1,7 +1,8 @@
-﻿@using Humanizer.Localisation
+﻿@using Humanizer
+@using Humanizer.Localisation
 @model IEnumerable<SensorTypeViewModel>
 
-<table id="table" class="table table-striped table-responsive border border-info">
+<table id="table" class="table table-striped border border-info">
     <thead>
         <tr>
             <th scope="col">Name</th>
@@ -18,7 +19,7 @@
                 <td scope="row">@sensorType.Tag</td>
                 <td>@sensorType.Description</td>
                 <td>@sensorType.MeasurementType</td>
-                <td>@sensorType.MinRefreshTime</td>
+                <td>@TimeSpan.FromSeconds(sensorType.MinRefreshTime).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Minute)</td>
                 <td><a asp-action="Register" asp-controller="Sensor" asp-route-id="@sensorType.Id" class="btn btn-success"><i class="material-icons">add_location</i> Register Sensor</a></td>
             </tr>
         }
