@@ -44,7 +44,12 @@ namespace SmartDormitary.Services
 
         public async Task<User> GetUserByGuidAsync(Guid? id)
         {
-            return await dormitaryContext.Users.Include(u => u.Sensors).ThenInclude(st => st.SensorType).SingleOrDefaultAsync(u => u.Id == id.ToString());
+            return await dormitaryContext.Users.
+                Include(u => u.Sensors).
+                    ThenInclude(st => st.SensorType).
+                Include(u => u.Sensors).
+                    ThenInclude(st => st.SensorData).
+                SingleOrDefaultAsync(u => u.Id == id.ToString());
         }
 
         public async Task<bool> UserExistsAsync(Guid id)
