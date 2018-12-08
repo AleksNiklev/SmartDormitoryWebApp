@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmartDormitary.Areas.Administration.Models;
@@ -16,10 +17,12 @@ namespace SmartDormitary.Areas.Administration.Controllers
     public class UsersController : Controller
     {
         private readonly IUsersService usersService;
+        private readonly SignInManager<User> signInManager;
 
-        public UsersController(IUsersService usersService)
+        public UsersController(IUsersService usersService, SignInManager<User> signInManager)
         {
             this.usersService = usersService;
+            this.signInManager = signInManager;
         }
 
         [TempData] public string StatusMessage { get; set; }
@@ -147,6 +150,26 @@ namespace SmartDormitary.Areas.Administration.Controllers
         {
             await usersService.DeleteUserSensorsAsync(id);
             StatusMessage = "Successfully removed the sensors registered by this user.";
+            return RedirectToAction(nameof(Edit), new {id});
+        }
+
+        public async Task<IActionResult> ToggleStaffRoleAsync(string id)
+        {
+            var user = await usersService.GetUserByGuidAsync(new Guid(id));
+
+            var isStaff = await signInManager.UserManager.IsInRoleAsync(user, "Administrator");
+
+            if (isStaff)
+            {
+                await signInManager.UserManager.RemoveFromRoleAsync(user, "Administrator");
+                StatusMessage = $"Successfully removed {user.UserName}'s Admin Status";
+            }
+            else
+            {
+                await signInManager.UserManager.AddToRoleAsync(user, "Administrator");
+                StatusMessage = $"Successfully granted {user.UserName} an Admin Status";
+            }
+
             return RedirectToAction(nameof(Edit), new {id});
         }
     }
