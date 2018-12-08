@@ -1,15 +1,15 @@
 ﻿@using Humanizer.Localisation
 @model IEnumerable<SmartDormitary.Data.Models.Sensor>
 
-<div class="card card-nav-tabs text-center">
+<div class="card card-nav-tabs">
     @if (ViewData["ShowTitleCard"] != null && ViewData["CardTitle"] != null && (bool)ViewData["ShowTitleCard"])
     {
-        <div class="card-header card-header-info">@ViewData["CardTitle"]</div>
+        <div class="card-header card-header-info text-center">@ViewData["CardTitle"]</div>
     }
     <div class="card-body table-responsive">
         @if (@Model.Any())
         {
-            <table class="table table-hover">
+            <table id="table" class="table table-hover">
                 <thead class="text-primary">
                 <tr>
                     <th>
@@ -42,7 +42,9 @@
                     <th>
                         User
                     </th>
-                    <th></th>
+                    <th>
+                        Actions
+                    </th>
                 </tr>
                 </thead>
                 <tbody>
