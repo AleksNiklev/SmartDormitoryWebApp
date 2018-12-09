@@ -53,6 +53,7 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
                 var service = new SensorsService(assertContext, hubServiceMock.Object);
                 var result = await service.GetSensorByGuidAsync(sensor.Id);
 
+                Assert.IsNotNull(result);
                 Assert.AreEqual(sensor.Id, result.Id);
             }
         }
