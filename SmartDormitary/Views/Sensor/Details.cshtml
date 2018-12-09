@@ -83,7 +83,16 @@
                                 </div>
                                 <div class="col-md-6 text-center justify-content-center align-self-center">
                                     <canvas id="gauge"></canvas>
-                                    <h2><b><span id="chart-text-value">@Model.Value</span> @Model.Type.MeasurementType</b></h2>
+                                    @if (Model.Type.MeasurementType == "(true/false)")
+                                    {
+                                        <h4><b>Red: door is closed</b></h4>
+                                        <h4><b>Green: door is open</b></h4>
+
+                                    }
+                                    @if (Model.Type.MeasurementType != "(true/false)")
+                                    {
+                                        <h2><b><span id="chart-text-value">@Model.Value</span> @Model.Type.MeasurementType</b></h2>
+                                    }
                                 </div>
                             </div>
                             <div class="form-group">
@@ -121,7 +130,22 @@
 
 <script type="text/javascript" src="~/lib/gaugejs/gauge.min.js"></script>
 <script type="text/javascript">
-    $(document).ready(function() {
+    $(document).ready(function () {
+        var staticZonesOptions;
+        if ('@Model.Type.MeasurementType' === "(true/false)") {
+            
+            staticZonesOptions = [
+                { strokeStyle: "#F03E3E", min: -0.5, max: 0.5 }, // Red from 100 to 130
+                { strokeStyle: "#30B32D", min: 0.5, max: 1.5 }, // Green
+            ]
+        } else {
+            staticZonesOptions = [
+                { strokeStyle: "#F03E3E", min: '@Model.Type.MinAcceptableValue' * 1, max: '@Model.MinAcceptableValue' * 1 }, // Red from 100 to 130
+                { strokeStyle: "#30B32D", min: '@Model.MinAcceptableValue' * 1, max: '@Model.MaxAcceptableValue' * 1 }, // Green
+                { strokeStyle: "#F03E3E", min: '@Model.MaxAcceptableValue' * 1, max: '@Model.Type.MaxAcceptableValue' * 1 }  // Red
+            ]
+        }
+
         var opts = {
             angle: -0.15, // The span of the gauge arc
             lineWidth: 0.3, // The line thickness
@@ -169,6 +193,21 @@
         gauge.animationSpeed = 93; // set animation speed (32 is default value)
         gauge.set('@Model.Value' * 1);
 
+        if ('@Model.Type.MeasurementType' === "(true/false)") {
+            
+            gauge.colorStart = '#E0E0E0';
+            gauge.minValue = -0.5;
+            gauge.maxValue = 1.5;
+            gauge.animationSpeed = 93; // set animation speed (32 is default value)
+            gauge.set('@Model.Value' * 1);
+        } else {
+            gauge.colorStart = '#E0E0E0';
+            gauge.minValue = '@Model.Type.MinAcceptableValue' * 1;
+            gauge.maxValue = '@Model.Type.MaxAcceptableValue' * 1;
+            gauge.animationSpeed = 93; // set animation speed (32 is default value)
+            gauge.set('@Model.Value' * 1);
+        }
+
         const modelDate = new Date('@Model.Timestamp.Value.Year.ToString()',
             '@Model.Timestamp.Value.Month.ToString()' - 1,
             '@Model.Timestamp.Value.Day.ToString()',
@@ -184,7 +223,7 @@
         function sendRequest() {
             $.get("/Sensor/GetSensorById",
                 { id: '@Model.Id' },
-                function(response, status) {
+                function (response, status) {
                     console.log(Date.parse(response.timeStamp).toLocaleString());
                     console.log(response.value);
                     gauge.set(response.value)
