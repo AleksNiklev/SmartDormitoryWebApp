@@ -22,7 +22,7 @@
             <div class="title text-center">
                 <h2>Live Sensors Grid</h2>
             </div>
-            <div id="map" style="height: 500px;" class="rounded"></div>
+            <div id="map" style="height: 300px;" class="rounded"></div>
         </div>
     </div>
 </div>
@@ -41,7 +41,6 @@
                             {
                                 zoom: 12,
                                 center: { lat: 42.6875236, lng: 23.3139769 }
-
                             });
 
                         JSON.parse(response).forEach(function (marker) {
@@ -70,7 +69,7 @@
         <script type="text/javascript">
             function initMap() {
                 $.ajax({
-                    url: "/Sensor/GetPublicAndYourSensors?id=@TempData["userId"]",
+                    url: '@Url.Action("GetPublicAndYourSensors", "Sensor", new { id = TempData["userId"]})',
                     type: "GET",
                     success: function (response) {
 
@@ -78,7 +77,6 @@
                             {
                                 zoom: 12,
                                 center: { lat: 42.6875236, lng: 23.3139769 }
-
                             });
 
                         JSON.parse(response).forEach(function (marker) {

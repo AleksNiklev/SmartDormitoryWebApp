@@ -157,6 +157,7 @@ namespace SmartDormitary.Services
         {
             return await dormitaryContext.Sensors.OrderByDescending(t => t.CreatedOn).Take(count)
                 .Include(s => s.User)
+                .Include(s => s.SensorType)
                 .Include(s => s.SensorData).ToListAsync();
         }
 

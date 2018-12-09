@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SmartDormitary.Areas.Administration.Models;
 using SmartDormitary.Services.Contracts;
 
@@ -35,6 +37,15 @@ namespace SmartDormitary.Areas.Administration.Controllers
             };
 
             return View("Index", pageModel);
+        }
+
+        public async Task<JsonResult> GetAllSensors()
+        {
+            var sensors = await sensorsService.GetAllSensorsAsync();
+            var result =
+                JsonConvert.SerializeObject(sensors.Select(s => new {x = s.Latitude, y = s.Longitude, name = s.Name}));
+
+            return Json(result);
         }
     }
 }
