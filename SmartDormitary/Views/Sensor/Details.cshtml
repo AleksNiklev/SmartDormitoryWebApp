@@ -1,9 +1,15 @@
 ﻿<style type="text/css">
-    .editable { background-color: antiquewhite; }
+    .editable {
+        background-color: antiquewhite;
+    }
 
-    .saveButton { visibility: hidden; }
+    .saveButton {
+        visibility: hidden;
+    }
 
-    button.editButton, button.saveButton { margin: 10px; }
+    button.editButton, button.saveButton {
+        margin: 10px;
+    }
 </style>
 @using Humanizer
 @using Humanizer.Localisation
@@ -16,68 +22,77 @@
     <div class="section">
         <div class="container">
             <h2>Details</h2>
-            <hr/>
+            <hr />
             <div class="updateForm">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-12">
                         <div class="card card-nav-tabs">
                             <div class="card-header card-header-info">
                                 <div class="card-icon">
                                     <i class="material-icons">edit</i>
                                 </div>
                             </div>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item text-info">
-                                    <i class="fa fa-signature" data-toggle="tooltip" title="Name"></i> <span class="editableField">@Model.Name</span>
-                                </li>
-                                <li class="list-group-item text-info text-truncate">
-                                    <i class="fa fa-pen-square" data-toggle="tooltip" title="Description"></i> <span class="editableField">@Model.Description</span>
-                                </li>
-                                <li class="list-group-item text-info">
-                                    <i class="fa fa-stopwatch" data-toggle="tooltip" title="Refresh Time"></i> @Model.PullingInterval.Seconds()
-                                </li>
-                                @{
-                                    if (Model.IsPublic)
-                                    {
-                                        <li class="list-group-item text-info"><i class="fa fa-globe-americas" data-toggle="tooltip" title="Is Visible for Public"></i> Public: <span class="ml-1 text-success fa fa-check" data-toggle="tooltip" title="Yes"></span></li>
-                                    }
-                                    else
-                                    {
-                                        <li class="list-group-item text-info"><i class="fa fa-globe-americas" data-toggle="tooltip" title="Is Visible for Public"></i> Public: <span class="ml-1 text-danger fa fa-times" data-toggle="tooltip" title="No"></span></li>
-                                    }
-                                    if (Model.TickOff)
-                                    {
-                                        <li class="list-group-item text-info"><i class="fa fa-bell" data-toggle="tooltip" title="Notify on Critical Value"></i> Notify: <span class="ml-1 text-success fa fa-check" data-toggle="tooltip" title="Yes"></span></li>
-                                    }
-                                    else
-                                    {
-                                        <li class="list-group-item text-info"><i class="fa fa-bell" data-toggle="tooltip" title="Notify on Critical Value"></i> Notify: <span class="ml-1 text-danger fa fa-times" data-toggle="tooltip" title="No"></span></li>
-                                    }
-                                }
-                                @{
-                                    if (Model.Timestamp == null)
-                                    {
-                                        <li class="list-group-item text-info"><i class="fa fa-stopwatch" data-toggle="tooltip" title="Last Updated"></i> Never</li>
-                                    }
-                                    else
-                                    {
-                                        <li class="list-group-item text-info"><i class="fa fa-stopwatch" data-toggle="tooltip" title="Last Updated"></i> @TimeSpan.FromTicks(DateTime.Now.Subtract(Model.Timestamp.Value).Ticks).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Minute) ago</li>
-                                    }
-                                }
-                                @{
-                                    if (string.IsNullOrEmpty(Model.Value))
-                                    {
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <ul class="list-group list-group-flush">
                                         <li class="list-group-item text-info">
-                                            <i class="fa fa-bolt" data-toggle="tooltip" title="Value"></i> <span id="valueField">None</span>
+                                            <i class="fa fa-signature" data-toggle="tooltip" title="Name"></i> <span class="editableField">@Model.Name</span>
                                         </li>
-                                    }
-                                    else
-                                    {
+                                        <li class="list-group-item text-info text-truncate">
+                                            <i class="fa fa-pen-square" data-toggle="tooltip" title="Description"></i> <span class="editableField">@Model.Description</span>
+                                        </li>
                                         <li class="list-group-item text-info">
-                                            <i class="fa fa-bolt" data-toggle="tooltip" title="Value"></i> <span id="valueField">@Model.Value</span>@Model.Type.MeasurementType</li>
-                                    }
-                                }
-                            </ul>
+                                            <i class="fa fa-stopwatch" data-toggle="tooltip" title="Refresh Time"></i> @Model.PullingInterval.Seconds()
+                                        </li>
+                                        @{
+                                            if (Model.IsPublic)
+                                            {
+                                                <li class="list-group-item text-info"><i class="fa fa-globe-americas" data-toggle="tooltip" title="Is Visible for Public"></i> Public: <span class="ml-1 text-success fa fa-check" data-toggle="tooltip" title="Yes"></span></li>
+                                            }
+                                            else
+                                            {
+                                                <li class="list-group-item text-info"><i class="fa fa-globe-americas" data-toggle="tooltip" title="Is Visible for Public"></i> Public: <span class="ml-1 text-danger fa fa-times" data-toggle="tooltip" title="No"></span></li>
+                                            }
+                                            if (Model.TickOff)
+                                            {
+                                                <li class="list-group-item text-info"><i class="fa fa-bell" data-toggle="tooltip" title="Notify on Critical Value"></i> Notify: <span class="ml-1 text-success fa fa-check" data-toggle="tooltip" title="Yes"></span></li>
+                                            }
+                                            else
+                                            {
+                                                <li class="list-group-item text-info"><i class="fa fa-bell" data-toggle="tooltip" title="Notify on Critical Value"></i> Notify: <span class="ml-1 text-danger fa fa-times" data-toggle="tooltip" title="No"></span></li>
+                                            }
+                                        }
+                                        @{
+                                            if (Model.Timestamp == null)
+                                            {
+                                                <li class="list-group-item text-info"><i class="fa fa-stopwatch" data-toggle="tooltip" title="Last Updated"></i> Never</li>
+                                            }
+                                            else
+                                            {
+                                                <li class="list-group-item text-info"><i class="fa fa-stopwatch" data-toggle="tooltip" title="Last Updated"></i> @TimeSpan.FromTicks(DateTime.Now.Subtract(Model.Timestamp.Value).Ticks).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Minute) ago</li>
+                                            }
+                                        }
+                                        @{
+                                            if (string.IsNullOrEmpty(Model.Value))
+                                            {
+                                                <li class="list-group-item text-info">
+                                                    <i class="fa fa-bolt" data-toggle="tooltip" title="Value"></i> <span id="valueField">None</span>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="list-group-item text-info">
+                                                    <i class="fa fa-bolt" data-toggle="tooltip" title="Value"></i> <span id="valueField">@Model.Value</span>@Model.Type.MeasurementType
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                                <div class="col-md-6 text-center justify-content-center align-self-center">
+                                    <canvas id="foo"></canvas>
+                                    <h2><b><span id="chart-text-value">@Model.Value</span> @Model.Type.MeasurementType</b></h2>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <button type="reset" class="btn btn-primary editButton">
                                     <i class="fas fa-edit"></i> <span>Edit</span>
@@ -88,60 +103,34 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="card card-nav-tabs">
-                            <div class="card-header card-header-success">
-                                <div class="card-icon">
-                                    <i class="material-icons">place</i>
-                                </div>
-                            </div>
-                            <div class="card-body">
-                                <div class="border border-primary rounded" id="map" style="height: 350px;"></div>
-                                <input asp-for="Latitude" class="form-control" type="hidden" id="latField"/>
-                                <span asp-validation-for="Latitude" class="text-danger"></span>
-                                <input asp-for="Longitude" class="form-control" type="hidden" id="lngField"/>
-                                <span asp-validation-for="Longitude" class="text-danger"></span>
-                                <input type="checkbox" name="MapMarker" style="visibility: hidden" id="mapMarker"/>
-                            </div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="card card-nav-tabs">
+                    <div class="card-header card-header-success">
+                        <div class="card-icon">
+                            <i class="material-icons">place</i>
                         </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="border border-primary rounded" id="map" style="height: 350px;"></div>
+                        <input asp-for="Latitude" class="form-control" type="hidden" id="latField" />
+                        <span asp-validation-for="Latitude" class="text-danger"></span>
+                        <input asp-for="Longitude" class="form-control" type="hidden" id="lngField" />
+                        <span asp-validation-for="Longitude" class="text-danger"></span>
+                        <input type="checkbox" name="MapMarker" style="visibility: hidden" id="mapMarker" />
                     </div>
                 </div>
             </div>
-            @*<div class="updateForm">
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <p><span class="font-weight-bold">Sensor Name:</span> <span class="editableField">@Model.Name</span></p>
-                        <p><span class="font-weight-bold">Description:</span> <span class="editableField">@Model.Description</span></p>
-                        <p><span class="font-weight-bold">Pulling Interval:</span> @Model.PullingInterval</p>
-                    </div>
-                    <div class="form-group col-md-1"></div>
-                    <div class="form-row">
-                        <div class="col-md-6">
-                            <p><span class="font-weight-bold">Sensor Value:</span> <span id="valueField">@Model.Value</span></p>
-                            <p><span class="font-weight-bold">Time stamp:</span> <span id="timeStampField">@Model.Timestamp.Value.Humanize()</span></p>
-                        </div>
-                    </div>
-                    <div class="form-group col-md-5">
-                        @if (User.Identity.Name == Model.User.UserName)
-                        {
-                            <div class="form-row">
-                                <button type="reset" class="btn btn-primary editButton"><i class="fas fa-edit"></i> <span>Edit Content</span></button>
-                                <button type="reset" class="btn btn-primary saveButton"><i class="fas fa-save"></i> <span>Save</span></button>
-                            </div>
-                        }
-                        <br />
-                        <canvas id="foo" class="col-md-6"></canvas>
-                        <div id="map" style="height: 300px;"></div>
-                    </div>
-                </div>
-            </div>*@
         </div>
     </div>
 </div>
+
 <script type="text/javascript" src="~/lib/gaugejs/gauge.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function() {
-        @*var opts = {
+        var opts = {
             angle: -0.15, // The span of the gauge arc
             lineWidth: 0.3, // The line thickness
             radiusScale: 1, // Relative radius
@@ -163,13 +152,14 @@
                 { strokeStyle: "#F03E3E", min: '@Model.MaxAcceptableValue' * 1, max: '@Model.Type.MaxAcceptableValue' * 1 }  // Red
             ]
         };
+
         var target = document.getElementById('foo'); // your canvas element
         var gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
         gauge.colorStart = '#E0E0E0';
         gauge.minValue = '@Model.Type.MinAcceptableValue' * 1;
         gauge.maxValue = '@Model.Type.MaxAcceptableValue' * 1;
         gauge.animationSpeed = 93; // set animation speed (32 is default value)
-        gauge.set('@Model.Value' * 1);*@
+        gauge.set('@Model.Value' * 1);
 
         const modelDate = new Date('@Model.Timestamp.Value.Year.ToString()',
             '@Model.Timestamp.Value.Month.ToString()' - 1,
@@ -192,10 +182,11 @@
                 function(response, status) {
                     console.log(Date.parse(response.timeStamp).toLocaleString());
                     console.log(response.value);
-                    //gauge.set(response.value)
+                    gauge.set(response.value)
                     $('#timeStampField').text(new Date(response.timeStamp).toISOString().replace(/T/, ' ')
                         .replace(/\..+/, ''));
                     $('#valueField').text(response.value);
+                    $('#chart-text-value').text(response.value);
                 });
         };
 
