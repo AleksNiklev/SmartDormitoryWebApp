@@ -7,9 +7,9 @@
 
 @if (showBanner)
 {
-    <nav id="cookieConsent" class="navbar navbar-expand-lg navbar-dark bg-primary navbar-fixed-top" role="alert">
+    <nav id="cookieConsent" class="navbar fixed-bottom navbar-expand-lg bg-dark pb-2 mb-0 rounded-0" role="alert">
         <div class="container">
-            <div class="navbar-header">
+            <div class="navbar-translate">
                 <span class="navbar-brand">
                     <span class="fas fa-info-circle" aria-hidden="true"></span>
                 </span>
@@ -18,21 +18,23 @@
                 <p class="navbar-text">
                     This website uses cookies to ensure you get the best experience on our website.
                 </p>
-                <div class="navbar-right float-right">
-                    <a asp-page="/Privacy" class="btn btn-info navbar-btn">Learn More</a>
-                    <button type="button" class="btn btn-dark navbar-btn" data-cookie-string="@cookieString">Accept</button>
-                </div>
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a asp-page="/Privacy" class="btn btn-info navbar-btn">Learn More</a>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" class="btn btn-success navbar-btn" data-cookie-string="@cookieString">Accept</button>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
     <script>
-        (function() {
-            document.querySelector("#cookieConsent button[data-cookie-string]").addEventListener("click",
-                function(el) {
-                    document.cookie = el.target.dataset.cookieString;
-                    document.querySelector("#cookieConsent").classList.add("hidden");
-                },
-                false);
+        (function () {
+            document.querySelector("#cookieConsent button[data-cookie-string]").addEventListener("click", function (el) {
+                document.cookie = el.target.dataset.cookieString;
+                document.querySelector("#cookieConsent").remove();
+            }, false);
         })();
     </script>
 }

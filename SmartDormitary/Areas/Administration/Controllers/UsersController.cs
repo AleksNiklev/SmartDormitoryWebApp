@@ -49,39 +49,6 @@ namespace SmartDormitary.Areas.Administration.Controllers
             return View(userModel);
         }
 
-        // GET: Users/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Users/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(UserViewModel userModel)
-        {
-            if (ModelState.IsValid)
-            {
-                var tempUser = new User
-                {
-                    Id = userModel.Id,
-                    UserName = userModel.Username,
-                    Email = userModel.Email,
-                    EmailConfirmed = userModel.EmailConfirmed,
-                    TwoFactorEnabled = userModel.TwoFactorEnabled,
-                    CreatedOn = userModel.CreatedOn,
-                    Sensors = userModel.SensorsList
-                };
-
-                await usersService.AddUserAsync(tempUser);
-
-                return RedirectToAction(nameof(Index));
-            }
-
-            StatusMessage = "Error: Something went wrong...";
-            return View(userModel);
-        }
-
         // GET: Users/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
         {
