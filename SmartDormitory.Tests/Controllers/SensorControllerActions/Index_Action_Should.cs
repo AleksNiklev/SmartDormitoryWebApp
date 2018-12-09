@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SmartDormitary.Controllers;
@@ -10,10 +8,8 @@ using SmartDormitary.Models.SensorViewModels;
 using SmartDormitary.Services.Contracts;
 using SmartDormitory.API.DormitaryAPI;
 using SmartDormitory.Tests.HelpersMethods;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SmartDormitory.Tests.Controllers.SensorControllerActions
