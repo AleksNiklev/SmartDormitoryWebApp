@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Moq;
 using SmartDormitary.Data.Models;
 
 namespace SmartDormitory.Tests.HelpersMethods
@@ -8,12 +12,12 @@ namespace SmartDormitory.Tests.HelpersMethods
     {
         public static User TestUser1()
         {
-            return new User {Id = "00000000-0000-0000-0000-000000000001", Sensors = new List<Sensor>()};
+            return new User { Id = "00000000-0000-0000-0000-000000000001", Sensors = new List<Sensor>() };
         }
 
         public static User TestUser2()
         {
-            return new User {Id = "00000000-0000-0000-0000-000000000002", Sensors = new List<Sensor>()};
+            return new User { Id = "00000000-0000-0000-0000-000000000002", Sensors = new List<Sensor>() };
         }
 
         public static Guid TestGuid()
@@ -38,12 +42,20 @@ namespace SmartDormitory.Tests.HelpersMethods
 
         public static SensorType TestSensorType()
         {
-            return new SensorType {Id = TestGuid()};
+            return new SensorType {
+                Id = TestGuid(),
+                Description = "TEst",
+                MinRefreshTime = 60,
+                MinAcceptableValue = 10,
+                MaxAcceptableValue = 80,
+                MeasurementType = "%",
+                Tag = "Test"
+            };
         }
 
         public static SensorData TestSensorData()
         {
-            return new SensorData {Id = 1, Value = "123" , Timestamp = new DateTime()};
+            return new SensorData { Id = 1, Value = "123", Timestamp = new DateTime() };
         }
 
         public static Sensor TestPublicSensor()
@@ -107,5 +119,19 @@ namespace SmartDormitory.Tests.HelpersMethods
                 User = TestUser1()
             };
         }
+
+        public static Mock<UserManager<User>> GetTestUserManager()
+        {
+            return new Mock<UserManager<User>> (
+                    new Mock<IUserStore<User>>().Object,
+                    new Mock<IOptions<IdentityOptions>>().Object,
+                    new Mock<IPasswordHasher<User>>().Object,
+                    new IUserValidator<User>[0],
+                    new IPasswordValidator<User>[0],
+                    new Mock<ILookupNormalizer>().Object,
+                    new Mock<IdentityErrorDescriber>().Object,
+                    new Mock<IServiceProvider>().Object,
+                    new Mock<ILogger<UserManager<User>>>().Object);
+        }            
     }
 }

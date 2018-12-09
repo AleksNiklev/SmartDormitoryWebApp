@@ -33,7 +33,7 @@ namespace SmartDormitary.Controllers
         {
             var sensorTypes = await sensorTypesService.GetAllSensorTypesAsync();
             var result = sensorTypes.Select(s => new SensorTypeViewModel(s));
-            return View(result);
+            return View("Index", result);
         }
 
         [HttpGet]
