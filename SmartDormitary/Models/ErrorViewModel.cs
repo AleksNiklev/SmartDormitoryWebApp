@@ -1,5 +1,3 @@
-using System;
-
 namespace SmartDormitary.Models
 {
     public class ErrorViewModel

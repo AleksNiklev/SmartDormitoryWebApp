@@ -1,10 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using SmartDormitary.Data.Context;
 using SmartDormitary.Services;
-using SmartDormitary.Services.Hubs.Service;
 using SmartDormitory.Tests.HelpersMethods;
 
 namespace SmartDormitory.Tests.Services.UsersServiceTests

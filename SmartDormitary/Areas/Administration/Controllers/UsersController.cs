@@ -16,8 +16,8 @@ namespace SmartDormitary.Areas.Administration.Controllers
     [Area("Administration")]
     public class UsersController : Controller
     {
-        private readonly IUsersService usersService;
         private readonly SignInManager<User> signInManager;
+        private readonly IUsersService usersService;
 
         public UsersController(IUsersService usersService, SignInManager<User> signInManager)
         {
@@ -46,39 +46,6 @@ namespace SmartDormitary.Areas.Administration.Controllers
 
             var userModel = new UserViewModel(user);
 
-            return View(userModel);
-        }
-
-        // GET: Users/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Users/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(UserViewModel userModel)
-        {
-            if (ModelState.IsValid)
-            {
-                var tempUser = new User
-                {
-                    Id = userModel.Id,
-                    UserName = userModel.Username,
-                    Email = userModel.Email,
-                    EmailConfirmed = userModel.EmailConfirmed,
-                    TwoFactorEnabled = userModel.TwoFactorEnabled,
-                    CreatedOn = userModel.CreatedOn,
-                    Sensors = userModel.SensorsList
-                };
-
-                await usersService.AddUserAsync(tempUser);
-
-                return RedirectToAction(nameof(Index));
-            }
-
-            StatusMessage = "Error: Something went wrong...";
             return View(userModel);
         }
 

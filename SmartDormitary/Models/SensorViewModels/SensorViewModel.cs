@@ -1,9 +1,6 @@
-﻿using SmartDormitary.Data.Models;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+using SmartDormitary.Data.Models;
 
 namespace SmartDormitary.Models.SensorViewModels
 {
@@ -11,31 +8,30 @@ namespace SmartDormitary.Models.SensorViewModels
     {
         public SensorViewModel()
         {
-
         }
 
         public SensorViewModel(Sensor sensor)
         {
-            this.Id = sensor.Id;
-            this.Name = sensor.Name;
-            this.Description = sensor.Description;
-            this.Latitude = sensor.Latitude;
-            this.Longitude = sensor.Longitude;
-            this.IsPublic = sensor.IsPublic;
-            this.MinAcceptableValue = sensor.MinAcceptableValue;
-            this.MaxAcceptableValue = sensor.MaxAcceptableValue;
-            this.Value = sensor.SensorData.Value;
-            this.PullingInterval = sensor.RefreshTime;
-            this.TickOff = sensor.TickOff;
-            this.Timestamp = sensor.SensorData.Timestamp;
-            this.Type = new SensorTypeViewModel(sensor.SensorType);
-            this.User = sensor.User;
+            Id = sensor.Id;
+            Name = sensor.Name;
+            Description = sensor.Description;
+            Latitude = sensor.Latitude;
+            Longitude = sensor.Longitude;
+            IsPublic = sensor.IsPublic;
+            MinAcceptableValue = sensor.MinAcceptableValue;
+            MaxAcceptableValue = sensor.MaxAcceptableValue;
+            Value = sensor.SensorData.Value;
+            PullingInterval = sensor.RefreshTime;
+            TickOff = sensor.TickOff;
+            Timestamp = sensor.SensorData.Timestamp;
+            Type = new SensorTypeViewModel(sensor.SensorType);
+            User = sensor.User;
         }
 
         public SensorViewModel(SensorTypeViewModel sensorType)
         {
-            this.Type = sensorType;
-            this.PullingInterval = sensorType.MinRefreshTime;
+            Type = sensorType;
+            PullingInterval = sensorType.MinRefreshTime;
         }
 
         public Guid Id { get; set; }
@@ -49,18 +45,15 @@ namespace SmartDormitary.Models.SensorViewModels
         [MinLength(2, ErrorMessage = "Description is too short!")]
         [MaxLength(300, ErrorMessage = "Description is too long!")]
         public string Description { get; set; }
-        
+
         [Range(0, 2880, ErrorMessage = "Invalid pulling interval!")]
         public int PullingInterval { get; set; }
 
-        [Range(-90, 90)]
-        public double Latitude { get; set; }
+        [Range(-90, 90)] public double Latitude { get; set; }
 
-        [Range(-180, 180)]
-        public double Longitude { get; set; }
+        [Range(-180, 180)] public double Longitude { get; set; }
 
-        [Required]
-        public string Value { get; set; }
+        [Required] public string Value { get; set; }
 
         public double MinAcceptableValue { get; set; }
 

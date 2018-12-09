@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SmartDormitary.Data.Models;
+using SmartDormitary.Extensions;
 using SmartDormitary.Models.AccountViewModels;
 using SmartDormitary.Services;
 using SmartDormitary.Services.Cron;

@@ -16,7 +16,6 @@ using Microsoft.AspNetCore.Http;
 using SmartDormitary.Services.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using SmartDormitary.Services.Cron;
-using FluentScheduler;
 using SmartDormitary.Services.Cron.Jobs;
 using SmartDormitary.Services.Hubs.Service;
 
@@ -34,6 +33,23 @@ namespace SmartDormitary
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Cookie Policy (GDPR)
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies 
+                // is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+                options.Secure = CookieSecurePolicy.SameAsRequest;
+            });
+
+            // The TempData provider cookie is not essential. Make it essential
+            // So TempData is functional when tracking is disabled.
+            services.Configure<CookieTempDataProviderOptions>(options =>
+            {
+                options.Cookie.IsEssential = true;
+            });
+            
             services.AddDbContext<SmartDormitaryContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -46,22 +62,6 @@ namespace SmartDormitary
             {
                 facebookOptions.AppId = "647090609020984";
                 facebookOptions.AppSecret = "5a73b6698ce81b1782eb773cff221f45";
-            });
-
-            // Cookie Policy (GDPR)
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies 
-                // is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
-
-            // The TempData provider cookie is not essential. Make it essential
-            // So TempData is functional when tracking is disabled.
-            services.Configure<CookieTempDataProviderOptions>(options =>
-            {
-                options.Cookie.IsEssential = true;
             });
 
             // Add application services.
@@ -98,10 +98,11 @@ namespace SmartDormitary
             }
 
             app.UseStaticFiles();
+            
             app.UseCookiePolicy();
 
             app.UseAuthentication();
-
+            
             app.UseSignalR(routes =>
             {
                 routes.MapHub<NotifyHub>("/notifyHub");
@@ -118,8 +119,6 @@ namespace SmartDormitary
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
-            app.UseCookiePolicy();
         }
     }
 }

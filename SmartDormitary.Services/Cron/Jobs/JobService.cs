@@ -1,30 +1,19 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.Hosting;
-using SmartDormitary.Data.Models;
-using SmartDormitary.Services.Contracts;
-using SmartDormitary.Services.Hubs;
-using SmartDormitory.API.DormitaryAPI;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System;
 using Microsoft.Extensions.DependencyInjection;
-using SmartDormitary.Data.Context;
-using System.Linq;
-using System.Diagnostics;
 using Quartz;
 using Quartz.Impl;
+using SmartDormitary.Data.Context;
 using SmartDormitary.Services.Hubs.Service;
+using SmartDormitory.API.DormitaryAPI;
 
 namespace SmartDormitary.Services.Cron.Jobs
 {
     public class JobService : IJobService
     {
-        private readonly IHubService hubService;
-        private readonly IServiceProvider serviceProvider;
         private readonly ISensorsAPI api;
+        private readonly IHubService hubService;
         private readonly ISensorJob job;
+        private readonly IServiceProvider serviceProvider;
 
         public JobService(IHubService hubService, IServiceProvider serviceProvider, ISensorsAPI api, ISensorJob job)
         {
@@ -36,24 +25,24 @@ namespace SmartDormitary.Services.Cron.Jobs
 
         public async void RunJob()
         {
-            IScheduler scheduler = await StdSchedulerFactory.GetDefaultScheduler();
+            var scheduler = await StdSchedulerFactory.GetDefaultScheduler();
 
             await scheduler.Start();
 
             var dbContext = serviceProvider.CreateScope()
-                            .ServiceProvider
-                            .GetService<SmartDormitaryContext>();
+                .ServiceProvider
+                .GetService<SmartDormitaryContext>();
 
 
-            IJobDetail job = JobBuilder.Create<SensorJob>()
+            var job = JobBuilder.Create<SensorJob>()
                 .WithIdentity("job1", "group1")
                 .Build();
 
-            job.JobDataMap["api"] = this.api;
+            job.JobDataMap["api"] = api;
             job.JobDataMap["dbContext"] = dbContext;
-            job.JobDataMap["hubService"] = this.hubService;
+            job.JobDataMap["hubService"] = hubService;
 
-            ITrigger trigger = TriggerBuilder.Create()
+            var trigger = TriggerBuilder.Create()
                 .WithIdentity("trigger1", "group1")
                 .StartNow()
                 .WithSimpleSchedule(x => x
@@ -63,10 +52,7 @@ namespace SmartDormitary.Services.Cron.Jobs
 
             var exists = await scheduler.CheckExists(job.Key);
 
-            if (!exists)
-            {
-                await scheduler.ScheduleJob(job, trigger);
-            }
+            if (!exists) await scheduler.ScheduleJob(job, trigger);
         }
     }
 }

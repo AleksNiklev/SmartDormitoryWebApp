@@ -9,53 +9,55 @@ namespace SmartDormitary.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DeleteData(
-                table: "AspNetRoles",
-                keyColumns: new[] { "Id", "ConcurrencyStamp" },
-                keyValues: new object[] { "f89f40c7-fc6d-4c23-90a8-e5fd3344eec2", "958be9e1-c5bd-45f4-bf05-b35050c793a4" });
+                "AspNetRoles",
+                new[] {"Id", "ConcurrencyStamp"},
+                new object[] {"f89f40c7-fc6d-4c23-90a8-e5fd3344eec2", "958be9e1-c5bd-45f4-bf05-b35050c793a4"});
 
             migrationBuilder.DropColumn(
-                name: "Timestamp",
-                table: "Sensors");
+                "Timestamp",
+                "Sensors");
 
             migrationBuilder.DropColumn(
-                name: "Value",
-                table: "Sensors");
+                "Value",
+                "Sensors");
 
             migrationBuilder.AddColumn<int>(
-                name: "SensorDataId",
-                table: "Sensors",
+                "SensorDataId",
+                "Sensors",
                 nullable: false,
                 defaultValue: 0);
 
             migrationBuilder.CreateTable(
-                name: "SensorData",
-                columns: table => new
+                "SensorData",
+                table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("SqlServer:ValueGenerationStrategy",
+                            SqlServerValueGenerationStrategy.IdentityColumn),
                     Timestamp = table.Column<DateTime>(nullable: true),
                     Value = table.Column<string>(nullable: true)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SensorData", x => x.Id);
-                });
+                constraints: table => { table.PrimaryKey("PK_SensorData", x => x.Id); });
 
             migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "fd9823f6-43ec-464e-8ee7-a29212fe779c", "e3a1a418-5641-4474-bcdb-b42079f8fa30", "Administrator", "ADMINISTRATOR" });
+                "AspNetRoles",
+                new[] {"Id", "ConcurrencyStamp", "Name", "NormalizedName"},
+                new object[]
+                {
+                    "fd9823f6-43ec-464e-8ee7-a29212fe779c", "e3a1a418-5641-4474-bcdb-b42079f8fa30", "Administrator",
+                    "ADMINISTRATOR"
+                });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Sensors_SensorDataId",
-                table: "Sensors",
-                column: "SensorDataId");
+                "IX_Sensors_SensorDataId",
+                "Sensors",
+                "SensorDataId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Sensors_SensorData_SensorDataId",
-                table: "Sensors",
-                column: "SensorDataId",
-                principalTable: "SensorData",
+                "FK_Sensors_SensorData_SensorDataId",
+                "Sensors",
+                "SensorDataId",
+                "SensorData",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
         }
@@ -63,39 +65,43 @@ namespace SmartDormitary.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Sensors_SensorData_SensorDataId",
-                table: "Sensors");
+                "FK_Sensors_SensorData_SensorDataId",
+                "Sensors");
 
             migrationBuilder.DropTable(
-                name: "SensorData");
+                "SensorData");
 
             migrationBuilder.DropIndex(
-                name: "IX_Sensors_SensorDataId",
-                table: "Sensors");
+                "IX_Sensors_SensorDataId",
+                "Sensors");
 
             migrationBuilder.DeleteData(
-                table: "AspNetRoles",
-                keyColumns: new[] { "Id", "ConcurrencyStamp" },
-                keyValues: new object[] { "fd9823f6-43ec-464e-8ee7-a29212fe779c", "e3a1a418-5641-4474-bcdb-b42079f8fa30" });
+                "AspNetRoles",
+                new[] {"Id", "ConcurrencyStamp"},
+                new object[] {"fd9823f6-43ec-464e-8ee7-a29212fe779c", "e3a1a418-5641-4474-bcdb-b42079f8fa30"});
 
             migrationBuilder.DropColumn(
-                name: "SensorDataId",
-                table: "Sensors");
+                "SensorDataId",
+                "Sensors");
 
             migrationBuilder.AddColumn<DateTime>(
-                name: "Timestamp",
-                table: "Sensors",
+                "Timestamp",
+                "Sensors",
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
-                name: "Value",
-                table: "Sensors",
+                "Value",
+                "Sensors",
                 nullable: true);
 
             migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "f89f40c7-fc6d-4c23-90a8-e5fd3344eec2", "958be9e1-c5bd-45f4-bf05-b35050c793a4", "Administrator", "ADMINISTRATOR" });
+                "AspNetRoles",
+                new[] {"Id", "ConcurrencyStamp", "Name", "NormalizedName"},
+                new object[]
+                {
+                    "f89f40c7-fc6d-4c23-90a8-e5fd3344eec2", "958be9e1-c5bd-45f4-bf05-b35050c793a4", "Administrator",
+                    "ADMINISTRATOR"
+                });
         }
     }
 }

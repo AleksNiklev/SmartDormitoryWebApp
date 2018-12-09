@@ -1,14 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SmartDormitary.Data.Context;
 using SmartDormitary.Services;
 using SmartDormitary.Services.Hubs.Service;
 using SmartDormitory.Tests.HelpersMethods;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartDormitory.Tests.Services.SensorsServiceTests
 {
@@ -72,7 +69,7 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
             var contextOptions = new DbContextOptionsBuilder<SmartDormitaryContext>()
                 .UseInMemoryDatabase("Return_Zero_IfNoSensors")
                 .Options;
-            
+
             // Assert
             using (var assertContext = new SmartDormitaryContext(contextOptions))
             {
@@ -82,7 +79,6 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
                 var result = await service.GetSensorCountAsync();
                 Assert.AreEqual(0, result);
             }
-
         }
     }
 }
