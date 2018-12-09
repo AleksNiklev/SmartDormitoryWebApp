@@ -5,10 +5,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp;
+using SmartDormitary.Areas.Administration.Models;
 using SmartDormitary.Data.Models;
 using SmartDormitary.Models;
-using SmartDormitary.Models.SensorViewModels;
 using SmartDormitary.Services.Contracts;
+using SensorViewModel = SmartDormitary.Models.SensorViewModels.SensorViewModel;
 
 namespace SmartDormitary.Controllers
 {
@@ -33,6 +34,8 @@ namespace SmartDormitary.Controllers
             var sensors = await sensorsService.GetAllPublicSensorsAsync();
 
             var result = sensors.Select(s => new SensorViewModel(s));
+
+            TempData["userId"] = userManager.GetUserId(User);
 
             return View("Index", result);
         }

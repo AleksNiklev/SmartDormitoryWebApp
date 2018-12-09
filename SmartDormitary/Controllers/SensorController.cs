@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -147,6 +148,24 @@ namespace SmartDormitary.Controllers
             var sensors = await sensorsService.GetAllPublicSensorsAsync();
             var result =
                 JsonConvert.SerializeObject(sensors.Select(s => new {x = s.Latitude, y = s.Longitude, name = s.Name}));
+
+            return Json(result);
+        }
+
+        [AllowAnonymous]
+        public async Task<JsonResult> GetPublicAndYourSensors(string id)
+        {
+            var sensorsList = new List<Sensor>();
+            foreach (var sensor in await sensorsService.GetAllPublicSensorsAsync())
+            {
+                sensorsList.Add(sensor);
+            }
+            foreach (var sensor in await sensorsService.GetUserSensorsAsync(id))
+            {
+                sensorsList.Add(sensor);
+            }
+            var result =
+                JsonConvert.SerializeObject(sensorsList.Select(s => new {x = s.Latitude, y = s.Longitude, name = s.Name}));
 
             return Json(result);
         }

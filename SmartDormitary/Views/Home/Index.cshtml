@@ -1,4 +1,6 @@
-﻿@model IEnumerable<SensorViewModel>
+﻿@using SmartDormitary.Data.Models
+@model IEnumerable<SensorViewModel>
+@inject SignInManager<User> SignInManager
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -26,41 +28,79 @@
 </div>
 
 @section Scripts {
-    <script type="text/javascript">
+    @if(!SignInManager.IsSignedIn(User))
+    {
+        <script type="text/javascript">
+            function initMap() {
+                $.ajax({
+                    url: "/Sensor/GetPublicSensors",
+                    type: "GET",
+                    success: function (response) {
 
-        function initMap() {
+                        var map = new google.maps.Map(document.getElementById('map'),
+                            {
+                                zoom: 12,
+                                center: { lat: 42.6875236, lng: 23.3139769 }
 
-            $.ajax({
-                url: "/Sensor/GetPublicSensors",
-                type: "GET",
-                success: function(response) {
+                            });
 
-                    var map = new google.maps.Map(document.getElementById('map'),
-                        {
-                            zoom: 12,
-                            center: { lat: 42.6875236, lng: 23.3139769 }
+                        JSON.parse(response).forEach(function (marker) {
 
+                            const myLatLng = { lat: marker.x, lng: marker.y };
+
+                            new google.maps.Marker({
+                                position: myLatLng,
+                                map: map,
+                                title: marker.name,
+                                animation: google.maps.Animation.DROP
+                            });
                         });
 
-                    JSON.parse(response).forEach(function(marker) {
+                    },
+                    error: function (response) {
+                        alert(response);
+                    }
+                });
+            }
 
-                        const myLatLng = { lat: marker.x, lng: marker.y };
+        </script>
+    }
+    else
+    {
+        <script type="text/javascript">
+            function initMap() {
+                $.ajax({
+                    url: "/Sensor/GetPublicAndYourSensors?id=@TempData["userId"]",
+                    type: "GET",
+                    success: function (response) {
 
-                        new google.maps.Marker({
-                            position: myLatLng,
-                            map: map,
-                            title: marker.name,
-                            animation: google.maps.Animation.DROP
+                        var map = new google.maps.Map(document.getElementById('map'),
+                            {
+                                zoom: 12,
+                                center: { lat: 42.6875236, lng: 23.3139769 }
+
+                            });
+
+                        JSON.parse(response).forEach(function (marker) {
+
+                            const myLatLng = { lat: marker.x, lng: marker.y };
+
+                            new google.maps.Marker({
+                                position: myLatLng,
+                                map: map,
+                                title: marker.name,
+                                animation: google.maps.Animation.DROP
+                            });
                         });
-                    });
 
-                },
-                error: function(response) {
-                    alert(response);
-                }
-            });
-        }
+                    },
+                    error: function (response) {
+                        alert(response);
+                    }
+                });
+            }
 
-    </script>
+        </script>
+    }
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOc4hXPYpMR4Gos817M6Iz_5hUKrPE0k4&callback=initMap"></script>
 }

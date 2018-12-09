@@ -1,11 +1,4 @@
-﻿/* Wrapping element */
-/* Set some basic padding to keep content from hitting the edges */
-.body-content {
-    padding-left: 15px;
-    padding-right: 15px;
-}
-
-/* Carousel */
+﻿/* Carousel */
 .carousel-caption p {
     font-size: 20px;
     line-height: 1.4;
@@ -27,4 +20,16 @@
     .carousel-caption {
         display: none;
     }
+}
+
+.editable {
+    background-color: antiquewhite;
+}
+
+.saveButton {
+    visibility: hidden;
+}
+
+button.editButton, button.saveButton {
+    margin: 10px;
 }

@@ -19,7 +19,7 @@
             <td scope="row">@sensorType.Tag</td>
             <td>@sensorType.Description</td>
             <td>@sensorType.MeasurementType</td>
-            <td>@TimeSpan.FromSeconds(sensorType.MinRefreshTime).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Minute)</td>
+            <td>@TimeSpan.FromSeconds(sensorType.MinRefreshTime).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Second)</td>
             <td>
                 <a asp-action="Register" asp-controller="Sensor" asp-route-id="@sensorType.Id" class="btn btn-success"><i class="material-icons">add_location</i> Register Sensor</a>
             </td>

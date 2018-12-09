@@ -1,17 +1,4 @@
-﻿<style type="text/css">
-    .editable {
-        background-color: antiquewhite;
-    }
-
-    .saveButton {
-        visibility: hidden;
-    }
-
-    button.editButton, button.saveButton {
-        margin: 10px;
-    }
-</style>
-@using Humanizer
+﻿@using Humanizer
 @using Humanizer.Localisation
 @model SensorViewModel
 @{
@@ -72,6 +59,12 @@
                                                 <li class="list-group-item text-info"><i class="fa fa-stopwatch" data-toggle="tooltip" title="Last Updated"></i> @TimeSpan.FromTicks(DateTime.Now.Subtract(Model.Timestamp.Value).Ticks).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Minute) ago</li>
                                             }
                                         }
+                                        @*<li class="list-group-item text-info">
+                                            <i class="fa fa-exclamation-triangle" data-toggle="tooltip" title="Minimum Value"></i> <span>@Model.Type.MinAcceptableValue</span>
+                                        </li>
+                                        <li class="list-group-item text-info">
+                                            <i class="fa fa-exclamation-triangle" data-toggle="tooltip" title="Maximum Value"></i> <span>@Model.Type.MaxAcceptableValue</span>
+                                        </li>*@
                                         @{
                                             if (string.IsNullOrEmpty(Model.Value))
                                             {
@@ -89,7 +82,7 @@
                                     </ul>
                                 </div>
                                 <div class="col-md-6 text-center justify-content-center align-self-center">
-                                    <canvas id="foo"></canvas>
+                                    <canvas id="gauge"></canvas>
                                     <h2><b><span id="chart-text-value">@Model.Value</span> @Model.Type.MeasurementType</b></h2>
                                 </div>
                             </div>
@@ -103,26 +96,25 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <div class="col-md-12">
-                <div class="card card-nav-tabs">
-                    <div class="card-header card-header-success">
-                        <div class="card-icon">
-                            <i class="material-icons">place</i>
+                    <div class="col-md-12">
+                        <div class="card card-nav-tabs">
+                            <div class="card-header card-header-success">
+                                <div class="card-icon">
+                                    <i class="material-icons">place</i>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="border border-primary rounded" id="map" style="height: 350px;"></div>
+                                <input asp-for="Latitude" class="form-control" type="hidden" id="latField" />
+                                <span asp-validation-for="Latitude" class="text-danger"></span>
+                                <input asp-for="Longitude" class="form-control" type="hidden" id="lngField" />
+                                <span asp-validation-for="Longitude" class="text-danger"></span>
+                                <input type="checkbox" name="MapMarker" style="visibility: hidden" id="mapMarker" />
+                            </div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <div class="border border-primary rounded" id="map" style="height: 350px;"></div>
-                        <input asp-for="Latitude" class="form-control" type="hidden" id="latField" />
-                        <span asp-validation-for="Latitude" class="text-danger"></span>
-                        <input asp-for="Longitude" class="form-control" type="hidden" id="lngField" />
-                        <span asp-validation-for="Longitude" class="text-danger"></span>
-                        <input type="checkbox" name="MapMarker" style="visibility: hidden" id="mapMarker" />
-                    </div>
                 </div>
-            </div>
+            </div>         
         </div>
     </div>
 </div>
@@ -139,25 +131,41 @@
                 strokeWidth: 0.064, // The thickness
                 color: '#000000' // Fill color
             },
-            limitMax: false,     // If false, max value increases automatically if value > maxValue
-            limitMin: false,     // If true, the min value of the gauge will be fixed
+            staticLabels: {
+                font: "13px sans-serif",  // Specifies font
+                labels: [0, @Model.Type.MinAcceptableValue, @Model.Type.MaxAcceptableValue],  // Print labels at these values
+                color: "#000000",  // Optional: Label text color
+                fractionDigits: 0  // Optional: Numerical precision. 0=round off.
+            },
+            renderTicks: {
+                divisions: 5,
+                divWidth: 1.1,
+                divLength: 0.7,
+                divColor: '#333333',
+                subDivisions: 3,
+                subLength: 0.5,
+                subWidth: 0.6,
+                subColor: '#666666'
+            },
+            limitMax: true,     // If false, max value increases automatically if value > maxValue
+            limitMin: true,     // If true, the min value of the gauge will be fixed
             colorStart: '#6FADCF',   // Colors
             colorStop: '#8FC0DA',    // just experiment with them
             strokeColor: '#E0E0E0',  // to see which ones work best for you
             generateGradient: true,
             highDpiSupport: true,   // High resolution support
             staticZones: [
-                { strokeStyle: "#F03E3E", min: '@Model.Type.MinAcceptableValue' * 1, max: '@Model.MinAcceptableValue' * 1 }, // Red from 100 to 130
-                { strokeStyle: "#30B32D", min: '@Model.MinAcceptableValue' * 1, max: '@Model.MaxAcceptableValue' * 1 }, // Green
-                { strokeStyle: "#F03E3E", min: '@Model.MaxAcceptableValue' * 1, max: '@Model.Type.MaxAcceptableValue' * 1 }  // Red
+                { strokeStyle: "#F03E3E", min: 0, max: @Model.Type.MinAcceptableValue * 1 }, // Red
+                { strokeStyle: "#30B32D", min: @Model.Type.MinAcceptableValue * 1, max: @Model.Type.MaxAcceptableValue * 1 }, // Green
+                { strokeStyle: "#F03E3E", min: @Model.MaxAcceptableValue * 1, max: (@Model.Type.MaxAcceptableValue * 1) + (20 * (@Model.Type.MaxAcceptableValue * 1)) / 100 }  // Red
             ]
         };
 
-        var target = document.getElementById('foo'); // your canvas element
+        var target = document.getElementById('gauge'); // your canvas element
         var gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
         gauge.colorStart = '#E0E0E0';
-        gauge.minValue = '@Model.Type.MinAcceptableValue' * 1;
-        gauge.maxValue = '@Model.Type.MaxAcceptableValue' * 1;
+        gauge.minValue = 0;
+        gauge.maxValue = (@Model.Type.MaxAcceptableValue * 1) + (20 * (@Model.Type.MaxAcceptableValue * 1)) / 100;
         gauge.animationSpeed = 93; // set animation speed (32 is default value)
         gauge.set('@Model.Value' * 1);
 
@@ -170,9 +178,6 @@
         );
         const now = new Date($.now());
         const dateSpan = (now - modelDate) / 1000;
-        console.log(dateSpan);
-        console.log(modelDate);
-        console.log(now);
 
         setInterval(sendRequest, 5000);
 
