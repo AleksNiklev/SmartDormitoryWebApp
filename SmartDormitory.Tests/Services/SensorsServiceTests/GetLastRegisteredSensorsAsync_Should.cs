@@ -1,15 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SmartDormitary.Data.Context;
 using SmartDormitary.Services;
 using SmartDormitary.Services.Hubs.Service;
 using SmartDormitory.Tests.HelpersMethods;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartDormitory.Tests.Services.SensorsServiceTests
 {
@@ -29,9 +27,9 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
             // Act
             using (var actContext = new SmartDormitaryContext(contextOptions))
             {
-                for (int i = 1; i <= count; i++)
+                for (var i = 1; i <= count; i++)
                 {
-                    var sensor = TestHelpers.TestPublicSensorWhitoutId();
+                    var sensor = TestHelpers.TestPublicSensorWithoutId();
                     sensor.SensorData.Timestamp = new DateTime(2018, 12, i);
                     await actContext.Sensors.AddAsync(sensor);
                 }
@@ -66,9 +64,9 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
             // Act
             using (var actContext = new SmartDormitaryContext(contextOptions))
             {
-                for (int i = 1; i <= count; i++)
+                for (var i = 1; i <= count; i++)
                 {
-                    var sensor = TestHelpers.TestPublicSensorWhitoutId();
+                    var sensor = TestHelpers.TestPublicSensorWithoutId();
                     sensor.SensorData.Timestamp = new DateTime(2018, 12, i);
                     await actContext.Sensors.AddAsync(sensor);
                 }
@@ -103,9 +101,9 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
             // Act
             using (var actContext = new SmartDormitaryContext(contextOptions))
             {
-                for (int i = 1; i <= count; i++)
+                for (var i = 1; i <= count; i++)
                 {
-                    var sensor = TestHelpers.TestPublicSensorWhitoutId();
+                    var sensor = TestHelpers.TestPublicSensorWithoutId();
                     sensor.SensorData.Timestamp = new DateTime(2018, 12, i);
                     await actContext.Sensors.AddAsync(sensor);
                 }
@@ -125,10 +123,8 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
                     .ToListAsync();
 
                 var result = await service.GetLastRegisteredSensorsAsync(count);
-                for (int i = 0; i < orderedSensors.Count; i++)
-                {
+                for (var i = 0; i < orderedSensors.Count; i++)
                     Assert.AreEqual(orderedSensors[i].SensorData.Timestamp, result[i].SensorData.Timestamp);
-                }
             }
         }
     }

@@ -16,7 +16,6 @@ using Microsoft.AspNetCore.Http;
 using SmartDormitary.Services.Hubs;
 using Microsoft.AspNetCore.SignalR;
 using SmartDormitary.Services.Cron;
-using FluentScheduler;
 using SmartDormitary.Services.Cron.Jobs;
 using SmartDormitary.Services.Hubs.Service;
 

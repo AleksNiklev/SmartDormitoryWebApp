@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -23,7 +22,7 @@ namespace SmartDormitary.Services
         public async Task<EntityEntry<User>> AddUserAsync(User user)
         {
             var temp = await dormitaryContext.Users.AddAsync(user);
-            await this.dormitaryContext.SaveChangesAsync();
+            await dormitaryContext.SaveChangesAsync();
             return temp;
         }
 
@@ -39,17 +38,15 @@ namespace SmartDormitary.Services
 
         public async Task<List<User>> GetLastRegisteredUsersAsync(int count = 10)
         {
-            return await dormitaryContext.Users.OrderByDescending(t => t.CreatedOn).Take(count).Include(s => s.Sensors).ToListAsync();
+            return await dormitaryContext.Users.OrderByDescending(t => t.CreatedOn).Take(count).Include(s => s.Sensors)
+                .ToListAsync();
         }
 
         public async Task<User> GetUserByGuidAsync(Guid? id)
         {
-            return await dormitaryContext.Users.
-                Include(u => u.Sensors).
-                    ThenInclude(st => st.SensorType).
-                Include(u => u.Sensors).
-                    ThenInclude(st => st.SensorData).
-                SingleOrDefaultAsync(u => u.Id == id.ToString());
+            return await dormitaryContext.Users.Include(u => u.Sensors).ThenInclude(st => st.SensorType)
+                .Include(u => u.Sensors).ThenInclude(st => st.SensorData)
+                .SingleOrDefaultAsync(u => u.Id == id.ToString());
         }
 
         public async Task<bool> UserExistsAsync(Guid id)
@@ -67,10 +64,7 @@ namespace SmartDormitary.Services
         public async Task DeleteUserSensorsAsync(Guid id)
         {
             var sensors = await dormitaryContext.Sensors.Where(s => s.UserId == id.ToString()).ToListAsync();
-            foreach (var sensor in sensors)
-            {
-                dormitaryContext.Sensors.Remove(sensor);
-            }
+            foreach (var sensor in sensors) dormitaryContext.Sensors.Remove(sensor);
 
             await dormitaryContext.SaveChangesAsync();
         }

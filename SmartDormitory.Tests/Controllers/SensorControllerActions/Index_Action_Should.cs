@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SmartDormitary.Controllers;
@@ -9,10 +9,6 @@ using SmartDormitary.Data.Models;
 using SmartDormitary.Services.Contracts;
 using SmartDormitory.API.DormitaryAPI;
 using SmartDormitory.Tests.HelpersMethods;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartDormitory.Tests.Controllers.SensorControllerActions
 {
@@ -28,10 +24,11 @@ namespace SmartDormitory.Tests.Controllers.SensorControllerActions
             var sensorsApi = new Mock<ISensorsAPI>();
             var mockUserManager = TestHelpers.GetTestUserManager();
 
-            sensorTypesService.Setup(s => s.GetAllSensorTypesAsync()).
-                ReturnsAsync(new List<SensorType>() { TestHelpers.TestSensorType() });
+            sensorTypesService.Setup(s => s.GetAllSensorTypesAsync())
+                .ReturnsAsync(new List<SensorType> {TestHelpers.TestSensorType()});
 
-            var controler = new SensorController(sensorTypesService.Object, sensorsService.Object, mockUserManager.Object, sensorsApi.Object);
+            var controler = new SensorController(sensorTypesService.Object, sensorsService.Object,
+                mockUserManager.Object, sensorsApi.Object);
 
             var result = await controler.Index() as ViewResult;
 

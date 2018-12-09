@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using SmartDormitary.Services;
 
-namespace SmartDormitary.Services
+namespace SmartDormitary.Extensions
 {
     public static class EmailSenderExtensions
     {

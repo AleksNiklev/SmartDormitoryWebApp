@@ -16,8 +16,8 @@ namespace SmartDormitary.Areas.Administration.Controllers
     [Area("Administration")]
     public class UsersController : Controller
     {
-        private readonly IUsersService usersService;
         private readonly SignInManager<User> signInManager;
+        private readonly IUsersService usersService;
 
         public UsersController(IUsersService usersService, SignInManager<User> signInManager)
         {

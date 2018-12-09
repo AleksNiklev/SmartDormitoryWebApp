@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using SmartDormitary.Data.Context;
 using SmartDormitary.Data.Models;
 using SmartDormitary.Services.Contracts;
-using SmartDormitary.Services.Hubs;
 using SmartDormitary.Services.Hubs.Service;
 
 namespace SmartDormitary.Services
@@ -26,7 +23,7 @@ namespace SmartDormitary.Services
         }
 
         /// <summary>
-        /// Adds the given sensor in params as new sensor in the database.
+        ///     Adds the given sensor in params as new sensor in the database.
         /// </summary>
         /// <param name="sensor"></param>
         /// <returns>ChangeTracking-EntityEntry</returns>
@@ -38,7 +35,7 @@ namespace SmartDormitary.Services
         }
 
         /// <summary>
-        /// Updates the information in the database about the given sensor.
+        ///     Updates the information in the database about the given sensor.
         /// </summary>
         /// <param name="sensor"></param>
         /// <returns>ChangeTracking-EntityEntry</returns>
@@ -51,7 +48,7 @@ namespace SmartDormitary.Services
         }
 
         /// <summary>
-        /// Returns a sensors, matching the (Guid) sensorId.
+        ///     Returns a sensors, matching the (Guid) sensorId.
         /// </summary>
         /// <param name="sensorId">(Guid) sensorId</param>
         /// <returns></returns>
@@ -60,14 +57,14 @@ namespace SmartDormitary.Services
             return sensorId == null
                 ? null
                 : await dormitaryContext.Sensors.Where(s => s.Id == sensorId)
-                .Include(s => s.User)
-                .Include(s => s.SensorType)
-                .Include(s => s.SensorData)
-                .FirstOrDefaultAsync();
+                    .Include(s => s.User)
+                    .Include(s => s.SensorType)
+                    .Include(s => s.SensorData)
+                    .FirstOrDefaultAsync();
         }
 
         /// <summary>
-        /// Returns a collection of all sensors, registered by the given userId.
+        ///     Returns a collection of all sensors, registered by the given userId.
         /// </summary>
         /// <param name="userId">User's ID</param>
         /// <returns></returns>
@@ -81,7 +78,7 @@ namespace SmartDormitary.Services
         }
 
         /// <summary>
-        /// Returns a collection of all sensors that are public (isPublic).
+        ///     Returns a collection of all sensors that are public (isPublic).
         /// </summary>
         /// <returns></returns>
         public async Task<List<Sensor>> GetAllPublicSensorsAsync()
@@ -92,8 +89,9 @@ namespace SmartDormitary.Services
                 .Include(s => s.SensorData)
                 .ToListAsync();
         }
+
         /// <summary>
-        /// Returns a collection of all sensors
+        ///     Returns a collection of all sensors
         /// </summary>
         /// <returns></returns>
         public async Task<List<Sensor>> GetAllSensorsAsync()
@@ -106,7 +104,7 @@ namespace SmartDormitary.Services
         }
 
         /// <summary>
-        /// Returns a collection of all sensors
+        ///     Returns a collection of all sensors
         /// </summary>
         /// <returns></returns>
         public List<Sensor> GetAllSensors()
@@ -117,8 +115,9 @@ namespace SmartDormitary.Services
                 .Include(s => s.SensorData)
                 .ToList();
         }
+
         /// <summary>
-        /// Returns a sensors, matching the (Guid) sensorId.
+        ///     Returns a sensors, matching the (Guid) sensorId.
         /// </summary>
         /// <param name="sensorId"></param>
         /// <returns></returns>
@@ -136,7 +135,8 @@ namespace SmartDormitary.Services
             var returnEntity = dormitaryContext.SensorData.Update(sensorData);
             await dormitaryContext.SaveChangesAsync();
 
-            await hubService.Notify(sensor.UserId, sensor.Name, returnEntity.Entity.Value, sensor.SensorType.MeasurementType);
+            await hubService.Notify(sensor.UserId, sensor.Name, returnEntity.Entity.Value,
+                sensor.SensorType.MeasurementType);
 
             return returnEntity;
         }

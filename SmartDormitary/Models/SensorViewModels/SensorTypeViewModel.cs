@@ -1,8 +1,5 @@
-﻿using SmartDormitary.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System;
+using SmartDormitary.Data.Models;
 
 namespace SmartDormitary.Models.SensorViewModels
 {
@@ -14,16 +11,16 @@ namespace SmartDormitary.Models.SensorViewModels
 
         public SensorTypeViewModel(SensorType sensorType)
         {
-            this.Id = sensorType.Id;
-            this.Tag = sensorType.Tag;
-            this.MeasurementType = sensorType.MeasurementType;
-            this.MinRefreshTime = sensorType.MinRefreshTime;
-            this.MinAcceptableValue = sensorType.MinAcceptableValue;
-            this.MaxAcceptableValue = sensorType.MaxAcceptableValue;
-            this.Description = sensorType.Description;
+            Id = sensorType.Id;
+            Tag = sensorType.Tag;
+            MeasurementType = sensorType.MeasurementType;
+            MinRefreshTime = sensorType.MinRefreshTime;
+            MinAcceptableValue = sensorType.MinAcceptableValue;
+            MaxAcceptableValue = sensorType.MaxAcceptableValue;
+            Description = sensorType.Description;
         }
 
-        public Guid Id { get; private set; }
+        public Guid Id { get; }
         public string Tag { get; set; }
         public string MeasurementType { get; set; }
         public int MinRefreshTime { get; set; }

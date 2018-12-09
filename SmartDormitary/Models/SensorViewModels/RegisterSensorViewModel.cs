@@ -1,9 +1,5 @@
-﻿using SmartDormitary.Data.Models;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SmartDormitary.Models.SensorViewModels
 {
@@ -11,16 +7,15 @@ namespace SmartDormitary.Models.SensorViewModels
     {
         public RegisterSensorViewModel()
         {
-
         }
 
         public RegisterSensorViewModel(SensorTypeViewModel sensor)
         {
-            this.Id = sensor.Id;
-            this.MeasurementType = sensor.MeasurementType;
-            this.DefaultPullingInterval = sensor.MinRefreshTime;
-            this.DefaultMinAcceptableValue = sensor.MinAcceptableValue;
-            this.DefaultMaxAcceptableValue = sensor.MaxAcceptableValue;
+            Id = sensor.Id;
+            MeasurementType = sensor.MeasurementType;
+            DefaultPullingInterval = sensor.MinRefreshTime;
+            DefaultMinAcceptableValue = sensor.MinAcceptableValue;
+            DefaultMaxAcceptableValue = sensor.MaxAcceptableValue;
         }
 
         public Guid Id { get; set; }
@@ -38,11 +33,9 @@ namespace SmartDormitary.Models.SensorViewModels
         [Range(0, 2880, ErrorMessage = "Invalid pulling interval!")]
         public int PullingInterval { get; set; }
 
-        [Range(-90, 90)]
-        public double Latitude { get; set; }
+        [Range(-90, 90)] public double Latitude { get; set; }
 
-        [Range(-180, 180)]
-        public double Longitude { get; set; }
+        [Range(-180, 180)] public double Longitude { get; set; }
 
         public double MinAcceptableValue { get; set; }
 

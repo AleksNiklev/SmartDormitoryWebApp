@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SmartDormitary.Data.Models;
+using SmartDormitary.Extensions;
 using SmartDormitary.Models.ManageViewModels;
 using SmartDormitary.Services;
 

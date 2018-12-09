@@ -1,9 +1,4 @@
-﻿ using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace SmartDormitary.Extensions.Formatter
+﻿namespace SmartDormitary.Extensions.Formatter
 {
     public class FormatProvider
     {
