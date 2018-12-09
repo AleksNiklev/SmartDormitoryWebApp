@@ -10,42 +10,33 @@ using SmartDormitory.Tests.HelpersMethods;
 namespace SmartDormitory.Tests.Services.SensorsServiceTests
 {
     [TestClass]
-    public class UpdateSensorDataAsync_Should
+    public class DeleteSensorsAsync_Should
     {
         [TestMethod]
-        public async Task Update_SensorData_Value()
+        public async Task Delete_Sensor()
         {
             var contextOptions = new DbContextOptionsBuilder<SmartDormitaryContext>()
-                .UseInMemoryDatabase("Update_SensorData_Value")
+                .UseInMemoryDatabase("Delete_Sensor_Async")
                 .Options;
 
-            var sensor = TestHelpers.TestPublicSensor();
-            var val = "Update";
+            var sensor = TestHelpers.TestPrivateSensor();
 
             // Act
             using (var actContext = new SmartDormitaryContext(contextOptions))
             {
-                await actContext.Sensors.AddAsync(sensor);
-                await actContext.SaveChangesAsync();
+                actContext.Sensors.Add(sensor);
+                actContext.SaveChanges();
             }
 
             // Assert
             using (var assertContext = new SmartDormitaryContext(contextOptions))
             {
                 var hubServiceMock = new Mock<IHubService>();
-                hubServiceMock
-                    .Setup(s => s.Notify(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(),
-                        It.IsAny<string>())).Returns(Task.CompletedTask);
-
                 var service = new SensorsService(assertContext, hubServiceMock.Object);
-                var toUpdate = await assertContext.Sensors
-                    .Include(s => s.SensorType)
-                    .Include(s => s.SensorData).SingleAsync();
+                await service.DeleteSensorsAsync(sensor.Id);
+                var result = await assertContext.Sensors.CountAsync();
 
-                toUpdate.SensorData.Value = val;
-                var result = await service.UpdateSensorDataAsync(toUpdate);
-
-                Assert.AreEqual(val, result.Entity.Value);
+                Assert.AreEqual(0, result);
             }
         }
     }

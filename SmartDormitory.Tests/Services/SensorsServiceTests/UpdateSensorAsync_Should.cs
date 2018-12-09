@@ -38,10 +38,10 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
                         It.IsAny<string>())).Returns(Task.CompletedTask);
 
                 var service = new SensorsService(assertContext, hubServiceMock.Object);
-                var toUbdate = await assertContext.Sensors.SingleAsync();
+                var toUpdate = await assertContext.Sensors.SingleAsync();
 
-                toUbdate.Name = name;
-                var result = await service.UpdateSensorAsync(toUbdate);
+                toUpdate.Name = name;
+                var result = await service.UpdateSensorAsync(toUpdate);
 
                 Assert.AreEqual(name, result.Entity.Name);
             }

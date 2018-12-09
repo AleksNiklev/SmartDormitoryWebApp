@@ -41,6 +41,11 @@ namespace SmartDormitory.Tests.HelpersMethods
             return new SensorType {Id = TestGuid()};
         }
 
+        public static SensorData TestSensorData()
+        {
+            return new SensorData {Id = 1, Value = "123" , Timestamp = new DateTime()};
+        }
+
         public static Sensor TestPublicSensor()
         {
             return new Sensor
@@ -57,7 +62,7 @@ namespace SmartDormitory.Tests.HelpersMethods
                 Latitude = 41.1231,
                 Longitude = 41.1231,
                 RefreshTime = 40,
-                SensorData = new SensorData {Id = 1, Value = "123", Timestamp = new DateTime()},
+                SensorData = TestSensorData(),
                 User = TestUser1()
             };
         }
@@ -78,7 +83,7 @@ namespace SmartDormitory.Tests.HelpersMethods
                 Latitude = 41.1231,
                 Longitude = 41.1231,
                 RefreshTime = 40,
-                SensorData = new SensorData {Id = 2, Value = "123", Timestamp = new DateTime()},
+                SensorData = TestSensorData(),
                 User = TestUser1()
             };
         }
