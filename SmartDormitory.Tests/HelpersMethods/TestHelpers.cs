@@ -67,6 +67,26 @@ namespace SmartDormitory.Tests.HelpersMethods
             };
         }
 
+        public static Sensor TestPublicSensorWhitoutId()
+        {
+            return new Sensor
+            {
+                Name = "test",
+                Description = "test",
+                MaxAcceptableValue = 1,
+                MinAcceptableValue = 0,
+                IsPublic = true,
+                TickOff = true,
+                SensorTypeId = TestGuid(),
+                SensorType = TestSensorType(),
+                Latitude = 41.1231,
+                Longitude = 41.1231,
+                RefreshTime = 40,
+                SensorData = new SensorData { Id = 1, Value = "123", Timestamp = new DateTime() },
+                User = TestUser1()
+            };
+        }
+
         public static Sensor TestPrivateSensor()
         {
             return new Sensor
