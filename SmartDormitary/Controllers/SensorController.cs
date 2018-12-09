@@ -41,7 +41,7 @@ namespace SmartDormitary.Controllers
         {
             var model = await sensorTypesService.GetSensorTypeByIdAsync(Id);
             var sensor = new RegisterSensorViewModel(new SensorTypeViewModel(model));
-            return View(sensor);
+            return View("Register", sensor);
         }
 
         [HttpPost]
@@ -108,7 +108,7 @@ namespace SmartDormitary.Controllers
                 DefaultPullingInterval = model.SensorType.MinRefreshTime
             };
 
-            return View(sensor);
+            return View("Update",sensor);
         }
 
         [HttpPost]
@@ -138,7 +138,7 @@ namespace SmartDormitary.Controllers
             if (sensor == null) return RedirectToAction("Index");
 
             var model = new SensorViewModel(sensor);
-            return View(model);
+            return View("Details", model);
         }
 
         [AllowAnonymous]
