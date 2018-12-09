@@ -54,5 +54,20 @@ namespace SmartDormitory.Tests.Controllers.SensorControllerActions
 
             Assert.AreEqual(testSensor.Id, viewModel.Id);
         }
+
+        [TestMethod]
+        public async Task Redirect_ToIndex_IfInvalidId()
+        {
+            var sensorTypesService = new Mock<ISensorTypesService>();
+            var sensorsService = new Mock<ISensorsService>();
+            var sensorsApi = new Mock<ISensorsAPI>();
+            var mockUserManager = TestHelpers.GetTestUserManager();
+            
+            var controler = new SensorController(sensorTypesService.Object, sensorsService.Object, mockUserManager.Object, sensorsApi.Object);
+
+            var result = (RedirectToActionResult) await controler.Details(TestHelpers.TestGuid());
+
+            Assert.AreEqual("Index", result.ActionName);
+        }
     }
 }
