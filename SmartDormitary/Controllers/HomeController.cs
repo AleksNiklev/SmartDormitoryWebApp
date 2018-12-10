@@ -15,15 +15,13 @@ namespace SmartDormitary.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IRestClient restClient;
         private readonly ISensorsService sensorsService;
         private readonly ISensorTypesService sensorTypesService;
         private readonly UserManager<User> userManager;
 
-        public HomeController(IRestClient restClient, ISensorTypesService sensorTypesService,
+        public HomeController( ISensorTypesService sensorTypesService,
             ISensorsService sensorsService, UserManager<User> userManager)
         {
-            this.restClient = restClient;
             this.sensorTypesService = sensorTypesService;
             this.sensorsService = sensorsService;
             this.userManager = userManager;

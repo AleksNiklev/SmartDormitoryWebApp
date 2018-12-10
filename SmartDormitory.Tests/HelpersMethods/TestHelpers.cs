@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
+using SmartDormitary.Controllers;
 using SmartDormitary.Data.Models;
+using SmartDormitary.Services.Contracts;
 
 namespace SmartDormitory.Tests.HelpersMethods
 {
@@ -133,6 +139,22 @@ namespace SmartDormitory.Tests.HelpersMethods
                 new Mock<IdentityErrorDescriber>().Object,
                 new Mock<IServiceProvider>().Object,
                 new Mock<ILogger<UserManager<User>>>().Object);
+        }
+
+        public static HomeController GetHomeController(ISensorTypesService sensorTypesService,
+            ISensorsService sensorsService, UserManager<User> userManager)
+        {
+            return new HomeController(sensorTypesService, sensorsService, userManager)
+            {
+                ControllerContext = new ControllerContext
+                {
+                    HttpContext = new DefaultHttpContext
+                    {
+                        User = new ClaimsPrincipal()
+                    }
+                },
+                TempData = new Mock<ITempDataDictionary>().Object
+            };
         }
     }
 }

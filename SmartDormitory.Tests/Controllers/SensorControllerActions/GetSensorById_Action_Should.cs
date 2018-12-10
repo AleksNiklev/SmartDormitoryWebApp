@@ -33,5 +33,24 @@ namespace SmartDormitory.Tests.Controllers.SensorControllerActions
 
             Assert.AreEqual(testSensor.SensorData.Value, data.GetType().GetProperty("value").GetValue(data, null));
         }
+
+        [TestMethod]
+        public async Task Invoce_GetSensorByGuidAsync_FromSensorService()
+        {
+            var sensorTypesService = new Mock<ISensorTypesService>();
+            var sensorsService = new Mock<ISensorsService>();
+            var sensorsApi = new Mock<ISensorsAPI>();
+            var mockUserManager = TestHelpers.GetTestUserManager();
+            var testSensor = TestHelpers.TestPublicSensor();
+
+            sensorsService.Setup(s => s.GetSensorByGuidAsync(It.IsAny<Guid>())).
+                ReturnsAsync(testSensor);
+
+            var controller = new SensorController(sensorTypesService.Object, sensorsService.Object, mockUserManager.Object, sensorsApi.Object);
+
+            await controller.GetSensorById(testSensor.Id);
+
+            sensorsService.Verify(s => s.GetSensorByGuidAsync(testSensor.Id), Times.Once());
+        }
     }
 }

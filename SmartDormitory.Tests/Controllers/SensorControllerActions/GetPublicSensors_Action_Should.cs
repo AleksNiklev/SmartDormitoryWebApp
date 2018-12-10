@@ -39,5 +39,27 @@ namespace SmartDormitory.Tests.Controllers.SensorControllerActions
 
             Assert.AreEqual(2, result.GetType().GetProperty("Count").GetValue(result, null));
         }
+
+        [TestMethod]
+        public async Task Invoce_GetAllPublicSensorsAsync_FromSensorService()
+        {
+            var sensorTypesService = new Mock<ISensorTypesService>();
+            var sensorsService = new Mock<ISensorsService>();
+            var sensorsApi = new Mock<ISensorsAPI>();
+            var mockUserManager = TestHelpers.GetTestUserManager();
+
+            sensorsService.Setup(s => s.GetAllPublicSensorsAsync()).
+                ReturnsAsync(new List<Sensor>()
+                {
+                    TestHelpers.TestPublicSensor(),
+                    TestHelpers.TestPrivateSensor()
+                });
+
+            var controller = new SensorController(sensorTypesService.Object, sensorsService.Object, mockUserManager.Object, sensorsApi.Object);
+
+            await controller.GetPublicSensors();
+
+            sensorsService.Verify(s => s.GetAllPublicSensorsAsync(), Times.Once());
+        }
     }
 }
