@@ -8,12 +8,12 @@ connection.on("notify",
             {
                 html:
                     "<div>" +
-                        "<div class='alert alert-info alert-dismissible' role='alert'>" +
+                        "<div class='alert alert-danger alert-dismissible' role='alert'>" +
                             "<span data-notify-text/>" +
                         "</div>" +
                     "</div>"
             });
-        $.notify("Sensor " + name + " has value of " + value + "" + measurementType,
+        $.notify("Sensor " + name + " has reached critical value of " + value + "" + measurementType,
             {
                 style: 'alertNotify'
             });
