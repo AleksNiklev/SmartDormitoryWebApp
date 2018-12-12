@@ -1,2 +1,2 @@
-* text=auto
-*.cs     diff=csharp
+SmartDormitary/wwwroot/* linguist-vendored
+wwwroot/* linguist-vendored
