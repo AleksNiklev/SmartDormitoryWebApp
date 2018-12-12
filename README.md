@@ -1,5 +1,7 @@
 # SmartDormitoryWebApp
 > Our system can collect data from all over the world.
+
+  ![alt text](https://raw.githubusercontent.com/AleksNiklev/SmartDormitoryWebApp/development/SmartDormitary/wwwroot/images/LandingPage.png)
 <hr/>
 
 ## Description
@@ -38,5 +40,6 @@ The General technologies used in the developing the SmartDormitoryApp are these:
   - 87% Unit test code coverage of the business logic
   Framework Code First approach for data access. Here is how the database looks like:
   ![alt text](https://raw.githubusercontent.com/AleksNiklev/SmartDormitoryWebApp/development/SmartDormitary/wwwroot/images/Database.png)
+
 
 
