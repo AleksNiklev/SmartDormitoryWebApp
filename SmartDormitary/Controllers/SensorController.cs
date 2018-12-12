@@ -52,7 +52,7 @@ namespace SmartDormitary.Controllers
             if (!ModelState.IsValid) return View("Index");
             if (model.MinAcceptableValue >= model.MaxAcceptableValue)
             {
-                TempData["InvalidModel"] = "Error! Max Acceptable value should be grater than Min Acceptable Value.";
+                TempData["InvalidModel"] = "Error: Max Acceptable value should be greater than Min Acceptable Value.";
                 return View(model);
             }
 

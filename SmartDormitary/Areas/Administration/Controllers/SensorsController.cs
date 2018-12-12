@@ -72,13 +72,12 @@ namespace SmartDormitary.Areas.Administration.Controllers
             {
                 if (model.MinAcceptableValue >= model.MaxAcceptableValue)
                 {
-                    TempData["InvalidModel"] = "Error! Max Acceptable value should be grater than Min Acceptable Value.";
+                    StatusMessage = "Error: Max Acceptable value should be greater than Min Acceptable Value.";
                     return View(model);
                 }
 
-                var typeId = model.Id;
+                var typeId = model.SensorTypeId;
                 var sensorApi = await this.sensorApi.GetSensorAsync(typeId);
-                model.Id = Guid.Empty;
 
                 var sensorData = new SensorData
                 {
@@ -86,10 +85,11 @@ namespace SmartDormitary.Areas.Administration.Controllers
                     Timestamp = sensorApi.Timestamp
                 };
 
-                var sensrDataEntity = await sensorsService.RegisterSensorDataAsync(sensorData);
+                var sensorDataEntity = await sensorsService.RegisterSensorDataAsync(sensorData);
 
                 var sensor = new Sensor
                 {
+                    Id = new Guid(),
                     Name = model.Name,
                     Description = model.Description,
                     RefreshTime = model.RefreshTime,
@@ -100,12 +100,11 @@ namespace SmartDormitary.Areas.Administration.Controllers
                     MinAcceptableValue = model.MinAcceptableValue,
                     MaxAcceptableValue = model.MaxAcceptableValue,
                     SensorTypeId = typeId,
-                    SensorDataId = sensrDataEntity.Entity.Id,
+                    SensorDataId = sensorDataEntity.Entity.Id,
                     UserId = userManager.Users.First(u => u.UserName == User.Identity.Name).Id
                 };
 
                 await sensorsService.RegisterSensorAsync(sensor);
-                StatusMessage = "Successfully saved the changes.";
                 return RedirectToAction(nameof(Details), new { id = sensor.Id });
             }
 
