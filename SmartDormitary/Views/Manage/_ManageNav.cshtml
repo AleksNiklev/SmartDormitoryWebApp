@@ -1,17 +1,30 @@
 ﻿@using SmartDormitary.Data.Models
-@using SmartDormitary.Views.Manage
 @inject SignInManager<User> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
-
-<ul class="nav nav-pills nav-stacked">
-    <li class="@ManageNavPages.IndexNavClass(ViewContext)"><a asp-action="Index">Profile</a></li>
-    <li class="@ManageNavPages.ChangePasswordNavClass(ViewContext)"><a asp-action="ChangePassword">Password</a></li>
-    @if (hasExternalLogins)
-    {
-        <li class="@ManageNavPages.ExternalLoginsNavClass(ViewContext)"><a asp-action="ExternalLogins">External logins</a></li>
-    }
-    <li class="@ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)"><a asp-action="TwoFactorAuthentication">Two-factor authentication</a></li>
-</ul>
-
+<div class="card card-nav-tabs">
+    <div class="card-header card-header-primary">
+        <div class="nav-tabs-navigation">
+            <div class="nav-tabs-wrapper">
+                <ul class="nav nav-tabs nav-stacked" data-tabs="tabs">
+                    <li class="nav-item">
+                        <a class="nav-link @ManageNavPages.IndexNavClass(ViewContext)" asp-action="Index"><i class="material-icons">face</i> Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @ManageNavPages.ChangePasswordNavClass(ViewContext)" asp-action="ChangePassword"><i class="material-icons">lock</i> Password</a>
+                    </li>
+                    @if (hasExternalLogins)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link @ManageNavPages.ExternalLoginsNavClass(ViewContext)" asp-action="ExternalLogins"><i class="material-icons">fingerprint</i> External Logins</a>
+                        </li>
+                    }
+                    <li class="nav-item">
+                        <a class="nav-link @ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)" asp-action="TwoFactorAuthentication"><i class="material-icons">offline_bolt</i> Two-factor authentication</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

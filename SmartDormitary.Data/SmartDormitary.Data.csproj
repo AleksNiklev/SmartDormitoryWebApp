@@ -10,6 +10,8 @@
     <Compile Remove="Migrations\20181117200501_SensorTypeKey.cs" />
     <Compile Remove="Migrations\20181117203404_DropSensorTables.cs" />
     <Compile Remove="Migrations\20181117211138_SeedMigration.cs" />
+    <Compile Remove="Migrations\20181124125432_DropSensorUserID.cs" />
+    <Compile Remove="Migrations\20181129204742_New.cs" />
   </ItemGroup>
 
   <ItemGroup>

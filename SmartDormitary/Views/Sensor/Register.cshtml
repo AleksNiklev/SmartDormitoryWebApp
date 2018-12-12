@@ -1,0 +1,168 @@
+﻿@model RegisterSensorViewModel
+@{
+    ViewData["Title"] = "Register";
+}
+<div class="page-header header-filter" data-parallax="true" style="background-image: url('/assets/img/city-profile.jpg');"></div>
+<div class="main main-raised">
+    <div class="section">
+        <div class="container">
+            <div class="row">
+                <div class="title">
+                    <h2>Register Sensor</h2>
+                    <h3 class="text-danger">@TempData["InvalidModel"]</h3>
+                </div>
+                <div class="table">
+                    <form asp-controller="Sensor" asp-action="Register" method="post" id="registerForm">
+                        <div asp-validation-summary="All" class="text-danger"></div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label asp-for="Name">Name</label>
+                                <input asp-for="Name" class="form-control" name="Name" minLength="2" maxlength="50" required/>
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label asp-for="PullingInterval">Pulling Data Interval</label>
+                                <input asp-for="PullingInterval" class="form-control" name="PullingInterval" min="@Model.DefaultPullingInterval"/>
+                                <span asp-validation-for="PullingInterval" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Description">Description</label>
+                            <textarea asp-for="Description" class="form-control" name="Description"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label asp-for="MinAcceptableValue">Min Acceptable Value</label>
+                                        <input asp-for="MinAcceptableValue" class="form-control" name="MinAcceptableValue" required min="@Model.DefaultMinAcceptableValue" max="@Model.DefaultMaxAcceptableValue"/>
+                                        <span asp-validation-for="MinAcceptableValue" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label asp-for="MaxAcceptableValue">Max Acceptable Value</label>
+                                        <input asp-for="MaxAcceptableValue" class="form-control" name="MaxAcceptableValue" required min="@Model.DefaultMinAcceptableValue" max="@Model.DefaultMaxAcceptableValue"/>
+                                        <span asp-validation-for="MaxAcceptableValue" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="checkbox" asp-for="TickOff"> Notify When Critical
+                                                <span class="form-check-sign">
+                                                    <span class="check"></span>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <div class="form-check">
+                                            <label class="form-check-label">
+                                                <input class="form-check-input" type="checkbox" asp-for="IsPublic"> Is Public
+                                                <span class="form-check-sign">
+                                                    <span class="check"></span>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-success"><i class="material-icons">add_location</i> Register</button>
+                                        <button class="btn btn-info" asp-action="Index"><i class="material-icons">explore</i> Back to List</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <div id="map" class="rounded" style="height: 300px;"></div>
+                                <input asp-for="Latitude" class="form-control" type="hidden" id="latField" required/>
+                                <span asp-validation-for="Latitude" class="text-danger"></span>
+                                <input asp-for="Longitude" class="form-control" type="hidden" id="lngField" required/>
+                                <span asp-validation-for="Longitude" class="text-danger"></span>
+                                <input type="checkbox" name="MapMarker" style="visibility: hidden" id="mapMarker" required title="You need to set location on the map."/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        @*$("#registerForm").validate({
+            rules: {
+                PullingInterval: {
+                    required: true,
+                    min: @Model.DefaultPullingInterval,
+                    max: 2880
+                },
+                MinAcceptableValue: {
+                    required: true,
+                    min: @Model.DefaultMinAcceptableValue,
+                    max: @Model.DefaultMaxAcceptableValue
+                },
+                MaxAcceptableValue: {
+                    required: true,
+                    min: @Model.DefaultMinAcceptableValue,
+                    max: @Model.DefaultMaxAcceptableValue
+                },
+                Name: {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 30
+                },
+                Description: {
+                    required: true,
+                    minlength: 2,
+                    maxlength: 300
+                },
+                MapMarker: {
+                    required: true
+                }
+            },
+            messages: {
+                MapMarker: "Enter sensor Location!"
+            }
+        });*@
+    });
+
+    function initMap() {
+        var marker;
+        var map = new google.maps.Map(document.getElementById('map'),
+            {
+                zoom: 12,
+                center: { lat: 42.6875236, lng: 23.3139769 }
+            });
+
+        map.addListener('click',
+            function(e) {
+                placeMarker(e.latLng, map);
+            });
+
+        function placeMarker(position, map) {
+            if (marker) {
+                marker.setPosition(position);
+            } else {
+                marker = new google.maps.Marker({
+                    position: position,
+                    map: map
+                });
+            }
+            map.panTo(position);
+
+            $('#mapMarker').prop('checked', true);
+            $('#latField').val(position.lat);
+            $('#lngField').val(position.lng);
+        }
+    }
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOc4hXPYpMR4Gos817M6Iz_5hUKrPE0k4&callback=initMap"></script>

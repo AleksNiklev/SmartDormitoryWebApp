@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace SmartDormitary.Models.AccountViewModels
 {
@@ -12,14 +8,15 @@ namespace SmartDormitary.Models.AccountViewModels
         [DataType(DataType.Text)]
         [Display(Name = "Username")]
         public string Username { get; set; }
-        
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.",
+            MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
@@ -28,5 +25,9 @@ namespace SmartDormitary.Models.AccountViewModels
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        //[Range(typeof(bool), "true", "true", ErrorMessage = "You must give consent for GDPR Compliance.")]
+        [Display(Name = "Accept GDPR")]
+        public bool AcceptedGDPR { get; set; }
     }
 }

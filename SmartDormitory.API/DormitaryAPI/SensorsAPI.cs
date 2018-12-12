@@ -38,7 +38,7 @@ namespace SmartDormitory.API.DormitaryAPI
             restClient.BaseUrl = new Uri(Constants.baseUrl);
             restClient.AddDefaultHeader(Constants.authKey, Constants.authValue);
 
-            var request = new RestRequest(Method.GET) { Resource = getAllSensorsUrl };
+            var request = new RestRequest(Method.GET) {Resource = getAllSensorsUrl};
 
             var response = restClient.ExecuteAsGet<List<AllSensorsDTO>>(request, "GET");
             return response.Data;

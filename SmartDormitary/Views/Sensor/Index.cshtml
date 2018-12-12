@@ -1,0 +1,32 @@
+﻿@model IEnumerable<SensorTypeViewModel>
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="page-header header-filter" data-parallax="true" style="background-image: url('/assets/img/city-profile.jpg');"></div>
+<div class="main main-raised">
+    <div class="section">
+        <div class="container">
+            <div class="title">
+                <h2>Sensor Manager Panel</h2>
+            </div>
+            <hr/>
+            <div class="table-responsive">
+                @await Html.PartialAsync("_SensorsTable", Model)
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#table').DataTable({
+                responsive: true,
+                stateSave: true
+            });
+        });
+    </script>
+}

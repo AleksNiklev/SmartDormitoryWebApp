@@ -1,0 +1,148 @@
+﻿@model SensorViewModel
+
+@{
+    ViewData["Title"] = "Manage";
+}
+
+<h3 class="text-primary mt-0">Manage | @Model.User's sensor</h3>
+<hr/>
+<div class="col-md-6 ml-0 pl-0">
+    @Html.Partial("_StatusMessage", TempData["StatusMessage"])
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Edit" class="row">
+            <div class="col-md-4">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id"/>
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control"/>
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" class="form-control"/>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="RefreshTime" class="control-label"></label>
+                    <input asp-for="RefreshTime" class="form-control"/>
+                    <span asp-validation-for="RefreshTime" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            Is Public
+                            <input class="form-check-input" type="checkbox" asp-for="@Model.IsPublic">
+                            <span class="form-check-sign">
+                                <span class="check"></span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Value" class="control-label"></label>
+                    <input asp-for="Value" class="form-control"/>
+                    <span asp-validation-for="Value" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MinAcceptableValue" class="control-label"></label>
+                    <input asp-for="MinAcceptableValue" class="form-control"/>
+                    <span asp-validation-for="MinAcceptableValue" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="MaxAcceptableValue" class="control-label"></label>
+                    <input asp-for="MaxAcceptableValue" class="form-control"/>
+                    <span asp-validation-for="MaxAcceptableValue" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            Notify on Critical Value
+                            <input class="form-check-input" type="checkbox" asp-for="@Model.TickOff">
+                            <span class="form-check-sign">
+                                <span class="check"></span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="mb-5">Sensor Type</label>
+                    <select data-placeholder="Choose Sensor Type" asp-for="SensorTypeId" class="form-control chosen-select" asp-items="ViewBag.SensorTypes"></select>
+                    <span asp-validation-for="SensorTypeId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="mb-5">Sensor Owner</label>
+                    <select data-placeholder="Choose Owner of the Sensor" asp-for="UserId" class="form-control chosen-select" asp-items="ViewBag.Users"></select>
+                    <span asp-validation-for="UserId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-edit"></i> Save Changes</button>
+                    <a asp-action="Index" class="btn btn-info float-right"><i class="fas fa-arrow-circle-left"></i> Back to Sensors</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-nav-tabs">
+                    <div class="card-header card-header-success">
+                        Sensor Location
+                    </div>
+                    <div class="card-body">
+                        <div class="border border-primary rounded" id="map" style="height: 400px;"></div>
+                        <input asp-for="Latitude" class="form-control" type="hidden" id="latField"/>
+                        <span asp-validation-for="Latitude" class="text-danger"></span>
+                        <input asp-for="Longitude" class="form-control" type="hidden" id="lngField"/>
+                        <span asp-validation-for="Longitude" class="text-danger"></span>
+                        <input type="checkbox" name="MapMarker" style="visibility: hidden" id="mapMarker"/>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+        $(".chosen-select").chosen({ no_results_text: "Oops, nothing found!" });
+    </script>
+    <script type="text/javascript">
+        function initMap() {
+            var map = new google.maps.Map(document.getElementById('map'),
+                {
+                    zoom: 12,
+                    center: { lat: 42.6875236, lng: 23.3139769 }
+                });
+
+            const myLatLng = { lat: @Model.Latitude, lng: @Model.Longitude };
+            var marker = new google.maps.Marker({
+                position: myLatLng,
+                map: map,
+                title: '@Model.Name'
+            });
+
+            map.addListener('click',
+                function(e) {
+                    placeMarker(e.latLng, map);
+                });
+
+            function placeMarker(position, map) {
+                if (marker) {
+                    marker.setPosition(position);
+                } else {
+                    marker = new google.maps.Marker({
+                        position: position,
+                        map: map
+                    });
+                }
+                map.panTo(position);
+
+                $('#mapMarker').prop('checked', true);
+                $('#latField').val(position.lat);
+                $('#lngField').val(position.lng);
+            }
+        }
+    </script>
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOc4hXPYpMR4Gos817M6Iz_5hUKrPE0k4&callback=initMap"></script>
+}

@@ -1,0 +1,250 @@
+﻿@model IndexPageViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+    ViewBag.Current = "Dashboard";
+}
+<div class="card card-nav-tabs text-center">
+    <div class="card-header card-header-primary">
+        All Sensors At One Place
+    </div>
+    <div class="card-body">
+        <div id="map" style="height: 500px;" class="rounded"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
+        <div class="card card-stats">
+            <div class="card-header card-header-success card-header-icon">
+                <div class="card-icon">
+                    <i class="fa fa-thermometer-half"></i>
+                </div>
+                <p class="card-category">Total Sensors</p>
+                <h3 class="card-title">
+                    @Model.SensorsCount
+                </h3>
+            </div>
+            <div class="card-footer">
+                <div class="stats">
+                    <i class="material-icons text-info">signal_wifi_4_bar</i>
+                    <a asp-action="Index" asp-controller="Sensors" asp-area="Administration" class="info-link font-weight-bold">See all sensors...</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
+        <div class="card card-stats">
+            <div class="card-header card-header-info card-header-icon">
+                <div class="card-icon">
+                    <i class="fa fa-users"></i>
+                </div>
+                <p class="card-category">Users</p>
+                <h3 class="card-title">@Model.UsersCount</h3>
+            </div>
+            <div class="card-footer">
+                <div class="stats">
+                    <i class="material-icons">update</i> Just Updated
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6">
+        <div class="card card-stats">
+            <div class="card-header card-header-danger card-header-icon">
+                <div class="card-icon">
+                    <i class="material-icons">info_outline</i>
+                </div>
+                <p class="card-category">Critical Sensors</p>
+                <h3 class="card-title">@Model.SensorsList.Count(s => s.SensorData.Value != "true" && s.SensorData.Value != "false" && s.MinAcceptableValue > double.Parse(s.SensorData.Value) && s.MaxAcceptableValue < double.Parse(s.SensorData.Value))</h3>
+            </div>
+            <div class="card-footer">
+                <div class="stats">
+                    <i class="material-icons">update</i> Just Updated
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title">Latest Users</h4>
+                <p class="card-category">Information about newly registered users</p>
+            </div>
+            <div class="card-body table-responsive">
+                <table class="table table-hover">
+                    <thead class="text-warning">
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Sensors</th>
+                            <th>Registered On</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.UsersList)
+                        {
+                            <tr>
+                                <td>
+                                    <a class="text-primary" asp-controller="Users" asp-action="Details" asp-route-id="@user.Id">@user.UserName</a>
+                                </td>
+                                <td>@user.Email</td>
+                                <td>@user.Sensors.Count</td>
+                                <td>@user.CreatedOn.Humanize()</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-12">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title">Latest Sensors</h4>
+                <p class="card-category">Information about newly registered sensors</p>
+            </div>
+            <div class="card-body table-responsive">
+                <table class="table table-hover">
+                    <thead class="text-warning">
+                        <tr>
+                            <th>Name</th>
+                            <th>Value</th>
+                            <th>Owner</th>
+                            <th>Registered On</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var sensor in Model.SensorsList)
+                        {
+                            <tr>
+                                <td>
+                                    <a class="text-info" asp-action="Details" asp-controller="Sensors" asp-area="Administration" asp-route-id="@sensor.Id">@sensor.Name</a>
+                                </td>
+                                <td>@sensor.SensorData.Value@sensor.SensorType.MeasurementType</td>
+                                <td>@sensor.User.UserName</td>
+                                <td>@sensor.CreatedOn.Humanize()</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        function initMap() {
+            $.ajax({
+                url: '@Url.Action("GetAllSensors", "Home", new { area = "Administration"})',
+                type: "GET",
+                success: function (response) {
+                    var map = new google.maps.Map(document.getElementById('map'),
+                        {
+                            zoom: 12,
+                            center: { lat: 42.6875236, lng: 23.3139769 },
+                            disableDefaultUI: true,
+                            scrollwheel: false,
+                            styles: [
+                                { elementType: 'geometry', stylers: [{ color: '#242f3e' }] },
+                                { elementType: 'labels.text.stroke', stylers: [{ color: '#242f3e' }] },
+                                { elementType: 'labels.text.fill', stylers: [{ color: '#746855' }] },
+                                {
+                                    featureType: 'administrative.locality',
+                                    elementType: 'labels.text.fill',
+                                    stylers: [{ color: '#d59563' }]
+                                },
+                                {
+                                    featureType: 'poi',
+                                    elementType: 'labels.text.fill',
+                                    stylers: [{ color: '#d59563' }]
+                                },
+                                {
+                                    featureType: 'poi.park',
+                                    elementType: 'geometry',
+                                    stylers: [{ color: '#263c3f' }]
+                                },
+                                {
+                                    featureType: 'poi.park',
+                                    elementType: 'labels.text.fill',
+                                    stylers: [{ color: '#6b9a76' }]
+                                },
+                                {
+                                    featureType: 'road',
+                                    elementType: 'geometry',
+                                    stylers: [{ color: '#38414e' }]
+                                },
+                                {
+                                    featureType: 'road',
+                                    elementType: 'geometry.stroke',
+                                    stylers: [{ color: '#212a37' }]
+                                },
+                                {
+                                    featureType: 'road',
+                                    elementType: 'labels.text.fill',
+                                    stylers: [{ color: '#9ca5b3' }]
+                                },
+                                {
+                                    featureType: 'road.highway',
+                                    elementType: 'geometry',
+                                    stylers: [{ color: '#746855' }]
+                                },
+                                {
+                                    featureType: 'road.highway',
+                                    elementType: 'geometry.stroke',
+                                    stylers: [{ color: '#1f2835' }]
+                                },
+                                {
+                                    featureType: 'road.highway',
+                                    elementType: 'labels.text.fill',
+                                    stylers: [{ color: '#f3d19c' }]
+                                },
+                                {
+                                    featureType: 'transit',
+                                    elementType: 'geometry',
+                                    stylers: [{ color: '#2f3948' }]
+                                },
+                                {
+                                    featureType: 'transit.station',
+                                    elementType: 'labels.text.fill',
+                                    stylers: [{ color: '#d59563' }]
+                                },
+                                {
+                                    featureType: 'water',
+                                    elementType: 'geometry',
+                                    stylers: [{ color: '#17263c' }]
+                                },
+                                {
+                                    featureType: 'water',
+                                    elementType: 'labels.text.fill',
+                                    stylers: [{ color: '#515c6d' }]
+                                },
+                                {
+                                    featureType: 'water',
+                                    elementType: 'labels.text.stroke',
+                                    stylers: [{ color: '#17263c' }]
+                                }
+                            ]
+                        });
+
+                    JSON.parse(response).forEach(function (marker) {
+
+                        const myLatLng = { lat: marker.x, lng: marker.y };
+
+                        new google.maps.Marker({
+                            position: myLatLng,
+                            map: map,
+                            title: marker.name,
+                            animation: google.maps.Animation.DROP
+                        });
+                    });
+
+                },
+                error: function (response) {
+                    alert(response);
+                }
+            });
+        }
+
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOc4hXPYpMR4Gos817M6Iz_5hUKrPE0k4&callback=initMap"></script>
+}

@@ -1,40 +1,72 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+using SmartDormitary.Data.Models;
 
 namespace SmartDormitary.Models.SensorViewModels
 {
     public class SensorViewModel
     {
-        [Required, MinLength(2), MaxLength(50)]
-        public string Name { get; set; }
+        public SensorViewModel()
+        {
+        }
 
-        [Required, MinLength(2), MaxLength(300)]
-        public string Description { get; set; }
+        public SensorViewModel(Sensor sensor)
+        {
+            Id = sensor.Id;
+            Name = sensor.Name;
+            Description = sensor.Description;
+            Latitude = sensor.Latitude;
+            Longitude = sensor.Longitude;
+            IsPublic = sensor.IsPublic;
+            MinAcceptableValue = sensor.MinAcceptableValue;
+            MaxAcceptableValue = sensor.MaxAcceptableValue;
+            Value = sensor.SensorData.Value;
+            PullingInterval = sensor.RefreshTime;
+            TickOff = sensor.TickOff;
+            Timestamp = sensor.SensorData.Timestamp;
+            Type = new SensorTypeViewModel(sensor.SensorType);
+            User = sensor.User;
+        }
 
-        [MinLength(2), MaxLength(50)]
-        public string Url { get; set; }
+        public SensorViewModel(SensorTypeViewModel sensorType)
+        {
+            Type = sensorType;
+            PullingInterval = sensorType.MinRefreshTime;
+        }
 
-        [Range(0, 2880)]
-        public int PullingInterval { get; set; }
-        
-        [Range(-90, 90)]
-        public double Latitude { get; set; }
-
-        [Range(-180, 180)]
-        public double Longitude { get; set; }
+        public Guid Id { get; set; }
 
         [Required]
-        public string Value { get; set; }
+        [MinLength(2, ErrorMessage = "Invalid sensor name!")]
+        [MaxLength(50, ErrorMessage = "Invalid sensor name!")]
+        public string Name { get; set; }
+
+        [Required]
+        [MinLength(2, ErrorMessage = "Description is too short!")]
+        [MaxLength(300, ErrorMessage = "Description is too long!")]
+        public string Description { get; set; }
+
+        [Range(0, 2880, ErrorMessage = "Invalid pulling interval!")]
+        public int PullingInterval { get; set; }
+
+        [Range(-90, 90)] public double Latitude { get; set; }
+
+        [Range(-180, 180)] public double Longitude { get; set; }
+
+        [Required] public string Value { get; set; }
 
         public double MinAcceptableValue { get; set; }
 
         public double MaxAcceptableValue { get; set; }
 
+        public DateTime? Timestamp { get; set; }
+
         public bool TickOff { get; set; }
 
         public bool IsPublic { get; set; }
+
+        public SensorTypeViewModel Type { get; set; }
+
+        public User User { get; set; }
     }
 }

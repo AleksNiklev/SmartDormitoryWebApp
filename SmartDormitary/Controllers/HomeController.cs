@@ -1,79 +1,56 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Hangfire;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using RestSharp;
+using SmartDormitary.Areas.Administration.Models;
+using SmartDormitary.Data.Models;
 using SmartDormitary.Models;
-using SmartDormitary.Models.SensorViewModels;
 using SmartDormitary.Services.Contracts;
-using SmartDormitory.API.DormitaryAPI;
+using SensorViewModel = SmartDormitary.Models.SensorViewModels.SensorViewModel;
 
 namespace SmartDormitary.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IRestClient restClient;
-        private readonly ISensorTypesService sensorTypesService;
         private readonly ISensorsService sensorsService;
+        private readonly ISensorTypesService sensorTypesService;
+        private readonly UserManager<User> userManager;
 
-        public HomeController(IRestClient restClient, ISensorTypesService sensorTypesService, ISensorsService sensorsService)
+        public HomeController( ISensorTypesService sensorTypesService,
+            ISensorsService sensorsService, UserManager<User> userManager)
         {
-            this.restClient = restClient;
             this.sensorTypesService = sensorTypesService;
             this.sensorsService = sensorsService;
+            this.userManager = userManager;
         }
 
         public async Task<IActionResult> Index()
         {
-            //RecurringJob.AddOrUpdate(
-            //    () => sensorTypesService.SeedSensorTypesAsync(),
-            //    Cron.MinuteInterval(1));
-            var sensors = await this.sensorsService.GetAllPublicSensorsAsync();
+            var sensors = await sensorsService.GetAllPublicSensorsAsync();
 
-            var result = sensors.Select(s => new SensorViewModel()
-            {
-                Name = s.Name,
-                Description = s.Description,
-                PullingInterval = s.RefreshTime,
-                Url = s.SensorTypeId.ToString(),
-                Latitude = s.Latitude,
-                Longitude = s.Longitude,
-                Value = s.Value,
-                IsPublic = s.IsPublic,
-                MaxAcceptableValue = s.MaxAcceptableValue,
-                MinAcceptableValue = s.MinAcceptableValue,
-                TickOff = s.TickOff
+            var result = sensors.Select(s => new SensorViewModel(s));
 
-            });
+            TempData["userId"] = userManager.GetUserId(User);
 
             return View("Index", result);
         }
 
-        public async Task<IActionResult> About()
+        [Authorize]
+        public async Task<IActionResult> Sensors()
         {
-            // Testing the sensor API.
-            var test = new SensorsAPI(restClient);
+            var user = userManager.Users.First(u => u.UserName == User.Identity.Name);
+            var sensors = await sensorsService.GetUserSensorsAsync(user.Id);
+            var result = sensors.Select(s => new SensorViewModel(s));
 
-            var response = test.GetAllSensors();
-            var responseAsync = await test.GetAllSensorsAsync();
-            var newResponse = await test.GetSensorAsync(response.First().SensorId);
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
+            return View("Sensors", result);
         }
 
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(new ErrorViewModel {RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier});
         }
     }
 }

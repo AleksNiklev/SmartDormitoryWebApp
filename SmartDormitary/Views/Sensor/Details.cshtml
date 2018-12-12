@@ -1,0 +1,320 @@
+﻿@using Humanizer
+@using Humanizer.Localisation
+@model SensorViewModel
+@{
+    ViewData["Title"] = "Details";
+}
+<div class="page-header header-filter" data-parallax="true" style="background-image: url('/assets/img/city-profile.jpg');"></div>
+<div class="main main-raised">
+    <div class="section">
+        <div class="container">
+            <h2>Details</h2>
+            <hr />
+            <div class="updateForm">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-nav-tabs">
+                            <div class="card-header card-header-info">
+                                <div class="card-icon">
+                                    <i class="material-icons">edit</i>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item text-info">
+                                            <i class="fa fa-signature" data-toggle="tooltip" title="Name"></i> <span class="editableField">@Model.Name</span>
+                                        </li>
+                                        <li class="list-group-item text-info text-truncate">
+                                            <i class="fa fa-pen-square" data-toggle="tooltip" title="Description"></i> <span class="editableField">@Model.Description</span>
+                                        </li>
+                                        <li class="list-group-item text-info">
+                                            <i class="fa fa-stopwatch" data-toggle="tooltip" title="Refresh Time"></i> @Model.PullingInterval.Seconds()
+                                        </li>
+                                        @{
+                                            if (Model.IsPublic)
+                                            {
+                                                <li class="list-group-item text-info"><i class="fa fa-globe-americas" data-toggle="tooltip" title="Is Visible for Public"></i> Public: <span class="ml-1 text-success fa fa-check" data-toggle="tooltip" title="Yes"></span></li>
+                                            }
+                                            else
+                                            {
+                                                <li class="list-group-item text-info"><i class="fa fa-globe-americas" data-toggle="tooltip" title="Is Visible for Public"></i> Public: <span class="ml-1 text-danger fa fa-times" data-toggle="tooltip" title="No"></span></li>
+                                            }
+                                            if (Model.TickOff)
+                                            {
+                                                <li class="list-group-item text-info"><i class="fa fa-bell" data-toggle="tooltip" title="Notify on Critical Value"></i> Notify: <span class="ml-1 text-success fa fa-check" data-toggle="tooltip" title="Yes"></span></li>
+                                            }
+                                            else
+                                            {
+                                                <li class="list-group-item text-info"><i class="fa fa-bell" data-toggle="tooltip" title="Notify on Critical Value"></i> Notify: <span class="ml-1 text-danger fa fa-times" data-toggle="tooltip" title="No"></span></li>
+                                            }
+                                        }
+                                        @{
+                                            if (Model.Timestamp == null)
+                                            {
+                                                <li class="list-group-item text-info"><i class="fa fa-stopwatch" data-toggle="tooltip" title="Last Updated"></i> Never</li>
+                                            }
+                                            else
+                                            {
+                                                <li class="list-group-item text-info"><i class="fa fa-stopwatch" data-toggle="tooltip" title="Last Updated"></i> @TimeSpan.FromTicks(DateTime.Now.Subtract(Model.Timestamp.Value).Ticks).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Minute) ago</li>
+                                            }
+                                        }
+                                        @*<li class="list-group-item text-info">
+                                            <i class="fa fa-exclamation-triangle" data-toggle="tooltip" title="Minimum Value"></i> <span>@Model.Type.MinAcceptableValue</span>
+                                        </li>
+                                        <li class="list-group-item text-info">
+                                            <i class="fa fa-exclamation-triangle" data-toggle="tooltip" title="Maximum Value"></i> <span>@Model.Type.MaxAcceptableValue</span>
+                                        </li>*@
+                                        @{
+                                            if (string.IsNullOrEmpty(Model.Value))
+                                            {
+                                                <li class="list-group-item text-info">
+                                                    <i class="fa fa-bolt" data-toggle="tooltip" title="Value"></i> <span id="valueField">None</span>
+                                                </li>
+                                            }
+                                            else
+                                            {
+                                                <li class="list-group-item text-info">
+                                                    <i class="fa fa-bolt" data-toggle="tooltip" title="Value"></i> <span id="valueField">@Model.Value</span>@Model.Type.MeasurementType
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                                <div class="col-md-6 text-center justify-content-center align-self-center">
+                                    <canvas id="gauge"></canvas>
+                                    @if (Model.Type.MeasurementType == "(true/false)")
+                                    {
+                                        <h4><b>Red: door is closed</b></h4>
+                                        <h4><b>Green: door is open</b></h4>
+
+                                    }
+                                    @if (Model.Type.MeasurementType != "(true/false)")
+                                    {
+                                        <h2><b><span id="chart-text-value">@Model.Value</span> @Model.Type.MeasurementType</b></h2>
+                                    }
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <button type="reset" class="btn btn-primary editButton">
+                                    <i class="fas fa-edit"></i> <span>Edit</span>
+                                </button>
+                                <button type="reset" class="btn btn-primary saveButton">
+                                    <i class="fas fa-save"></i> <span>Save Changes</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="card card-nav-tabs">
+                            <div class="card-header card-header-success">
+                                <div class="card-icon">
+                                    <i class="material-icons">place</i>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="border border-primary rounded" id="map" style="height: 350px;"></div>
+                                <input asp-for="Latitude" class="form-control" type="hidden" id="latField" />
+                                <span asp-validation-for="Latitude" class="text-danger"></span>
+                                <input asp-for="Longitude" class="form-control" type="hidden" id="lngField" />
+                                <span asp-validation-for="Longitude" class="text-danger"></span>
+                                <input type="checkbox" name="MapMarker" style="visibility: hidden" id="mapMarker" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>         
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="~/lib/gaugejs/gauge.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        let staticZones;
+        if ('@Model.Type.MeasurementType' === "(true/false)") {
+
+            staticZones = [
+                { strokeStyle: "#F03E3E", min: 0.5, max: 1.0 }, // Red
+                { strokeStyle: "#30B32D", min: 0.0, max: 0.5 } // Green
+            ];
+        } else {
+            staticZones = [
+                { strokeStyle: "#F03E3E", min: 0, max: @Model.MinAcceptableValue * 1 }, // Red
+                {
+                    strokeStyle: "#30B32D",
+                    min: @Model.MinAcceptableValue * 1,
+                    max: @Model.MaxAcceptableValue * 1
+                }, // Green
+                {
+                    strokeStyle: "#F03E3E",
+                    min: @Model.MaxAcceptableValue * 1,
+                    max: (@Model.Type.MaxAcceptableValue * 1) + (20 * (@Model.Type.MaxAcceptableValue * 1)) / 100
+                } // Red
+            ];
+        }
+
+        let opts = {
+            angle: -0.15, // The span of the gauge arc
+            lineWidth: 0.3, // The line thickness
+            radiusScale: 1, // Relative radius
+            pointer: {
+                length: 0.63, // // Relative to gauge radius
+                strokeWidth: 0.064, // The thickness
+                color: '#000000' // Fill color
+            },
+            staticLabels: {
+                font: "13px sans-serif",  // Specifies font
+                labels: [0, @Model.Type.MinAcceptableValue, @Model.Type.MaxAcceptableValue],  // Print labels at these values
+                color: "#000000",  // Optional: Label text color
+                fractionDigits: 0  // Optional: Numerical precision. 0=round off.
+            },
+            renderTicks: {
+                divisions: 5,
+                divWidth: 1.1,
+                divLength: 0.7,
+                divColor: '#333333',
+                subDivisions: 3,
+                subLength: 0.5,
+                subWidth: 0.6,
+                subColor: '#666666'
+            },
+            limitMax: true,     // If false, max value increases automatically if value > maxValue
+            limitMin: true,     // If true, the min value of the gauge will be fixed
+            colorStart: '#6FADCF',   // Colors
+            colorStop: '#8FC0DA',    // just experiment with them
+            strokeColor: '#E0E0E0',  // to see which ones work best for you
+            generateGradient: true,
+            highDpiSupport: true,   // High resolution support
+            staticZones: staticZones
+        };
+
+        let target = document.getElementById('gauge'); // your canvas element
+        let gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
+        
+        if ('@Model.Type.MeasurementType' === "(true/false)") {
+
+            gauge.colorStart = '#E0E0E0';
+            gauge.minValue = 0.0;
+            gauge.maxValue = 1.0;
+            gauge.animationSpeed = 93; // set animation speed (32 is default value)
+            gauge.set(@Model.Value);
+        } else {
+            gauge.colorStart = '#E0E0E0';
+            gauge.minValue = 0;
+            gauge.maxValue = (@Model.Type.MaxAcceptableValue * 1) + (20 * (@Model.Type.MaxAcceptableValue * 1)) / 100;
+            gauge.animationSpeed = 93; // set animation speed (32 is default value)
+            gauge.set('@Model.Value' * 1);
+        }
+
+        const modelDate = new Date('@Model.Timestamp.Value.Year.ToString()',
+            '@Model.Timestamp.Value.Month.ToString()' - 1,
+            '@Model.Timestamp.Value.Day.ToString()',
+            '@Model.Timestamp.Value.Hour.ToString()',
+            '@Model.Timestamp.Value.Minute.ToString()',
+            '@Model.Timestamp.Value.Second.ToString()'
+        );
+        const now = new Date($.now());
+        const dateSpan = (now - modelDate) / 1000;
+
+        setInterval(sendRequest, 5000);
+
+        function sendRequest() {
+            $.get("/Sensor/GetSensorById",
+                { id: '@Model.Id' },
+                function (response, status) {
+                    console.log(Date.parse(response.timeStamp).toLocaleString());
+                    console.log(response.value);
+                    gauge.set(response.value)
+                    $('#timeStampField').text(new Date(response.timeStamp).toISOString().replace(/T/, ' ')
+                        .replace(/\..+/, ''));
+                    $('#valueField').text(response.value);
+                    $('#chart-text-value').text(response.value);
+                });
+        };
+
+    });
+
+    $(function() {
+        const oldValues = [];
+        let restore = false;
+
+        $('.editButton').click(function() {
+            const $fields = $('.editableField');
+
+            if (!restore) {
+                $fields.each((i, e) => {
+                    oldValues.push(e.innerHTML);
+                });
+                $('.saveButton').css("visibility", "initial");
+                $('.editButton > span').text("Cancel");
+            } else {
+                $fields.each((i, e) => {
+                    e.innerHTML = oldValues[i];
+                });
+
+                oldValues.length = 0;
+                $('.saveButton').css("visibility", "hidden");
+                $('.editButton > span').text("Edit");
+            }
+
+            restore = !restore;
+            const isEditable = $fields.is('.editable');
+            $fields.prop('contenteditable', !isEditable).toggleClass('editable');
+        });
+
+        $('.saveButton').click(function() {
+            const $fields = $('.editableField');
+            const isEditable = $fields.is('.editable');
+
+            oldValues.length = 0;
+            restore = !restore;
+
+            const id = '@Model.Id';
+            const name = $fields[0].innerHTML;
+            const description = $fields[1].innerHTML;
+
+            $.post("/Sensor/UpdateSensor",
+                {
+                    Id: id,
+                    Name: name,
+                    Description: description,
+                    Latitude: '@Model.Latitude',
+                    Longitude: '@Model.Longitude',
+                    IsPublic: '@Model.IsPublic',
+                    MinAcceptableValue: '@Model.MinAcceptableValue',
+                    MaxAcceptableValue: '@Model.MaxAcceptableValue',
+                    Value: '@Model.Value',
+                    PullingInterval: '@Model.PullingInterval',
+                    TickOff: '@Model.TickOff',
+                    Timestamp: '@Model.Timestamp'
+                });
+
+
+            $('.saveButton').css("visibility", "hidden");
+            $('.editButton > span').text("Edit");
+            $fields.prop('contenteditable', !isEditable).toggleClass('editable');
+        });
+    });
+
+    function initMap() {
+        const modelLat = '@Model.Latitude' * 1;
+        const modelLtd = '@Model.Longitude' * 1;
+
+        const myLatLng = { lat: modelLat, lng: modelLtd };
+
+        const map = new google.maps.Map(document.getElementById('map'),
+            {
+                zoom: 12,
+                center: myLatLng
+            });
+
+        new google.maps.Marker({
+            position: myLatLng,
+            map: map,
+            title: '@Model.Name'
+        });
+    };
+
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOc4hXPYpMR4Gos817M6Iz_5hUKrPE0k4&callback=initMap"></script>

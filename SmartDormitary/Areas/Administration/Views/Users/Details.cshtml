@@ -1,0 +1,59 @@
+﻿@model UserViewModel
+
+@{
+    ViewData["Title"] = "Details";
+    ViewData["ShowTitleCard"] = true;
+    ViewData["CardTitle"] = "User Sensors";
+}
+
+<h3 class="text-primary mt-0">Details | @Model.Username</h3>
+<hr/>
+<div class="row">
+    <div class="col-md-3">
+        <div class="card card-nav-tabs">
+            <div class="card-header card-header-success">
+                User Details
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item text-info">
+                    <i class="fa fa-user" data-toggle="tooltip" title="Username"></i> @Model.Username</li>
+                @if (Model.EmailConfirmed)
+                {
+                    <li class="list-group-item text-info">
+                        <i class="fa fa-envelope"></i> @Model.Email <span class="ml-1 text-success fa fa-check" data-toggle="tooltip" title="Confirmed"></span>
+                    </li>
+                }
+                else
+                {
+                    <li class="list-group-item text-info">
+                        <i class="fa fa-envelope"></i> @Model.Email <span class="ml-1 text-danger fa fa-times" data-toggle="tooltip" title="Not Confirmed"></span>
+                    </li>
+                }
+                <li class="list-group-item text-info">
+                    <i class="fas fa-user-clock" data-toggle="tooltip" title="Registered On"></i> @Model.CreatedOn.Humanize()</li>
+            </ul>
+            <div class="form-group ml-3 mr-3">
+                <a asp-action="Edit" class="btn btn-primary" asp-route-id="@Model.Id"><i class="fas fa-edit"></i> Edit</a>
+                <a asp-action="Index" class="btn btn-info float-right"><i class="fas fa-arrow-circle-left"></i> Back to Users</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        @await Html.PartialAsync("_UserSensorsTable", Model.SensorsList, ViewData)
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#table').DataTable({
+                responsive: true,
+                stateSave: true
+            });
+        });
+    </script>
+}

@@ -11,9 +11,13 @@ using RestSharp;
 using SmartDormitary.Data.Context;
 using SmartDormitary.Services.Contracts;
 using SmartDormitory.API.DormitaryAPI;
-using SmartDormitary.Services.Cron;
-using SmartDormitary.Services.Cron.Contracts;
 using System;
+using Microsoft.AspNetCore.Http;
+using SmartDormitary.Services.Hubs;
+using Microsoft.AspNetCore.SignalR;
+using SmartDormitary.Services.Cron;
+using SmartDormitary.Services.Cron.Jobs;
+using SmartDormitary.Services.Hubs.Service;
 
 namespace SmartDormitary
 {
@@ -29,12 +33,39 @@ namespace SmartDormitary
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<SmartDormitaryContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("LocalDBConnection")));
+            // Cookie Policy (GDPR)
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies 
+                // is needed for a given request.
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+                options.Secure = CookieSecurePolicy.SameAsRequest;
+            });
 
-            services.AddIdentity<User, IdentityRole>()
+            // The TempData provider cookie is not essential. Make it essential
+            // So TempData is functional when tracking is disabled.
+            services.Configure<CookieTempDataProviderOptions>(options =>
+            {
+                options.Cookie.IsEssential = true;
+            });
+
+            services.AddDbContext<SmartDormitaryContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddIdentity<User, IdentityRole>(options =>
+            {
+                //options.User.RequireUniqueEmail = true;
+            })
                 .AddEntityFrameworkStores<SmartDormitaryContext>()
                 .AddDefaultTokenProviders();
+
+            // External Login Providers
+            services.AddAuthentication().AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = "647090609020984";
+                facebookOptions.AppSecret = "5a73b6698ce81b1782eb773cff221f45";
+            });
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
@@ -44,14 +75,15 @@ namespace SmartDormitary
             services.AddScoped<ISensorsAPI, SensorsAPI>();
             services.AddScoped<ISensorsService, SensorsService>();
             services.AddScoped<ISensorTypesService, SensorTypesService>();
-            services.AddScoped<IJobScheduleService, JobScheduleService>();
             services.AddScoped<IServiceProvider, ServiceProvider>();
+            services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<IHubService, HubService>();
+            services.AddScoped<NotifyHub>();
+            services.AddScoped<IJobService, JobService>();
+            services.AddScoped<ISensorJob, SensorJob>();
+            services.AddSignalR();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
-            var sp = services.BuildServiceProvider();
-            var jobService = sp.GetService<IJobScheduleService>();
-            jobService.RunJobs();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,16 +102,26 @@ namespace SmartDormitary
 
             app.UseStaticFiles();
 
+            app.UseCookiePolicy();
+
             app.UseAuthentication();
-            
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<NotifyHub>("/notifyHub");
+            });
+
             app.UseMvc(routes =>
             {
+                routes.MapRoute(
+                    name: "areas",
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
+
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
-            app.UseCookiePolicy();
         }
     }
 }

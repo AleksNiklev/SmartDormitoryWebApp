@@ -1,0 +1,137 @@
+﻿@using Humanizer.Localisation
+@model SensorViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h3 class="text-primary mt-0">Details | @Model.Name</h3>
+<hr/>
+<div class="row">
+    <div class="col-md-4">
+        <div class="card card-nav-tabs">
+            <div class="card-header card-header-success">
+                Sensor Details
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item text-info">
+                    <i class="fa fa-fingerprint" data-toggle="tooltip" title="Id"></i> @Model.Id</li>
+                <li class="list-group-item text-info">
+                    <i class="fa fa-signature" data-toggle="tooltip" title="Name"></i> @Model.Name</li>
+                <li class="list-group-item text-info text-truncate">
+                    <i class="fa fa-pen-square" data-toggle="tooltip" title="Description"></i> @Model.Description</li>
+                <li class="list-group-item text-info">
+                    <i class="fa fa-stopwatch" data-toggle="tooltip" title="Refresh Time"></i> @Model.RefreshTime.Seconds()
+                </li>
+                @{
+                    if (Model.IsPublic)
+                    {
+                        <li class="list-group-item text-info"><i class="fa fa-globe-americas" data-toggle="tooltip" title="Is Visible for Public"></i> Public: <span class="ml-1 text-success fa fa-check" data-toggle="tooltip" title="Yes"></span></li>
+                    }
+                    else
+                    {
+                        <li class="list-group-item text-info"><i class="fa fa-globe-americas" data-toggle="tooltip" title="Is Visible for Public"></i> Public: <span class="ml-1 text-danger fa fa-times" data-toggle="tooltip" title="No"></span></li>
+                    }
+                    if (Model.TickOff)
+                    {
+                        <li class="list-group-item text-info"><i class="fa fa-bell" data-toggle="tooltip" title="Notify on Critical Value"></i> Notify: <span class="ml-1 text-success fa fa-check" data-toggle="tooltip" title="Yes"></span></li>
+                    }
+                    else
+                    {
+                        <li class="list-group-item text-info"><i class="fa fa-bell" data-toggle="tooltip" title="Notify on Critical Value"></i> Notify: <span class="ml-1 text-danger fa fa-times" data-toggle="tooltip" title="No"></span></li>
+                    }
+                }
+                @{
+                    if (Model.Timestamp == null)
+                    {
+                        <li class="list-group-item text-info"><i class="fa fa-stopwatch" data-toggle="tooltip" title="Last Updated"></i> Never</li>
+                    }
+                    else
+                    {
+                        <li class="list-group-item text-info"><i class="fa fa-stopwatch" data-toggle="tooltip" title="Last Updated"></i> @TimeSpan.FromTicks(DateTime.Now.Subtract(Model.Timestamp.Value).Ticks).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Minute) ago</li>
+                    }
+                }
+                @{
+                    if (string.IsNullOrEmpty(Model.Value))
+                    {
+                        <li class="list-group-item text-info"><i class="fa fa-bolt" data-toggle="tooltip" title="Value"></i> None</li>
+                    }
+                    else
+                    {
+                        <li class="list-group-item text-info">
+                            <i class="fa fa-bolt" data-toggle="tooltip" title="Value"></i> @Model.Value@Model.SensorType.MeasurementType</li>
+                    }
+                }
+                <li class="list-group-item text-info">
+                    <i class="fa fa-minus-square" data-toggle="tooltip" title="Min Value"></i> @Model.MinAcceptableValue@Model.SensorType.MeasurementType</li>
+                <li class="list-group-item text-info">
+                    <i class="fa fa-plus-square" data-toggle="tooltip" title="Max Value"></i> @Model.MaxAcceptableValue@Model.SensorType.MeasurementType</li>
+                <li class="list-group-item text-info">
+                    <i class="fa fa-fingerprint" data-toggle="tooltip" title="SensorType Id"></i> @Model.SensorTypeId</li>
+                <li class="list-group-item text-info">
+                    <i class="fas fa-clock" data-toggle="tooltip" title="Registered On"></i> @Model.CreatedOn.Humanize()</li>
+            </ul>
+            <div class="form-group ml-3 mr-3">
+                <a asp-action="Edit" class="btn btn-primary" asp-route-id="@Model.Id"><i class="fas fa-edit"></i> Edit</a>
+                <a asp-action="Index" class="btn btn-info float-right"><i class="fas fa-arrow-circle-left"></i> Back to Sensors</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card card-nav-tabs">
+            <div class="card-header card-header-success">
+                Sensor Location
+            </div>
+            <div class="card-body">
+                <div class="border border-primary rounded" id="map" style="height: 400px;"></div>
+                <input asp-for="Latitude" class="form-control" type="hidden" id="latField"/>
+                <span asp-validation-for="Latitude" class="text-danger"></span>
+                <input asp-for="Longitude" class="form-control" type="hidden" id="lngField"/>
+                <span asp-validation-for="Longitude" class="text-danger"></span>
+                <input type="checkbox" name="MapMarker" style="visibility: hidden" id="mapMarker"/>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        function initMap() {
+            var map = new google.maps.Map(document.getElementById('map'),
+                {
+                    zoom: 12,
+                    center: { lat: 42.6875236, lng: 23.3139769 }
+                });
+
+            const myLatLng = { lat: @Model.Latitude, lng: @Model.Longitude };
+            var marker = new google.maps.Marker({
+                position: myLatLng,
+                map: map,
+                title: '@Model.Name'
+            });
+
+            map.addListener('click',
+                function(e) {
+                    placeMarker(e.latLng, map);
+                });
+
+            function placeMarker(position, map) {
+                if (marker) {
+                    marker.setPosition(position);
+                } else {
+                    marker = new google.maps.Marker({
+                        position: position,
+                        map: map
+                    });
+                }
+                map.panTo(position);
+
+                $('#mapMarker').prop('checked', true);
+                $('#latField').val(position.lat);
+                $('#lngField').val(position.lng);
+            }
+        }
+    </script>
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOc4hXPYpMR4Gos817M6Iz_5hUKrPE0k4&callback=initMap"></script>
+}
