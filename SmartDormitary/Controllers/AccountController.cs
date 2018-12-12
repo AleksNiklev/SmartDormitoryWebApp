@@ -71,7 +71,7 @@ namespace SmartDormitary.Controllers
                 }
 
                 if (result.RequiresTwoFactor)
-                    return RedirectToAction(nameof(LoginWith2fa), new {returnUrl, model.RememberMe});
+                    return RedirectToAction(nameof(LoginWith2fa), new { returnUrl, model.RememberMe });
                 if (result.IsLockedOut)
                 {
                     _logger.LogWarning("User account locked out.");
@@ -95,7 +95,7 @@ namespace SmartDormitary.Controllers
 
             if (user == null) throw new ApplicationException("Unable to load two-factor authentication user.");
 
-            var model = new LoginWith2faViewModel {RememberMe = rememberMe};
+            var model = new LoginWith2faViewModel { RememberMe = rememberMe };
             ViewData["ReturnUrl"] = returnUrl;
 
             return View(model);
@@ -204,7 +204,12 @@ namespace SmartDormitary.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new User {UserName = model.Username, Email = model.Email};
+                if (await _userManager.FindByEmailAsync(model.Email) != null)
+                {
+                    ErrorMessage = "Error: This email is already being used by another user.";
+                    return View(model);
+                }
+                var user = new User { UserName = model.Username, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -241,7 +246,7 @@ namespace SmartDormitary.Controllers
         public IActionResult ExternalLogin(string provider, string returnUrl = null)
         {
             // Request a redirect to the external login provider.
-            var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new {returnUrl});
+            var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { returnUrl });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
             return Challenge(properties, provider);
         }
@@ -274,7 +279,7 @@ namespace SmartDormitary.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             ViewData["LoginProvider"] = info.LoginProvider;
             var email = info.Principal.FindFirstValue(ClaimTypes.Email);
-            return View("ExternalLogin", new ExternalLoginViewModel {Email = email});
+            return View("ExternalLogin", new ExternalLoginViewModel { Email = email });
         }
 
         [HttpPost]
@@ -289,7 +294,7 @@ namespace SmartDormitary.Controllers
                 var info = await _signInManager.GetExternalLoginInfoAsync();
                 if (info == null)
                     throw new ApplicationException("Error loading external login information during confirmation.");
-                var user = new User {UserName = model.Email, Email = model.Email};
+                var user = new User { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
@@ -363,7 +368,7 @@ namespace SmartDormitary.Controllers
         public IActionResult ResetPassword(string code = null)
         {
             if (code == null) throw new ApplicationException("A code must be supplied for password reset.");
-            var model = new ResetPasswordViewModel {Code = code};
+            var model = new ResetPasswordViewModel { Code = code };
             return View(model);
         }
 

@@ -49,11 +49,14 @@ namespace SmartDormitary
             {
                 options.Cookie.IsEssential = true;
             });
-            
+
             services.AddDbContext<SmartDormitaryContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<User, IdentityRole>()
+            services.AddIdentity<User, IdentityRole>(options =>
+            {
+                //options.User.RequireUniqueEmail = true;
+            })
                 .AddEntityFrameworkStores<SmartDormitaryContext>()
                 .AddDefaultTokenProviders();
 
@@ -98,11 +101,11 @@ namespace SmartDormitary
             }
 
             app.UseStaticFiles();
-            
+
             app.UseCookiePolicy();
 
             app.UseAuthentication();
-            
+
             app.UseSignalR(routes =>
             {
                 routes.MapHub<NotifyHub>("/notifyHub");
