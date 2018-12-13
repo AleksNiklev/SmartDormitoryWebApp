@@ -279,6 +279,11 @@ namespace SmartDormitary.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             ViewData["LoginProvider"] = info.LoginProvider;
             var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+            if (await _userManager.FindByEmailAsync(email) != null)
+            {
+                ErrorMessage = "Error: This email is already being used by another user.";
+                return RedirectToAction(nameof(Login));
+            }
             return View("ExternalLogin", new ExternalLoginViewModel { Email = email });
         }
 

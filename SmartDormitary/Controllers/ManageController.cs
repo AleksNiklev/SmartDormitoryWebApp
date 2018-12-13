@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -233,7 +234,11 @@ namespace SmartDormitary.Controllers
             if (info == null)
                 throw new ApplicationException(
                     $"Unexpected error occurred loading external login info for user with ID '{user.Id}'.");
-
+            if (await _userManager.FindByEmailAsync(info.Principal.FindFirstValue(ClaimTypes.Email)) != null)
+            {
+                StatusMessage = "Error: This email is already being used by another user.";
+                return RedirectToAction(nameof(ExternalLogins));
+            }
             var result = await _userManager.AddLoginAsync(user, info);
             if (!result.Succeeded)
                 throw new ApplicationException(
