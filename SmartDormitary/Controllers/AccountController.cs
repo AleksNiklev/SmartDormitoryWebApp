@@ -22,19 +22,16 @@ namespace SmartDormitary.Controllers
         private readonly ILogger _logger;
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
-        private readonly IJobService cron;
 
         public AccountController(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             IEmailSender emailSender,
-            IJobService cron,
             ILogger<AccountController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
-            this.cron = cron;
             _logger = logger;
         }
 
@@ -66,7 +63,6 @@ namespace SmartDormitary.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    cron.RunJob();
                     return RedirectToLocal(returnUrl);
                 }
 

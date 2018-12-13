@@ -18,6 +18,8 @@ using Microsoft.AspNetCore.SignalR;
 using SmartDormitary.Services.Cron;
 using SmartDormitary.Services.Cron.Jobs;
 using SmartDormitary.Services.Hubs.Service;
+using System.Threading.Tasks;
+using SmartDormitary.Middlewares;
 
 namespace SmartDormitary
 {
@@ -110,6 +112,9 @@ namespace SmartDormitary
             {
                 routes.MapHub<NotifyHub>("/notifyHub");
             });
+
+
+            app.UseMiddleware<BackgroundJobMiddleware>();
 
             app.UseMvc(routes =>
             {

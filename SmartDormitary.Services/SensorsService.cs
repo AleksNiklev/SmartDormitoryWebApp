@@ -134,7 +134,8 @@ namespace SmartDormitary.Services
             var sensorData = sensor.SensorData;
             var returnEntity = dormitaryContext.SensorData.Update(sensorData);
             await dormitaryContext.SaveChangesAsync();
-            if (double.Parse(returnEntity.Entity.Value) > sensor.MaxAcceptableValue || double.Parse(returnEntity.Entity.Value) < sensor.MinAcceptableValue)
+
+            if (sensor.TickOff && (double.Parse(returnEntity.Entity.Value) > sensor.MaxAcceptableValue || double.Parse(returnEntity.Entity.Value) < sensor.MinAcceptableValue))
             {
                 await hubService.Notify(sensor.UserId, sensor.Name, returnEntity.Entity.Value,
                     sensor.SensorType.MeasurementType);
