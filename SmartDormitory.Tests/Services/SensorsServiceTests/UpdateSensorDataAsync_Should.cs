@@ -20,7 +20,7 @@ namespace SmartDormitory.Tests.Services.SensorsServiceTests
                 .Options;
 
             var sensor = TestHelpers.TestPublicSensor();
-            var val = "Update";
+            var val = "12";
 
             // Act
             using (var actContext = new SmartDormitaryContext(contextOptions))
