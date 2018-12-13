@@ -151,7 +151,9 @@ namespace SmartDormitary.Areas.Administration.Controllers
                     sensorModel.Latitude = sensor.Latitude;
                     sensorModel.IsPublic = sensor.IsPublic;
                     sensorModel.TickOff = sensor.TickOff;
-
+                    sensorModel.SensorTypeId = sensor.SensorTypeId;
+                    sensorModel.UserId = sensor.UserId;
+                    
                     await sensorsService.UpdateSensorAsync(sensorModel);
                 }
                 catch (DbUpdateConcurrencyException)
