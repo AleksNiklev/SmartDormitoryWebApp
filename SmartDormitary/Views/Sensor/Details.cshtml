@@ -53,18 +53,21 @@
                                             if (Model.Timestamp == null)
                                             {
                                                 <li class="list-group-item text-info"><i class="fa fa-stopwatch" data-toggle="tooltip" title="Last Updated"></i> Never</li>
+                                                <li class="list-group-item text-info"><i class="fa fa-heartbeat" data-toggle="tooltip" title="Live Data"></i> Is Live: <span class="ml-1 text-danger fa fa-times" data-toggle="tooltip" title="No"></span></li>
                                             }
                                             else
                                             {
+                                                if (DateTime.Now.Subtract(Model.Timestamp.Value).Seconds >= Model.PullingInterval)
+                                                {
+                                                    <li class="list-group-item text-info"><i class="fa fa-heartbeat" data-toggle="tooltip" title="Live Data"></i> Is Live: <span class="ml-1 text-danger fa fa-times" data-toggle="tooltip" title="No"></span></li>
+                                                }
+                                                else
+                                                {
+                                                    <li class="list-group-item text-info"><i class="fa fa-heartbeat" data-toggle="tooltip" title="Live Data"></i> Is Live: <span class="ml-1 text-success fa fa-check" data-toggle="tooltip" title="Yes"></span></li>
+                                                }
                                                 <li class="list-group-item text-info"><i class="fa fa-stopwatch" data-toggle="tooltip" title="Last Updated"></i> @TimeSpan.FromTicks(DateTime.Now.Subtract(Model.Timestamp.Value).Ticks).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Minute) ago</li>
                                             }
                                         }
-                                        @*<li class="list-group-item text-info">
-                                            <i class="fa fa-exclamation-triangle" data-toggle="tooltip" title="Minimum Value"></i> <span>@Model.Type.MinAcceptableValue</span>
-                                        </li>
-                                        <li class="list-group-item text-info">
-                                            <i class="fa fa-exclamation-triangle" data-toggle="tooltip" title="Maximum Value"></i> <span>@Model.Type.MaxAcceptableValue</span>
-                                        </li>*@
                                         @{
                                             if (string.IsNullOrEmpty(Model.Value))
                                             {
