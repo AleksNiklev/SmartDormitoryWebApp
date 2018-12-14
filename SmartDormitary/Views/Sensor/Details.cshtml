@@ -4,7 +4,7 @@
 @{
     ViewData["Title"] = "Details";
 }
-<div class="page-header header-filter" data-parallax="true" style="background-image: url('/assets/img/city-profile.jpg');"></div>
+<div class="page-header header-filter" data-parallax="true" style="        background-image: url('/assets/img/city-profile.jpg');"></div>
 <div class="main main-raised">
     <div class="section">
         <div class="container">
@@ -57,7 +57,7 @@
                                             }
                                             else
                                             {
-                                                if (DateTime.Now.Subtract(Model.Timestamp.Value).Seconds >= Model.PullingInterval)
+                                                if (DateTime.Now.Subtract(Model.Timestamp.Value).Seconds >= Model.Type.MinRefreshTime)
                                                 {
                                                     <li class="list-group-item text-info"><i class="fa fa-heartbeat" data-toggle="tooltip" title="Live Data"></i> Is Live: <span class="ml-1 text-danger fa fa-times" data-toggle="tooltip" title="No"></span></li>
                                                 }
@@ -65,7 +65,7 @@
                                                 {
                                                     <li class="list-group-item text-info"><i class="fa fa-heartbeat" data-toggle="tooltip" title="Live Data"></i> Is Live: <span class="ml-1 text-success fa fa-check" data-toggle="tooltip" title="Yes"></span></li>
                                                 }
-                                                <li class="list-group-item text-info"><i class="fa fa-stopwatch" data-toggle="tooltip" title="Last Updated"></i> @TimeSpan.FromTicks(DateTime.Now.Subtract(Model.Timestamp.Value).Ticks).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Minute) ago</li>
+                                                <li class="list-group-item text-info"><i class="fa fa-stopwatch" data-toggle="tooltip" title="Last Updated"></i> <span id="timeStampField">@TimeSpan.FromTicks(DateTime.Now.Subtract(Model.Timestamp.Value).Ticks).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Minute)</span> ago</li>
                                             }
                                         }
                                         @{
@@ -116,21 +116,20 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <div class="border border-primary rounded" id="map" style="height: 350px;"></div>
+                                <div class="border border-primary rounded" id="map" style="        height: 350px;"></div>
                                 <input asp-for="Latitude" class="form-control" type="hidden" id="latField" />
                                 <span asp-validation-for="Latitude" class="text-danger"></span>
                                 <input asp-for="Longitude" class="form-control" type="hidden" id="lngField" />
                                 <span asp-validation-for="Longitude" class="text-danger"></span>
-                                <input type="checkbox" name="MapMarker" style="visibility: hidden" id="mapMarker" />
+                                <input type="checkbox" name="MapMarker" style="        visibility: hidden" id="mapMarker" />
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>         
+            </div>
         </div>
     </div>
 </div>
-
 <script type="text/javascript" src="~/lib/gaugejs/gauge.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -194,7 +193,7 @@
 
         let target = document.getElementById('gauge'); // your canvas element
         let gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
-        
+
         if ('@Model.Type.MeasurementType' === "(true/false)") {
 
             gauge.colorStart = '#E0E0E0';
