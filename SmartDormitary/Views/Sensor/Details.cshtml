@@ -59,11 +59,11 @@
                                             {
                                                 if (DateTime.Now.Subtract(Model.Timestamp.Value).Seconds >= Model.Type.MinRefreshTime)
                                                 {
-                                                    <li class="list-group-item text-info"><i class="fa fa-heartbeat" data-toggle="tooltip" title="Live Data"></i> Is Live: <span class="ml-1 text-danger fa fa-times" data-toggle="tooltip" title="No"></span></li>
+                                                    <li class="list-group-item text-info"><i class="fa fa-heartbeat" data-toggle="tooltip" title="Live Data"></i> Is Live: <span class="ml-1 text-danger fa fa-times" id="liveStatus" data-toggle="tooltip" title="No"></span></li>
                                                 }
                                                 else
                                                 {
-                                                    <li class="list-group-item text-info"><i class="fa fa-heartbeat" data-toggle="tooltip" title="Live Data"></i> Is Live: <span class="ml-1 text-success fa fa-check" data-toggle="tooltip" title="Yes"></span></li>
+                                                    <li class="list-group-item text-info"><i class="fa fa-heartbeat" data-toggle="tooltip" title="Live Data"></i> Is Live: <span class="ml-1 text-success fa fa-check" id="liveStatus" data-toggle="tooltip" title="Yes"></span></li>
                                                 }
                                                 <li class="list-group-item text-info"><i class="fa fa-stopwatch" data-toggle="tooltip" title="Last Updated"></i> <span id="timeStampField">@TimeSpan.FromTicks(DateTime.Now.Subtract(Model.Timestamp.Value).Ticks).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Minute) ago</span></li>
                                             }
@@ -225,37 +225,45 @@
             $.get("/Sensor/GetSensorById",
                 { id: '@Model.Id' },
                 function (response, status) {
-                    console.log(Date.parse(response.timeStamp).toLocaleString());
-                    console.log(response.value);
-                    var delta = Math.round((+new Date - Date.parse(response.timeStamp)) / 1000);
+                    gauge.set(response.value);
 
-                    var minute = 60,
+                    let alpha = Math.round(((Date.now() - Date.parse(response.timeStamp)) / 1000) >= 30);
+                    if (alpha === 1) {
+                        $('#liveStatus').removeClass();
+                        $('#liveStatus').addClass('ml-1 text-danger fa fa-times');
+                        $('#liveStatus').attr('data-original-title', "No");
+                    } else {
+                        $('#liveStatus').removeClass();
+                        $('#liveStatus').addClass('ml-1 text-success fa fa-check');
+                        $('#liveStatus').attr('data-original-title', "Yes");
+                    }
+
+                    let delta = Math.round((+new Date - Date.parse(response.timeStamp)) / 1000);
+                    
+                    let minute = 60,
                         hour = minute * 60,
                         day = hour * 24,
                         week = day * 7;
 
-                    var fuzzy;
+                    let lastUpdated = "Never";
 
                     if (delta < 10) {
-                        fuzzy = 'just now';
+                        lastUpdated = 'just now';
                     } else if (delta < minute) {
-                        fuzzy = delta + ' seconds ago';
+                        lastUpdated = delta + ' seconds ago';
                     } else if (delta < 2 * minute) {
-                        fuzzy = 'a minute ago'
+                        lastUpdated = 'a minute ago';
                     } else if (delta < hour) {
-                        fuzzy = Math.floor(delta / minute) + ' minutes ago';
-                    } else if (Math.floor(delta / hour) == 1) {
-                        fuzzy = '1 hour ago'
+                        lastUpdated = Math.floor(delta / minute) + ' minutes ago';
+                    } else if (Math.floor(delta / hour) === 1) {
+                        lastUpdated = '1 hour ago';
                     } else if (delta < day) {
-                        fuzzy = Math.floor(delta / hour) + ' hours ago';
+                        lastUpdated = Math.floor(delta / hour) + ' hours ago';
                     } else if (delta < day * 2) {
-                        fuzzy = 'yesterday';
+                        lastUpdated = 'yesterday';
                     }
 
-                    gauge.set(response.value);
-
-                    
-                    $('#timeStampField').text(fuzzy);
+                    $('#timeStampField').text(lastUpdated);
                     $('#valueField').text(response.value);
                     $('#chart-text-value').text(response.value);
                 });
