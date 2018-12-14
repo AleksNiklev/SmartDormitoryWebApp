@@ -17,9 +17,9 @@ namespace SmartDormitary.Services.Cron
             var dataMap = context.JobDetail.JobDataMap;
             var sensorApiValues = new Dictionary<Guid, SensorDTO>();
 
-            var api = (ISensorsAPI) dataMap.Get("api");
-            var hubService = (IHubService) dataMap.Get("hubService");
-            var dbContext = (SmartDormitaryContext) dataMap.Get("dbContext");
+            var api = dataMap.Get("api") as ISensorsAPI;
+            var hubService = dataMap.Get("hubService") as IHubService;
+            var dbContext = dataMap.Get("dbContext") as SmartDormitaryContext;
 
             var sensorService = new SensorsService(dbContext, hubService);
 
@@ -33,7 +33,7 @@ namespace SmartDormitary.Services.Cron
                 }
 
                 var sensorApi = sensorApiValues[sensor.SensorTypeId];
-                if ((sensorApi.Timestamp.Value - sensor.SensorData.Timestamp.Value).TotalSeconds >
+                if ((sensorApi.Timestamp.Value.Subtract(sensor.SensorData.Timestamp.Value)).Seconds >
                     sensor.RefreshTime)
                 {
                     sensor.SensorData.Value = sensorApi.Value;

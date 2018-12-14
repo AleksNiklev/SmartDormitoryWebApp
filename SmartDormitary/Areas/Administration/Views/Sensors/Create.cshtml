@@ -84,9 +84,9 @@
                     <div class="card-body">
                         <div class="border border-primary rounded" id="map" style="height: 400px;"></div>
                         <input asp-for="Latitude" class="form-control" type="hidden" id="latField"/>
-                        <span asp-validation-for="Latitude" class="text-danger"></span>
+                        <span asp-validation-for="Latitude" class="text-danger">Please enter </span>
                         <input asp-for="Longitude" class="form-control" type="hidden" id="lngField"/>
-                        <span asp-validation-for="Longitude" class="text-danger"></span>
+                        <span asp-validation-for="Longitude" class="text-danger">location.</span>
                         <input type="checkbox" name="MapMarker" style="visibility: hidden" id="mapMarker"/>
                     </div>
                 </div>
