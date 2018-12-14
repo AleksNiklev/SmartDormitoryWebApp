@@ -65,7 +65,7 @@
                                                 {
                                                     <li class="list-group-item text-info"><i class="fa fa-heartbeat" data-toggle="tooltip" title="Live Data"></i> Is Live: <span class="ml-1 text-success fa fa-check" data-toggle="tooltip" title="Yes"></span></li>
                                                 }
-                                                <li class="list-group-item text-info"><i class="fa fa-stopwatch" data-toggle="tooltip" title="Last Updated"></i> <span id="timeStampField">@TimeSpan.FromTicks(DateTime.Now.Subtract(Model.Timestamp.Value).Ticks).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Minute)</span> ago</li>
+                                                <li class="list-group-item text-info"><i class="fa fa-stopwatch" data-toggle="tooltip" title="Last Updated"></i> <span id="timeStampField">@TimeSpan.FromTicks(DateTime.Now.Subtract(Model.Timestamp.Value).Ticks).Humanize(minUnit: TimeUnit.Second, maxUnit: TimeUnit.Minute) ago</span></li>
                                             }
                                         }
                                         @{
@@ -219,7 +219,7 @@
         const now = new Date($.now());
         const dateSpan = (now - modelDate) / 1000;
 
-        setInterval(sendRequest, 5000);
+        setInterval(sendRequest, 2000);
 
         function sendRequest() {
             $.get("/Sensor/GetSensorById",
@@ -227,10 +227,35 @@
                 function (response, status) {
                     console.log(Date.parse(response.timeStamp).toLocaleString());
                     console.log(response.value);
-                    console.log(response.timeStamp);
+                    var delta = Math.round((+new Date - Date.parse(response.timeStamp)) / 1000);
+
+                    var minute = 60,
+                        hour = minute * 60,
+                        day = hour * 24,
+                        week = day * 7;
+
+                    var fuzzy;
+
+                    if (delta < 10) {
+                        fuzzy = 'just now';
+                    } else if (delta < minute) {
+                        fuzzy = delta + ' seconds ago';
+                    } else if (delta < 2 * minute) {
+                        fuzzy = 'a minute ago'
+                    } else if (delta < hour) {
+                        fuzzy = Math.floor(delta / minute) + ' minutes ago';
+                    } else if (Math.floor(delta / hour) == 1) {
+                        fuzzy = '1 hour ago'
+                    } else if (delta < day) {
+                        fuzzy = Math.floor(delta / hour) + ' hours ago';
+                    } else if (delta < day * 2) {
+                        fuzzy = 'yesterday';
+                    }
+
                     gauge.set(response.value);
-                    $('#timeStampField').text(new Date(response.timeStamp).toISOString().replace(/T/, ' ')
-                        .replace(/\..+/, ''));
+
+                    
+                    $('#timeStampField').text(fuzzy);
                     $('#valueField').text(response.value);
                     $('#chart-text-value').text(response.value);
                 });

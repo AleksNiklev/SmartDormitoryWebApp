@@ -46,7 +46,7 @@ namespace SmartDormitary.Services.Cron.Jobs
                 .WithIdentity("trigger1", "group1")
                 .StartNow()
                 .WithSimpleSchedule(x => x
-                    .WithIntervalInSeconds(20)
+                    .WithIntervalInSeconds(5)
                     .RepeatForever())
                 .Build();
 
