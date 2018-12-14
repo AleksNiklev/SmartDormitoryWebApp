@@ -228,7 +228,8 @@
                 function (response, status) {
                     console.log(Date.parse(response.timeStamp).toLocaleString());
                     console.log(response.value);
-                    gauge.set(response.value)
+                    console.log(response.timeStamp);
+                    gauge.set(response.value);
                     $('#timeStampField').text(new Date(response.timeStamp).toISOString().replace(/T/, ' ')
                         .replace(/\..+/, ''));
                     $('#valueField').text(response.value);
