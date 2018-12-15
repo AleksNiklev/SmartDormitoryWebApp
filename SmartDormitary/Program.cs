@@ -19,9 +19,8 @@ namespace SmartDormitary
 
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseIISIntegration()
+                //.UseIISIntegration()
                 .UseStartup<Startup>()
-                .UseApplicationInsights()
                 .Build();
     }
 }

@@ -77,13 +77,12 @@ namespace SmartDormitary
             services.AddScoped<IServiceProvider, ServiceProvider>();
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IHubService, HubService>();
-            services.AddScoped<NotifyHub>();
             services.AddScoped<IJobService, JobService>();
             services.AddScoped<ISensorJob, SensorJob>();
-            services.AddSignalR();
-
+            
             services.AddMvc()
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -103,7 +102,6 @@ namespace SmartDormitary
             app.UseStaticFiles();
 
             app.UseAuthentication();
-
             app.UseWebSockets();
             app.UseSignalR(routes =>
             {
