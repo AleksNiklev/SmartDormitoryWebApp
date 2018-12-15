@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR;
 
 namespace SmartDormitary.Services.Hubs.Service
@@ -15,6 +16,11 @@ namespace SmartDormitary.Services.Hubs.Service
         public async Task Notify(string userId, string name, string value, string measurementType)
         {
             await hubContext.Clients.User(userId).SendAsync("Notify", name, value, measurementType);
+        }
+
+        public async Task SensorUpdateData(string userId, Guid sensorId, string sensorTypeMeasurementType, string sensorDataValue, double sensorTypeMinAcceptableValue, double sensorTypeMaxAcceptableValue)
+        {
+            await hubContext.Clients.User(userId).SendAsync("sensorUpdateData", sensorId, sensorTypeMeasurementType, sensorDataValue, sensorTypeMinAcceptableValue, sensorTypeMaxAcceptableValue);
         }
     }
 }

@@ -130,8 +130,9 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="~/lib/gaugejs/gauge.min.js"></script>
-<script type="text/javascript">
+@section Scripts {
+    <script type="text/javascript" src="~/lib/gaugejs/gauge.min.js"></script>
+    <script type="text/javascript">
     $(document).ready(function () {
         let staticZones;
         if ('@Model.Type.MeasurementType' === "(true/false)") {
@@ -209,17 +210,7 @@
             gauge.set('@Model.Value' * 1);
         }
 
-        const modelDate = new Date('@Model.Timestamp.Value.Year.ToString()',
-            '@Model.Timestamp.Value.Month.ToString()' - 1,
-            '@Model.Timestamp.Value.Day.ToString()',
-            '@Model.Timestamp.Value.Hour.ToString()',
-            '@Model.Timestamp.Value.Minute.ToString()',
-            '@Model.Timestamp.Value.Second.ToString()'
-        );
-        const now = new Date($.now());
-        const dateSpan = (now - modelDate) / 1000;
-
-        setInterval(sendRequest, 2000);
+        //setInterval(sendRequest, 2000);
 
         function sendRequest() {
             $.get("/Sensor/GetSensorById",
@@ -239,7 +230,7 @@
                     }
 
                     let delta = Math.round((+new Date - Date.parse(response.timeStamp)) / 1000);
-                    
+
                     let minute = 60,
                         hour = minute * 60,
                         day = hour * 24,
@@ -352,5 +343,6 @@
         });
     };
 
-</script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOc4hXPYpMR4Gos817M6Iz_5hUKrPE0k4&callback=initMap"></script>
+    </script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDOc4hXPYpMR4Gos817M6Iz_5hUKrPE0k4&callback=initMap"></script>
+}
