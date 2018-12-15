@@ -1,12 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using SmartDormitary.Controllers;
 using SmartDormitary.Services.Contracts;
 using SmartDormitory.API.DormitaryAPI;
 using SmartDormitory.Tests.HelpersMethods;
-using System;
-using System.Threading.Tasks;
 
 namespace SmartDormitory.Tests.Controllers.SensorControllerActions
 {
@@ -22,14 +21,14 @@ namespace SmartDormitory.Tests.Controllers.SensorControllerActions
             var mockUserManager = TestHelpers.GetTestUserManager();
             var testSensor = TestHelpers.TestPublicSensor();
 
-            sensorsService.Setup(s => s.GetSensorByGuidAsync(It.IsAny<Guid>())).
-                ReturnsAsync(testSensor);
+            sensorsService.Setup(s => s.GetSensorByGuidAsync(It.IsAny<Guid>())).ReturnsAsync(testSensor);
 
-            var controller = new SensorController(sensorTypesService.Object, sensorsService.Object, mockUserManager.Object, sensorsApi.Object);
+            var controller = new SensorController(sensorTypesService.Object, sensorsService.Object,
+                mockUserManager.Object, sensorsApi.Object);
 
-            var result = await controller.GetSensorById(testSensor.Id) as JsonResult;
-    
-            object data = result.Value;            
+            var result = await controller.GetSensorById(testSensor.Id);
+
+            var data = result.Value;
 
             Assert.AreEqual(testSensor.SensorData.Value, data.GetType().GetProperty("value").GetValue(data, null));
         }
@@ -43,10 +42,10 @@ namespace SmartDormitory.Tests.Controllers.SensorControllerActions
             var mockUserManager = TestHelpers.GetTestUserManager();
             var testSensor = TestHelpers.TestPublicSensor();
 
-            sensorsService.Setup(s => s.GetSensorByGuidAsync(It.IsAny<Guid>())).
-                ReturnsAsync(testSensor);
+            sensorsService.Setup(s => s.GetSensorByGuidAsync(It.IsAny<Guid>())).ReturnsAsync(testSensor);
 
-            var controller = new SensorController(sensorTypesService.Object, sensorsService.Object, mockUserManager.Object, sensorsApi.Object);
+            var controller = new SensorController(sensorTypesService.Object, sensorsService.Object,
+                mockUserManager.Object, sensorsApi.Object);
 
             await controller.GetSensorById(testSensor.Id);
 

@@ -33,17 +33,6 @@ namespace SmartDormitory.API.DormitaryAPI
             return response.Data;
         }
 
-        public IEnumerable<AllSensorsDTO> GetAllSensors()
-        {
-            restClient.BaseUrl = new Uri(Constants.baseUrl);
-            restClient.AddDefaultHeader(Constants.authKey, Constants.authValue);
-
-            var request = new RestRequest(Method.GET) {Resource = getAllSensorsUrl};
-
-            var response = restClient.ExecuteAsGet<List<AllSensorsDTO>>(request, "GET");
-            return response.Data;
-        }
-
         /// <summary>
         ///     Returns adequate data for the given sensorId.
         /// </summary>

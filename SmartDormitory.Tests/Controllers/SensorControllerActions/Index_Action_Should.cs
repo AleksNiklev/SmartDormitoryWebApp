@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -8,9 +11,6 @@ using SmartDormitary.Models.SensorViewModels;
 using SmartDormitary.Services.Contracts;
 using SmartDormitory.API.DormitaryAPI;
 using SmartDormitory.Tests.HelpersMethods;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SmartDormitory.Tests.Controllers.SensorControllerActions
 {
@@ -26,10 +26,11 @@ namespace SmartDormitory.Tests.Controllers.SensorControllerActions
             var sensorsApi = new Mock<ISensorsAPI>();
             var mockUserManager = TestHelpers.GetTestUserManager();
 
-            sensorTypesService.Setup(s => s.GetAllSensorTypesAsync()).
-                ReturnsAsync(new List<SensorType>() { TestHelpers.TestSensorType() });
+            sensorTypesService.Setup(s => s.GetAllSensorTypesAsync())
+                .ReturnsAsync(new List<SensorType> {TestHelpers.TestSensorType()});
 
-            var controler = new SensorController(sensorTypesService.Object, sensorsService.Object, mockUserManager.Object, sensorsApi.Object);
+            var controler = new SensorController(sensorTypesService.Object, sensorsService.Object,
+                mockUserManager.Object, sensorsApi.Object);
 
             var result = await controler.Index() as ViewResult;
 
@@ -45,10 +46,11 @@ namespace SmartDormitory.Tests.Controllers.SensorControllerActions
             var sensorsApi = new Mock<ISensorsAPI>();
             var mockUserManager = TestHelpers.GetTestUserManager();
 
-            sensorTypesService.Setup(s => s.GetAllSensorTypesAsync()).
-                ReturnsAsync(new List<SensorType>() { TestHelpers.TestSensorType() });
+            sensorTypesService.Setup(s => s.GetAllSensorTypesAsync())
+                .ReturnsAsync(new List<SensorType> {TestHelpers.TestSensorType()});
 
-            var controler = new SensorController(sensorTypesService.Object, sensorsService.Object, mockUserManager.Object, sensorsApi.Object);
+            var controler = new SensorController(sensorTypesService.Object, sensorsService.Object,
+                mockUserManager.Object, sensorsApi.Object);
 
             var result = await controler.Index() as ViewResult;
             var viewModel = (IEnumerable<SensorTypeViewModel>) result.ViewData.Model;

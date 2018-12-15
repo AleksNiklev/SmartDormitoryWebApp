@@ -10,9 +10,8 @@ namespace SmartDormitary.Services.Extensions
             var numbers = input.Split(' ');
 
             foreach (var num in numbers)
-            {
-                if (double.TryParse(num, out var numValue)) result.Add(numValue);
-            }
+                if (double.TryParse(num, out var numValue))
+                    result.Add(numValue);
 
             return result.ToArray();
         }

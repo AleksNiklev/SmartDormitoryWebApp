@@ -55,18 +55,15 @@ namespace SmartDormitary
             services.AddDbContext<SmartDormitaryContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<User, IdentityRole>(options =>
-            {
-                //options.User.RequireUniqueEmail = true;
-            })
+            services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<SmartDormitaryContext>()
                 .AddDefaultTokenProviders();
 
             // External Login Providers
             services.AddAuthentication().AddFacebook(facebookOptions =>
             {
-                facebookOptions.AppId = "647090609020984";
-                facebookOptions.AppSecret = "5a73b6698ce81b1782eb773cff221f45";
+                facebookOptions.AppId = Configuration.GetSection("ExternalLogins")["FacebookAppId"];
+                facebookOptions.AppSecret = Configuration.GetSection("ExternalLogins")["FacebookAppSecret"];
             });
 
             // Add application services.

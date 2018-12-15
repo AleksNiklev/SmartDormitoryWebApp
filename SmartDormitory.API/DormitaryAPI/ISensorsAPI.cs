@@ -7,7 +7,6 @@ namespace SmartDormitory.API.DormitaryAPI
 {
     public interface ISensorsAPI
     {
-        IEnumerable<AllSensorsDTO> GetAllSensors();
         Task<IEnumerable<AllSensorsDTO>> GetAllSensorsAsync();
         Task<SensorDTO> GetSensorAsync(Guid sensorId);
     }
