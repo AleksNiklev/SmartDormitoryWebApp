@@ -158,19 +158,19 @@
         }
 
         let opts = {
-            angle: -0.15, // The span of the gauge arc
-            lineWidth: 0.3, // The line thickness
-            radiusScale: 1, // Relative radius
+            angle: -0.15,
+            lineWidth: 0.3,
+            radiusScale: 1,
             pointer: {
-                length: 0.63, // // Relative to gauge radius
-                strokeWidth: 0.064, // The thickness
-                color: '#000000' // Fill color
+                length: 0.63,
+                strokeWidth: 0.064,
+                color: '#000000'
             },
             staticLabels: {
-                font: "13px sans-serif",  // Specifies font
-                labels: [0, @Model.Type.MinAcceptableValue, @Model.Type.MaxAcceptableValue],  // Print labels at these values
-                color: "#000000",  // Optional: Label text color
-                fractionDigits: 0  // Optional: Numerical precision. 0=round off.
+                font: "13px sans-serif",
+                labels: [0, @Model.Type.MinAcceptableValue, @Model.Type.MaxAcceptableValue],
+                color: "#000000",
+                fractionDigits: 0
             },
             renderTicks: {
                 divisions: 5,
@@ -182,84 +182,33 @@
                 subWidth: 0.6,
                 subColor: '#666666'
             },
-            limitMax: true,     // If false, max value increases automatically if value > maxValue
-            limitMin: true,     // If true, the min value of the gauge will be fixed
-            colorStart: '#6FADCF',   // Colors
-            colorStop: '#8FC0DA',    // just experiment with them
-            strokeColor: '#E0E0E0',  // to see which ones work best for you
+            limitMax: true,
+            limitMin: true,
+            colorStart: '#6FADCF',
+            colorStop: '#8FC0DA',
+            strokeColor: '#E0E0E0',
             generateGradient: true,
-            highDpiSupport: true,   // High resolution support
+            highDpiSupport: true,
             staticZones: staticZones
         };
 
-        let target = document.getElementById('gauge'); // your canvas element
-        let gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
+        let target = document.getElementById('gauge');
+        let gauge = new Gauge(target).setOptions(opts);
 
         if ('@Model.Type.MeasurementType' === "(true/false)") {
 
             gauge.colorStart = '#E0E0E0';
             gauge.minValue = 0.0;
             gauge.maxValue = 1.0;
-            gauge.animationSpeed = 93; // set animation speed (32 is default value)
+            gauge.animationSpeed = 93;
             gauge.set(@Model.Value);
         } else {
             gauge.colorStart = '#E0E0E0';
             gauge.minValue = 0;
             gauge.maxValue = (@Model.Type.MaxAcceptableValue * 1) + (20 * (@Model.Type.MaxAcceptableValue * 1)) / 100;
-            gauge.animationSpeed = 93; // set animation speed (32 is default value)
+            gauge.animationSpeed = 93;
             gauge.set('@Model.Value' * 1);
         }
-
-        //setInterval(sendRequest, 2000);
-
-        function sendRequest() {
-            $.get("/Sensor/GetSensorById",
-                { id: '@Model.Id' },
-                function (response, status) {
-                    gauge.set(response.value);
-
-                    let alpha = Math.round(((Date.now() - Date.parse(response.timeStamp)) / 1000) >= 30);
-                    if (alpha === 1) {
-                        $('#liveStatus').removeClass();
-                        $('#liveStatus').addClass('ml-1 text-danger fa fa-times');
-                        $('#liveStatus').attr('data-original-title', "No");
-                    } else {
-                        $('#liveStatus').removeClass();
-                        $('#liveStatus').addClass('ml-1 text-success fa fa-check');
-                        $('#liveStatus').attr('data-original-title', "Yes");
-                    }
-
-                    let delta = Math.round((+new Date - Date.parse(response.timeStamp)) / 1000);
-
-                    let minute = 60,
-                        hour = minute * 60,
-                        day = hour * 24,
-                        week = day * 7;
-
-                    let lastUpdated = "Never";
-
-                    if (delta < 10) {
-                        lastUpdated = 'just now';
-                    } else if (delta < minute) {
-                        lastUpdated = delta + ' seconds ago';
-                    } else if (delta < 2 * minute) {
-                        lastUpdated = 'a minute ago';
-                    } else if (delta < hour) {
-                        lastUpdated = Math.floor(delta / minute) + ' minutes ago';
-                    } else if (Math.floor(delta / hour) === 1) {
-                        lastUpdated = '1 hour ago';
-                    } else if (delta < day) {
-                        lastUpdated = Math.floor(delta / hour) + ' hours ago';
-                    } else if (delta < day * 2) {
-                        lastUpdated = 'yesterday';
-                    }
-
-                    $('#timeStampField').text(lastUpdated);
-                    $('#valueField').text(response.value);
-                    $('#chart-text-value').text(response.value);
-                });
-        };
-
     });
 
     $(function() {
