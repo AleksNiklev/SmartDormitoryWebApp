@@ -1,7 +1,7 @@
 # SmartDormitoryWebApp
 > Our system can collect data from all over the world.
 
-  ![alt text](https://raw.githubusercontent.com/AleksNiklev/SmartDormitoryWebApp/development/SmartDormitary/wwwroot/images/LandingPage.png)
+  ![alt text](https://raw.githubusercontent.com/AleksNiklev/SmartDormitoryWebApp/develop/SmartDormitary/wwwroot/images/LandingPage.png)
 <hr/>
 
 ## Description
@@ -25,7 +25,7 @@ SmartDormitoryWebApp has some of the following functionalities:
   - Register/Update Sensor Feature
   - Sensor alarm - logged user gets notification when one or few sensors values are not in the acceptable range
   - Cool Admin Panel
-  ![alt text](https://raw.githubusercontent.com/AleksNiklev/SmartDormitoryWebApp/development/SmartDormitary/wwwroot/images/AdminPanel.png)
+  ![alt text](https://raw.githubusercontent.com/AleksNiklev/SmartDormitoryWebApp/develop/SmartDormitary/wwwroot/images/AdminPanel.png)
 
 
 ## Technologies
@@ -39,7 +39,7 @@ The General technologies used in the developing the SmartDormitoryApp are these:
   - Microsoft SQL Server Manager for data storage and Entity 
   - 87% Unit test code coverage of the business logic
   Framework Code First approach for data access. Here is how the database looks like:
-  ![alt text](https://raw.githubusercontent.com/AleksNiklev/SmartDormitoryWebApp/development/SmartDormitary/wwwroot/images/Database.png)
+  ![alt text](https://raw.githubusercontent.com/AleksNiklev/SmartDormitoryWebApp/develop/SmartDormitary/wwwroot/images/Database.png)
 
 
 
