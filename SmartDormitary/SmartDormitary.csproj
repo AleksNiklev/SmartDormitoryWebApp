@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <UserSecretsId>aspnet-SmartDormitary-60913039-71E0-452F-9B21-2A276707D27A</UserSecretsId>
   </PropertyGroup>
 
 
