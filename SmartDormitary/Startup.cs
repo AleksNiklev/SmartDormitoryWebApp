@@ -82,10 +82,7 @@ namespace SmartDormitary
             services.AddScoped<ISensorJob, SensorJob>();
             services.AddSignalR();
 
-            services.AddMvc(options =>
-            {
-                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-            })
+            services.AddMvc()
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
