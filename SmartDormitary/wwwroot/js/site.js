@@ -122,7 +122,7 @@ connection.on("sensorUpdateData",
 
                 let lastUpdated = "Never";
 
-                if (delta < 10) {
+                if (delta < 5) {
                     lastUpdated = "just now";
                 } else if (delta < minute) {
                     lastUpdated = delta + " seconds ago";

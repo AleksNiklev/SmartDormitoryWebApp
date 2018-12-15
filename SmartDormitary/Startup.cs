@@ -102,10 +102,9 @@ namespace SmartDormitary
 
             app.UseStaticFiles();
 
-            app.UseCookiePolicy();
-
             app.UseAuthentication();
 
+            app.UseWebSockets();
             app.UseSignalR(routes =>
             {
                 routes.MapHub<NotifyHub>("/notifyHub");
