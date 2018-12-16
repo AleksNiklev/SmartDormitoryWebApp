@@ -85,7 +85,7 @@
                                     </ul>
                                 </div>
                                 <div class="col-md-6 text-center justify-content-center align-self-center">
-                                    <canvas id="gauge"></canvas>
+                                    <canvas class="gauge" id="@Model.Id"></canvas>
                                     @if (Model.Type.MeasurementType == "(true/false)")
                                     {
                                         <h4><b>Red: door is closed</b></h4>
@@ -192,7 +192,7 @@
             staticZones: staticZones
         };
 
-        let target = document.getElementById('gauge');
+        let target = document.getElementById('@Model.Id');
         let gauge = new Gauge(target).setOptions(opts);
 
         if ('@Model.Type.MeasurementType' === "(true/false)") {

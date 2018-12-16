@@ -18,9 +18,9 @@ namespace SmartDormitary.Services.Hubs.Service
             await hubContext.Clients.User(userId).SendAsync("Notify", name, value, measurementType);
         }
 
-        public async Task SensorUpdateData(string userId, Guid sensorId, string sensorTypeMeasurementType, string sensorDataValue, double sensorTypeMinAcceptableValue, double sensorTypeMaxAcceptableValue)
+        public async Task SensorUpdateData(string userId, Guid sensorId, string sensorTypeMeasurementType, string sensorDataValue, double sensorTypeMinAcceptableValue, double sensorTypeMaxAcceptableValue, double sensorMinAcceptableValue, double sensorMaxAcceptableValue)
         {
-            await hubContext.Clients.User(userId).SendAsync("sensorUpdateData", sensorId, sensorTypeMeasurementType, sensorDataValue, sensorTypeMinAcceptableValue, sensorTypeMaxAcceptableValue);
+            await hubContext.Clients.User(userId).SendAsync("sensorUpdateData", sensorId, sensorTypeMeasurementType, sensorDataValue, sensorTypeMinAcceptableValue, sensorTypeMaxAcceptableValue, sensorMinAcceptableValue, sensorMaxAcceptableValue);
         }
     }
 }

@@ -140,7 +140,7 @@ namespace SmartDormitary.Services
                 await hubService.Notify(sensor.UserId, sensor.Name, returnEntity.Entity.Value,
                     sensor.SensorType.MeasurementType);
 
-            await hubService.SensorUpdateData(sensor.UserId ,sensor.Id, sensor.SensorType.MeasurementType, sensor.SensorData.Value, sensor.SensorType.MinAcceptableValue, sensor.SensorType.MaxAcceptableValue);
+            await hubService.SensorUpdateData(sensor.UserId ,sensor.Id, sensor.SensorType.MeasurementType, sensor.SensorData.Value, sensor.SensorType.MinAcceptableValue, sensor.SensorType.MaxAcceptableValue, sensor.MinAcceptableValue, sensor.MaxAcceptableValue);
 
             return returnEntity;
         }
