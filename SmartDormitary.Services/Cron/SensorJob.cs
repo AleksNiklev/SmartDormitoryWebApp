@@ -33,7 +33,7 @@ namespace SmartDormitary.Services.Cron
                 }
 
                 var sensorApi = sensorApiValues[sensor.SensorTypeId];
-                if (sensorApi.Timestamp.Value.Subtract(sensor.SensorData.Timestamp.Value).Seconds >
+                if ((sensorApi.Timestamp.Value - sensor.SensorData.Timestamp.Value).TotalSeconds >
                     sensor.RefreshTime)
                 {
                     sensor.SensorData.Value = sensorApi.Value;
