@@ -137,6 +137,8 @@ namespace SmartDormitary.Areas.Administration.Controllers
                 StatusMessage = $"Successfully granted {user.UserName} an Admin Status";
             }
 
+            await signInManager.UserManager.UpdateSecurityStampAsync(user);
+
             return RedirectToAction(nameof(Edit), new {id});
         }
     }
