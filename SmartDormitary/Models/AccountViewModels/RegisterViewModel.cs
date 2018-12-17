@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using SmartDormitary.Extensions;
 
 namespace SmartDormitary.Models.AccountViewModels
 {
@@ -26,8 +27,8 @@ namespace SmartDormitary.Models.AccountViewModels
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
 
-        //[Range(typeof(bool), "true", "true", ErrorMessage = "You must give consent for GDPR Compliance.")]
         [Display(Name = "Accept GDPR")]
+        [MustBeTrue(ErrorMessage = "You must give consent for GDPR Compliance.")]
         public bool AcceptedGDPR { get; set; }
     }
 }
