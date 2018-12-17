@@ -205,7 +205,7 @@ namespace SmartDormitary.Controllers
                     ErrorMessage = "Error: This email is already being used by another user.";
                     return View(model);
                 }
-                var user = new User { UserName = model.Username, Email = model.Email };
+                var user = new User { UserName = model.Username, Email = model.Email, AcceptedGDPR = model.AcceptedGDPR };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

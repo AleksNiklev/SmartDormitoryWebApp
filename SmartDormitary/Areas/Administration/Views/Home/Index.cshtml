@@ -120,7 +120,7 @@
                                     <a class="text-info" asp-action="Details" asp-controller="Sensors" asp-area="Administration" asp-route-id="@sensor.Id">@sensor.Name</a>
                                 </td>
                                 <td>@sensor.SensorData.Value@sensor.SensorType.MeasurementType</td>
-                                <td>@sensor.User.UserName</td>
+                                <td><a class="text-primary" asp-controller="Users" asp-action="Details" asp-route-id="@sensor.UserId">@sensor.User.UserName</a></td>
                                 <td>@sensor.CreatedOn.Humanize()</td>
                             </tr>
                         }

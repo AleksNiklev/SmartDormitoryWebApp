@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Quartz;
 using SmartDormitary.Data.Context;
@@ -30,15 +31,18 @@ namespace SmartDormitary.Services.Cron
                 {
                     var sensorDTO = await api.GetSensorAsync(sensor.SensorTypeId);
                     sensorApiValues[sensor.SensorTypeId] = sensorDTO;
+                    Debug.WriteLine("****** Sensor " + sensor.Name);
                 }
 
                 var sensorApi = sensorApiValues[sensor.SensorTypeId];
                 if ((sensorApi.Timestamp.Value - sensor.SensorData.Timestamp.Value).TotalSeconds >
-                    sensor.RefreshTime)
-                {
+                    sensor.RefreshTime - 7)
+                    {
                     sensor.SensorData.Value = sensorApi.Value;
                     sensor.SensorData.Timestamp = sensorApi.Timestamp;
                     await sensorService.UpdateSensorDataAsync(sensor);
+                    Debug.WriteLine("****** Sensor value is" + sensor.SensorData.Value);
+                    Debug.WriteLine("****** Sensor time" + sensor.SensorData.Timestamp);
                 }
             }
         }
